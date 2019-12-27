@@ -8,7 +8,7 @@ const theme = createMuiTheme({
   overrides,
   typography: typography,
   zIndex: {
-    appBar: 1200,
+    appBar: 1400,
     drawer: 1100
   }
 });

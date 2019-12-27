@@ -8,11 +8,7 @@ export const loginContainer = css`
   align-items: center;
   justify-content: center;
   background: #c9d6ff; /* fallback for old browsers */
-  background: linear-gradient(
-    to right,
-    #e2e2e2,
-    #c9d6ff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, #e2e2e2, #c9d6ff);
 `;
 
 export const cardContainer = css`

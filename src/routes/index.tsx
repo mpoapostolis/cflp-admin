@@ -1,14 +1,21 @@
 import React from 'react';
 import { Switch, Redirect } from 'react-router-dom';
-import { Route } from 'react-router';
-import Registration from './Registration';
+import { Route, RouteProps } from 'react-router';
 import NotFound from './NotFound';
+import { useSelector } from 'react-redux';
+import { IReduxStore } from '../redux/reducers';
+import Layout from '../Layout';
+
+export const PrivateRoute = (props: RouteProps) => {
+  const account = useSelector((store: IReduxStore) => store.account);
+  return account.access_token ? <Route {...props} /> : <Redirect to="/login" />;
+};
 
 const Routes = () => {
   return (
     <Switch>
-      <Route component={Registration} exact path="/registration" />
-      <Route component={NotFound} exact path="/not-found" />
+      <Route path="/" component={Layout} />
+      <PrivateRoute component={NotFound} exact path="/not-found" />
       <Redirect to="/not-found" />
     </Switch>
   );
