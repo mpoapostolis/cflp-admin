@@ -32,6 +32,7 @@
     "@material-ui/styles": "^4.7.1",
     "clsx": "^1.0.4",
     "date-fns": "^2.8.1",
+    "emotion": "^10.0.27",
     "material-table": "^1.54.2",
     "query-string": "^6.9.0",
     "ramda": "^0.26.1",

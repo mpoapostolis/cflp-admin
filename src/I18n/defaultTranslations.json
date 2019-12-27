@@ -315,8 +315,8 @@
     "en": "Show filters",
     "el": "Εμφάνιση φίλτρων"
   },
-  "int.sign-in": {
-    "en": "Sign in",
+  "int.login": {
+    "en": "Login",
     "el": "Σύνδεση"
   },
   "int.specific-fields": {
