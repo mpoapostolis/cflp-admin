@@ -87,7 +87,7 @@ const Login = () => {
             <br />
             <Button fullWidth>{t('int.login')}</Button>
           </CardContent>
-          <CardMedia className={media} image="https://source.unsplash.com/random/800x600" /> <Divider />
+          <CardMedia className={media} image="https://source.unsplash.com/random/800x600/?inspiration" /> <Divider />
         </Card>
       </div>
     </div>
