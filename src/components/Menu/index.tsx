@@ -13,6 +13,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import Profile from './Profiles';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
@@ -95,6 +97,19 @@ function Menu(props: Props) {
       icon: <LocalOfferIcon />,
       perm: []
     },
+    {
+      title: t('int.transactions'),
+      href: '/transactions',
+      icon: <AttachMoneyIcon />,
+      perm: []
+    },
+    {
+      title: t('int.employees'),
+      href: '/employees',
+      icon: <SupervisorAccountIcon />,
+      perm: []
+    },
+
     {
       title: t('int.settings'),
       href: '/settings',
