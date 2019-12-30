@@ -1,49 +1,41 @@
-import React, { useContext } from 'react';
-import { Card, Theme, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import React, { useContext, useState, useMemo } from 'react';
 import I18n from '../../I18n';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  header: {
-    display: 'flex',
-    padding: '0 15px 0 15px',
-    alignItems: 'center',
-    background: '#fff',
-    height: '60px'
-  },
-  spacer: {
-    marginLeft: 'auto'
-  }
-}));
+import HeaderInfos from '../../components/HeaderInfos';
+import Filters from '../../components/Filters';
+import { FilterType } from '../../components/Filters/types';
 
 function AllProducts() {
-  const classes = useStyles();
   const t = useContext(I18n);
+
+  const filterConf = useMemo(
+    () =>
+      [
+        {
+          type: 'select',
+          keyName: 'type',
+          label: 'gamw ti panagia',
+          options: [
+            { label: 'All', value: 'ALL' },
+            { label: 'adsasd', value: 1 },
+            { label: 'adsasd1', value: 2 },
+            { label: 'adsasd2', value: 3 },
+            { label: 'adsasd3', value: 3 }
+          ]
+        },
+        {
+          keyNameFrom: 'dateFrom',
+          keyNameTo: 'dateTo',
+          type: 'date',
+          asdasd: 32
+        }
+      ] as FilterType[],
+    [t]
+  );
+
   return (
     <>
-      <Card className={classes.header}>
-        <div style={{ marginRight: '20px' }}>
-          <Typography variant="caption">{t('int.airport')}</Typography>
-          <br />
-          <Typography>{'airport'}</Typography>
-        </div>
-
-        <div style={{ marginRight: '20px' }}>
-          <Typography variant="caption">{t('int.airport')}</Typography>
-          <br />
-          <Typography>{'airport'}</Typography>
-        </div>
-        <div style={{ marginRight: '20px' }}>
-          <Typography variant="caption">{t('int.airport')}</Typography>
-          <br />
-          <Typography>{'airport'}</Typography>
-        </div>
-        <div style={{ marginRight: '20px' }}>
-          <Typography variant="caption">{t('int.airport')}</Typography>
-          <br />
-          <Typography>{'airport'}</Typography>
-        </div>
-      </Card>
+      <Filters onSubmit={console.log} filterConf={filterConf} />
+      <HeaderInfos filters={[]}></HeaderInfos>
     </>
   );
 }
