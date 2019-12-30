@@ -1,8 +1,11 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import I18n from '../../I18n';
-import HeaderInfos from '../../components/HeaderInfos';
 import Filters from '../../components/Filters';
 import { FilterType } from '../../components/Filters/types';
+import MaterialTable from '../../components/Table';
+import { Button, Typography } from '@material-ui/core';
+import { Columns } from '../../components/Table/types';
+import { rows } from './dummy';
 
 function AllProducts() {
   const t = useContext(I18n);
@@ -13,29 +16,57 @@ function AllProducts() {
         {
           type: 'select',
           keyName: 'type',
-          label: 'gamw ti panagia',
-          options: [
-            { label: 'All', value: 'ALL' },
-            { label: 'adsasd', value: 1 },
-            { label: 'adsasd1', value: 2 },
-            { label: 'adsasd2', value: 3 },
-            { label: 'adsasd3', value: 3 }
-          ]
+          label: t('int.product-type'),
+          options: []
         },
         {
+          label: t('int.date'),
           keyNameFrom: 'dateFrom',
           keyNameTo: 'dateTo',
-          type: 'date',
-          asdasd: 32
+          type: 'date'
         }
       ] as FilterType[],
     [t]
   );
 
+  //   name
+  // code
+  // population
+  // size
+  // density
+
+  const columns: Columns = [
+    {
+      title: 'name',
+      field: 'name'
+    },
+    {
+      title: 'code',
+      field: 'code'
+    }
+  ];
+
   return (
     <>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between'
+        }}>
+        <Typography variant="h4">{t('int.products')}</Typography>
+        <Button variant="contained">{t('int.add-new')}</Button>
+      </div>
+      <br />
       <Filters onSubmit={console.log} filterConf={filterConf} />
-      <HeaderInfos filters={[]}></HeaderInfos>
+      <MaterialTable
+        columns={columns}
+        data={rows}
+        offset={0}
+        total={200}
+        limit={20}
+        onChange={console.log}
+      />
     </>
   );
 }

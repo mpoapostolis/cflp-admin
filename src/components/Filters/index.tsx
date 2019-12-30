@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, useEffect } from 'react';
+import React, { useContext, useCallback, useState, useEffect, useMemo } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
@@ -6,13 +6,14 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { TextField, MenuItem, Typography } from '@material-ui/core';
+import { TextField, MenuItem, Typography, Card, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import queryString from 'query-string';
 import Calendar from 'react-calendar';
 import I18n from '../../I18n';
 import { FilterType } from './types';
 import { useHistory } from 'react-router-dom';
+import { formatDate } from '../../utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   list: {
@@ -23,6 +24,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     marginRight: theme.spacing(1)
   },
+  header: {
+    display: 'flex',
+    padding: '0 15px 0 15px',
+    alignItems: 'center',
+    background: '#fff',
+    height: '60px'
+  },
+  spacer: {
+    marginLeft: 'auto'
+  },
+  giveMeMargin: { marginRight: '20px' },
 
   closeBtnIcon: {
     marginRight: theme.spacing(1)
@@ -53,8 +65,7 @@ function Filters(props: Props) {
     const newState = keys.reduce(
       (acc, curr) => ({
         ...acc,
-        [curr]: params[curr],
-        curr
+        [curr]: params[curr]
       }),
       {}
     );
@@ -128,13 +139,40 @@ function Filters(props: Props) {
     setState(clearObj);
   }
 
+  const filtersInfo = useMemo(
+    () =>
+      props.filterConf
+        .map(obj => {
+          return obj.type === 'date'
+            ? [
+                {
+                  label: [obj.label],
+                  value: [formatDate(Number(state[obj.keyNameFrom])), formatDate(Number(state[obj.keyNameTo]))].join(
+                    ' - '
+                  )
+                }
+              ]
+            : { label: [obj.label], value: state[obj.keyName] };
+        })
+        .flatMap(e => e),
+    [state]
+  );
+
   return (
     <>
-      <Button onClick={() => setOpen(!open)} color="primary" variant="outlined">
-        <FilterListIcon className={classes.icon} />
-        {t('int.show-filters')}
-      </Button>
-      <br />
+      <Card className={classes.header}>
+        {filtersInfo.map((obj, idx) => (
+          <div key={idx} className={classes.giveMeMargin}>
+            <Typography variant="caption">{obj.label}</Typography>
+            <br />
+            <Typography variant="body2">{obj.value || '-'}</Typography>
+          </div>
+        ))}
+        <span className={classes.spacer} />
+        <IconButton title={t('int.filters')} onClick={() => setOpen(!open)} color="primary">
+          <FilterListIcon />
+        </IconButton>
+      </Card>
       <br />
 
       <Drawer variant="temporary" anchor="right" open={open} onClose={() => setOpen(false)}>

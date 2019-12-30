@@ -11,6 +11,7 @@ export type SelectFilter = {
 };
 
 export type DateFilter = {
+  label: string;
   keyNameFrom: string;
   keyNameTo: string;
   type: 'date';

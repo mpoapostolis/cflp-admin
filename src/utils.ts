@@ -1,53 +1,27 @@
 import { format } from 'date-fns';
 
-export function parseJwt(token: string) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split('')
-      .map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join('')
-  );
+export const formatDate = (date?: Date | number) =>
+  date ? format(+date, 'd MMM yyy') : '';
 
-  return JSON.parse(jsonPayload);
-}
+export const debounce = (func: any, wait: any, immediate?: any) => {
+  let timeout: any;
 
-function download_csv(csv: any, filename: string) {
-  var csvFile;
-  var downloadLink;
+  return function(...args: any) {
+    //@ts-ignore
+    let context = this;
 
-  // CSV FILE
-  csvFile = new Blob([csv], { type: 'text/csv' });
+    clearTimeout(timeout);
 
-  // Download link
-  downloadLink = document.createElement('a');
+    timeout = setTimeout(function() {
+      timeout = null;
 
-  // File name
-  downloadLink.download = filename;
+      if (!immediate) {
+        func.apply(context, args);
+      }
+    }, wait);
 
-  // We have to create a link to the file
-  downloadLink.href = window.URL.createObjectURL(csvFile);
-
-  // Make sure that the link is not displayed
-  downloadLink.style.display = 'none';
-
-  // Add the link to your DOM
-  document.body.appendChild(downloadLink);
-
-  // Lanzamos
-  downloadLink.click();
-}
-
-const formatDate = (date: Date | number) => format(date, 'd MMM yyy');
-
-export function exportCsv(columns: any, data: any) {
-  let csv: string[] = [];
-  const fields = columns.map((obj: any) => obj.field);
-  data.map((obj: any) => {
-    csv.push(fields.map((field: string) => obj[field]).join(','));
-  });
-  download_csv(csv.join('\n'), `${formatDate(Date.now())}.csv`);
-}
+    if (immediate && !timeout) {
+      func.apply(context, args);
+    }
+  };
+};

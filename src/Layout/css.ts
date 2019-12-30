@@ -3,7 +3,6 @@ import { css } from 'emotion';
 export const container = css`
   width: 100vw;
   min-height: 100vh;
-  background: #f4f6f8;
   display: grid;
   &.isSmallDevice {
     grid-template-columns: 0px 1fr;

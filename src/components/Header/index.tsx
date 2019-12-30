@@ -13,7 +13,11 @@ function Header(props: Props) {
     <AppBar elevation={0}>
       <Toolbar>
         <Hidden mdUp>
-          <IconButton onClick={props.setOpen} edge="start" color="inherit" aria-label="menu">
+          <IconButton
+            onClick={props.setOpen}
+            edge="start"
+            color="inherit"
+            aria-label="menu">
             <MenuIcon />
           </IconButton>
         </Hidden>
