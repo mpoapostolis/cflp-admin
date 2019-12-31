@@ -1,6 +1,15 @@
 import React, { useContext, useState, useCallback } from 'react';
 import I18n from '../../I18n';
-import { Card, Typography, CardContent, TextField, Button, Divider, CardMedia, Box } from '@material-ui/core';
+import {
+  Card,
+  Typography,
+  CardContent,
+  TextField,
+  Button,
+  Divider,
+  CardMedia,
+  Box
+} from '@material-ui/core';
 import { cardContainer, loginContainer, card, media, content } from './css';
 import CardHeader from '@material-ui/core/CardHeader';
 import { format } from 'date-fns/esm';
@@ -23,9 +32,7 @@ const Login = () => {
     setInfos(s => ({ ...s, ...obj }));
   }, []);
 
-  const handleSubmit = useCallback(obj => {
-    ky.post('/api/auth/login?user_type=employee', { json: obj }).catch(e => console.log(e));
-  }, []);
+  const handleSubmit = useCallback(obj => {}, []);
 
   return (
     <div className={loginContainer}>
@@ -35,7 +42,9 @@ const Login = () => {
           <CardContent classes={{ root: content }}>
             <CardHeader
               title={<Typography variant="h3">{t('int.login')}</Typography>}
-              subheader={<Typography variant="caption">{dateNow}</Typography>}></CardHeader>
+              subheader={
+                <Typography variant="caption">{dateNow}</Typography>
+              }></CardHeader>
             <Box>
               <TextField
                 onChange={evt =>
@@ -65,11 +74,18 @@ const Login = () => {
                 variant="outlined"
                 fullWidth></TextField>
             </Box>
-            <Button onClick={() => handleSubmit(infos)} variant="contained" color="secondary" fullWidth>
+            <Button
+              onClick={() => handleSubmit(infos)}
+              variant="contained"
+              color="secondary"
+              fullWidth>
               {t('int.login')}
             </Button>
           </CardContent>
-          <CardMedia className={media} image="https://source.unsplash.com/random/800x600/?inspiration" />
+          <CardMedia
+            className={media}
+            image="https://source.unsplash.com/random/800x600/?inspiration"
+          />
           <Divider />
         </Card>
       </div>

@@ -11,7 +11,10 @@ import Layout from './Layout';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
-  const [translations, lang] = useSelector((store: IReduxStore) => [store.i18n.translations, store.i18n.lang]);
+  const [translations, lang] = useSelector((store: IReduxStore) => [
+    store.i18n.translations,
+    store.i18n.lang
+  ]);
   const t = (key: string) => {
     return R.pathOr(key, [key, lang], translations);
   };

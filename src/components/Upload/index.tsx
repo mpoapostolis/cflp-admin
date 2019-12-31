@@ -16,6 +16,7 @@ function Upload(props: Props) {
         props.onChange({ file, url });
       });
     }
+    e.currentTarget.value = '';
   }
 
   const t = useContext(I18n);

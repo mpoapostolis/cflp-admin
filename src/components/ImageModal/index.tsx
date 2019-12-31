@@ -18,24 +18,15 @@ const useStyles = makeStyles({
 
 export interface IProps {
   src?: string;
+  open: boolean;
   onClose: () => void;
 }
 
 function ImageModal(props: IProps) {
-  const [open, setOpen] = useState();
   const classes = useStyles();
 
-  useEffect(() => {
-    setOpen(Boolean(props.src));
-  }, [props.src]);
-
-  const handleClose = () => {
-    setOpen(false);
-    props.onClose();
-  };
-
   return (
-    <Dialog classes={classes} onClose={handleClose} open={open}>
+    <Dialog classes={classes} onClose={props.onClose} open={props.open}>
       <img
         style={{
           objectFit: 'cover',
