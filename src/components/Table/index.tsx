@@ -32,6 +32,19 @@ const useStyles = makeStyles({
   },
   textField: {
     width: '200px'
+  },
+  underline: {
+    '&::before': {
+      borderBottom: 'solid 1px #0002'
+    },
+    '&::after': {
+      borderBottom: 'solid 1px #000a'
+    },
+    '&:hover': {
+      '&::before': {
+        borderBottom: 'solid 1px #0005 !important'
+      }
+    }
   }
 });
 
@@ -68,6 +81,7 @@ function MaterialTable(props: Props) {
       <div className={classes.searchTermCont}>
         <TextField
           InputProps={{
+            classes: { underline: classes.underline },
             startAdornment: (
               <InputAdornment position="start">
                 <SearchIcon />
