@@ -52,6 +52,7 @@ function AccountDetails() {
           <Grid item md={12} xs={12}>
             <TextField
               fullWidth
+              type={'number'}
               label={t('int.price')}
               margin="dense"
               required
@@ -62,6 +63,7 @@ function AccountDetails() {
           <Grid item md={12} xs={12}>
             <TextField
               fullWidth
+              type={'number'}
               label={t('int.lpReward')}
               margin="dense"
               required

@@ -109,6 +109,12 @@ function AccountProfile() {
         {images.map((obj, idx) => (
           <div
             key={idx}
+            onClickCapture={evt => {
+              if (selected.length > 0) {
+                handleSelectImg(obj);
+                evt.stopPropagation();
+              }
+            }}
             className={cx(classes.selectMeCont, {
               selected: selected.includes(obj)
             })}>
