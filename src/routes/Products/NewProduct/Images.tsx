@@ -4,54 +4,65 @@ import {
   Card,
   CardActions,
   CardContent,
-  Avatar,
   CardHeader,
   Divider,
-  Button
+  Button,
+  IconButton
 } from '@material-ui/core';
 import I18n from '../../../I18n';
 import Upload from '../../../components/Upload';
 import ImageModal from '../../../components/ImageModal';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import { cx } from 'emotion';
+import { cx, css } from 'emotion';
 import * as R from 'ramda';
+import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 
 const useStyles = makeStyles((theme: any) => ({
   cardContent: {
     display: 'flex',
     alignItems: 'flex-start',
     flexWrap: 'wrap',
-    minHeight: '167px'
-  },
-  avatar: {
-    cursor: 'pointer',
-    margin: '10px',
-    height: 65,
-    width: 65,
-    border: 'solid 1px #eee',
-    '&.selected': {
-      height: 75,
-      width: 75,
-      boxShadow: ' 0px 17px 10px -10px rgba(0,0,0,0.7)'
-    }
+    minHeight: '167px',
+    maxHeight: '65vh',
+    overflowY: 'auto'
   },
 
   spacer: {
     flexGrow: 1
   },
-  avatarContainer: {
-    height: 95,
-    width: 95,
+  imgModal: {
+    maxWidth: '250px',
+    minHeight: '180px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    objectFit: 'cover',
+    cursor: 'pointer'
+  },
+  imgClass: {
     cursor: 'pointer',
-    '&:hover': {
-      background: '#0002'
-    },
+    height: 'calc(100% - 20px)',
+    width: 'calc(100% - 20px)',
+    transition: '0.125s',
     '&.selected': {
-      height: 93,
-      width: 93,
-      border: 'solid 1px #0005'
+      height: 'calc(100% - 40px)',
+      width: 'calc(100% -  40px)'
     }
+  },
+  selectMeCont: {
+    margin: '10px',
+    padding: '10px',
+    position: 'relative',
+    background: '#e8f0fe2f',
+
+    '&.selected': {
+      background: '#f8f0ff'
+    }
+  },
+  selecteMe: {
+    position: 'absolute',
+    top: '-10px',
+    left: '-10px'
   }
 }));
 
@@ -64,7 +75,6 @@ function AccountProfile() {
   const classes = useStyles();
   const [images, setImages] = useState<Image[]>([]);
   const [selected, setSelected] = useState<Image[]>([]);
-  const [openModal, setOpenModal] = useState(false);
   const handleAddImage = useCallback(img => setImages(s => [...s, img]), []);
   const t = useContext(I18n);
 
@@ -98,12 +108,25 @@ function AccountProfile() {
       <CardContent className={classes.cardContent}>
         {images.map((obj, idx) => (
           <div
-            onClick={() => handleSelectImg(obj)}
             key={idx}
-            className={cx(classes.avatarContainer, {
+            className={cx(classes.selectMeCont, {
               selected: selected.includes(obj)
             })}>
-            <Avatar className={cx(classes.avatar)} src={obj.url} />
+            <IconButton
+              className={classes.selecteMe}
+              onClick={() => handleSelectImg(obj)}>
+              <CheckBoxRoundedIcon
+                color={selected.includes(obj) ? 'secondary' : 'action'}
+              />
+            </IconButton>
+            <ImageModal key={idx} className={classes.imgModal} src={obj.url}>
+              <img
+                className={cx(classes.imgClass, {
+                  selected: selected.includes(obj)
+                })}
+                src={obj.url}
+              />
+            </ImageModal>
           </div>
         ))}
       </CardContent>
@@ -111,16 +134,7 @@ function AccountProfile() {
       <CardActions>
         <span className={classes.spacer}></span>
 
-        {selected.length === 1 && (
-          <Button
-            onClick={() => setOpenModal(true)}
-            variant="outlined"
-            title={t('int.view')}>
-            <VisibilityIcon />
-          </Button>
-        )}
-
-        {selected && (
+        {selected.length > 0 && (
           <Button
             onClick={handleDeleteImage}
             title={t('int.delete')}
@@ -134,11 +148,6 @@ function AccountProfile() {
           {t('int.save')}
         </Button>
       </CardActions>
-      <ImageModal
-        src={selected.length === 1 ? selected[0]?.url : undefined}
-        onClose={() => setOpenModal(false)}
-        open={openModal}
-      />
     </Card>
   );
 }
