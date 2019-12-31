@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useState, useEffect, useMemo } from 'react';
+import React, {
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo
+} from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
@@ -6,7 +12,13 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { TextField, MenuItem, Typography, Card, IconButton } from '@material-ui/core';
+import {
+  TextField,
+  MenuItem,
+  Typography,
+  Card,
+  IconButton
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import queryString from 'query-string';
 import Calendar from 'react-calendar';
@@ -60,7 +72,9 @@ function Filters(props: Props) {
   useEffect(() => {
     const params = queryString.parse(history.location.search);
     const keys = props.filterConf
-      .map(obj => (obj.type === 'date' ? [obj.keyNameFrom, obj.keyNameTo] : obj.keyName))
+      .map(obj =>
+        obj.type === 'date' ? [obj.keyNameFrom, obj.keyNameTo] : obj.keyName
+      )
       .flatMap(e => e);
     const newState = keys.reduce(
       (acc, curr) => ({
@@ -95,7 +109,10 @@ function Filters(props: Props) {
       case 'date':
         const dateValues =
           state[obj.keyNameFrom] && state[obj.keyNameTo]
-            ? [new Date(+state[obj.keyNameFrom]), new Date(+state[obj.keyNameTo])]
+            ? [
+                new Date(+state[obj.keyNameFrom]),
+                new Date(+state[obj.keyNameTo])
+              ]
             : undefined;
 
         return (
@@ -147,15 +164,16 @@ function Filters(props: Props) {
             ? [
                 {
                   label: [obj.label],
-                  value: [formatDate(Number(state[obj.keyNameFrom])), formatDate(Number(state[obj.keyNameTo]))].join(
-                    ' - '
-                  )
+                  value: [
+                    formatDate(Number(state[obj.keyNameFrom])),
+                    formatDate(Number(state[obj.keyNameTo]))
+                  ].join(' - ')
                 }
               ]
             : { label: [obj.label], value: state[obj.keyName] };
         })
         .flatMap(e => e),
-    [state]
+    [history.location]
   );
 
   return (
@@ -169,13 +187,20 @@ function Filters(props: Props) {
           </div>
         ))}
         <span className={classes.spacer} />
-        <IconButton title={t('int.filters')} onClick={() => setOpen(!open)} color="primary">
+        <IconButton
+          title={t('int.filters')}
+          onClick={() => setOpen(!open)}
+          color="primary">
           <FilterListIcon />
         </IconButton>
       </Card>
       <br />
 
-      <Drawer variant="temporary" anchor="right" open={open} onClose={() => setOpen(false)}>
+      <Drawer
+        variant="temporary"
+        anchor="right"
+        open={open}
+        onClose={() => setOpen(false)}>
         <div className={classes.list}>
           <Button onClick={() => setOpen(false)}>
             <CloseIcon className={classes.closeBtnIcon} />
@@ -193,14 +218,22 @@ function Filters(props: Props) {
           <br />
 
           <ListItem>
-            <Button onClick={handleClear} fullWidth color="default" variant="contained">
+            <Button
+              onClick={handleClear}
+              fullWidth
+              color="default"
+              variant="contained">
               <DeleteOutlineIcon className={classes.icon} />
               {t('int.clear')}
             </Button>
           </ListItem>
 
           <ListItem>
-            <Button onClick={handleSubmit} fullWidth color="primary" variant="contained">
+            <Button
+              onClick={handleSubmit}
+              fullWidth
+              color="primary"
+              variant="contained">
               {t('int.apply-filters')}
             </Button>
           </ListItem>

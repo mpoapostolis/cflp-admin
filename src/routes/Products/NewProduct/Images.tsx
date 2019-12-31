@@ -84,16 +84,14 @@ function AccountProfile() {
     }
   };
 
+  const selectedTitle =
+    selected.length > 0 ? `(${selected.length} ${t('int.selected')})` : '';
+
   return (
     <Card>
       <CardHeader
-        action={
-          <Button color={'primary'} variant="outlined">
-            {t('int.save')}
-          </Button>
-        }
+        title={`${t('int.images')} ${selectedTitle}`}
         subheader={t('int.edit-view-delete-images')}
-        title={t('int.images')}
       />
       <Divider />
 
@@ -132,6 +130,9 @@ function AccountProfile() {
         )}
 
         <Upload onChange={handleAddImage} />
+        <Button color={'primary'} variant="outlined">
+          {t('int.save')}
+        </Button>
       </CardActions>
       <ImageModal
         src={selected.length === 1 ? selected[0]?.url : undefined}

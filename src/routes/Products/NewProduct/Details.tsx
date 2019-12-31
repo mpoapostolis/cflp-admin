@@ -14,9 +14,18 @@ import I18n from '../../../I18n';
 
 const useStyles = makeStyles(() => ({
   cardContent: {
-    height: '167px'
+    minHeight: '167px'
+  },
+
+  spacer: {
+    flexGrow: 1
   }
 }));
+
+// name: string
+// price: number
+// lpReward: number
+// images: string[]
 
 function AccountDetails() {
   const classes = useStyles();
@@ -26,25 +35,40 @@ function AccountDetails() {
   return (
     <Card>
       <CardHeader
-        action={
-          <Button color="primary" variant="outlined">
-            Save
-          </Button>
-        }
         subheader={t('int.edit-answers')}
         title={t('int.answers')}></CardHeader>
       <Divider />
       <CardContent className={classes.cardContent}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item md={12} xs={12}>
             <TextField
               fullWidth
-              label={t('int.result')}
+              label={t('int.name')}
               margin="dense"
               required
               variant="outlined"
             />
           </Grid>
+          <Grid item md={12} xs={12}>
+            <TextField
+              fullWidth
+              label={t('int.price')}
+              margin="dense"
+              required
+              variant="outlined"
+            />
+          </Grid>
+
+          <Grid item md={12} xs={12}>
+            <TextField
+              fullWidth
+              label={t('int.lpReward')}
+              margin="dense"
+              required
+              variant="outlined"
+            />
+          </Grid>
+
           <Grid item md={12} xs={12}>
             <TextField
               fullWidth
@@ -57,7 +81,12 @@ function AccountDetails() {
         </Grid>
       </CardContent>
       <Divider />
-      <CardActions></CardActions>
+      <CardActions>
+        <span className={classes.spacer}></span>
+        <Button color="primary" variant="outlined">
+          {t('int.save')}
+        </Button>
+      </CardActions>
     </Card>
   );
 }
