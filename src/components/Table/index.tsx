@@ -28,7 +28,8 @@ const useStyles = makeStyles({
   },
   searchTermCont: {
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    padding: '10px'
   },
   textField: {
     width: '200px'
@@ -38,7 +39,7 @@ const useStyles = makeStyles({
       borderBottom: 'solid 1px #0002'
     },
     '&::after': {
-      borderBottom: 'solid 1px #000a'
+      borderBottom: 'solid 1px #0005'
     },
     '&:hover': {
       '&::before': {
