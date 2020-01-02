@@ -1,31 +1,19 @@
 import { AnyAction } from 'redux';
 import { LOGIN, UPDATE_TOKEN } from '../names';
 
-export type Airport = {
-  code: string;
-  locales: string[];
-};
-
 export interface IAccount {
-  access_token?: string;
-  token_type?: string;
-  refresh_token?: string;
-  expires_in?: string;
-  scope?: string;
-  jti?: string;
-  exp?: number;
-  user_name?: string;
-  client_id?: string;
-  userInfo?: {
-    id: number;
-    username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    roles: string;
-    permissions: string[];
-    airports: Airport[];
-  };
+  _id?: string;
+  token?: string;
+  refreshToken?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  avatar?: string;
+  gender?: 'male' | 'female';
+  age?: number;
+  username?: string;
+  storeId?: string;
+  permissions?: string[];
 }
 
 export const initAccount = {};

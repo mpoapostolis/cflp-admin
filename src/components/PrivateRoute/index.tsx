@@ -5,6 +5,6 @@ import { useSelector } from 'react-redux';
 
 function PrivateRoute(props: RouteProps) {
   const account = useSelector((store: IReduxStore) => store.account);
-  return account.access_token || true ? <Route {...props} /> : <Redirect to="/login" />;
+  return account.token ? <Route {...props} /> : <Redirect to="/login" />;
 }
 export default PrivateRoute;

@@ -2,7 +2,9 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import { Avatar, Typography, Theme } from '@material-ui/core';
-
+import { useSelector } from 'react-redux';
+import { IReduxStore } from '../../redux/reducers';
+import * as R from 'ramda';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     marginTop: theme.spacing(1),
@@ -23,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function Profile() {
   const classes = useStyles();
+  const account = useSelector((store: IReduxStore) => store.account);
 
   return (
     <div className={classes.root}>
@@ -34,9 +37,9 @@ function Profile() {
         src={'/images/avatar.png'}
       />
       <Typography className={classes.name} variant="h4">
-        {`username`}
+        {R.propOr('userName', 'username', account)}
       </Typography>
-      <Typography variant="body2">{'email@email.com'}</Typography>
+      <Typography variant="body2">{R.prop('email', account)}</Typography>
     </div>
   );
 }

@@ -18,10 +18,11 @@ interface IProps {
 
 function AuthWrapper(props: IProps) {
   const { reqPerm, redirect } = props;
-  const permissions = useSelector((store: IReduxStore) =>
-    store.account.userInfo ? store.account.userInfo.permissions : []
+  const permissions = useSelector(
+    (store: IReduxStore) => store.account?.permissions ?? []
   );
-  const hasPerm = reqPerm.length === 0 || intersection(reqPerm, permissions).length > 0;
+  const hasPerm =
+    reqPerm.length === 0 || intersection(reqPerm, permissions).length > 0;
   if (hasPerm) return props.children;
   else if (redirect) {
     return <Redirect to={{ pathname: '/not-found' }} />;
