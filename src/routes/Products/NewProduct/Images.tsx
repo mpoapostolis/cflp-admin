@@ -13,12 +13,14 @@ import I18n from '../../../I18n';
 import Upload from '../../../components/Upload';
 import ImageModal from '../../../components/ImageModal';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import { cx, css } from 'emotion';
+import { cx } from 'emotion';
 import * as R from 'ramda';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import useApi from '../../../Hooks';
+import queryString from 'query-string';
+import { useHistory } from 'react-router';
 
-const useStyles = makeStyles((theme: any) => ({
+const useStyles = makeStyles(() => ({
   cardContent: {
     display: 'flex',
     alignItems: 'flex-start',
@@ -79,6 +81,15 @@ function AccountProfile() {
   const handleAddImage = useCallback(img => setImages(s => [...s, img]), []);
   const t = useContext(I18n);
 
+  const history = useHistory();
+  const params = history.location.search;
+  const _infos = queryString.parse(params);
+
+  const infos = {
+    name: _infos.name,
+    price: Number(_infos.price),
+    lpReward: Number(_infos.lpReward)
+  };
   const handleDeleteImage = () => {
     const union = R.intersection(images, selected);
     const _images = images.filter(img => !union.includes(img));
@@ -100,6 +111,7 @@ function AccountProfile() {
   const handleSubmit = () => {
     const formData = new FormData();
     images.forEach(f => formData.append('image', f.file));
+    formData.append('infos', JSON.stringify(infos));
 
     api
       .post('/api/bo/products/images', {

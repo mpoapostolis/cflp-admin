@@ -1,21 +1,15 @@
-import { SET_ERRORS, CLEAR_ERRORS } from '../names';
+import { SET_ERRORS } from '../names';
 import { AnyAction } from 'redux';
 
-export interface IErrors {
-  fieldErrors: Record<string, any>;
-}
+export type IErrors = Record<string, string>;
 
-export const initErrors = {
-  fieldErrors: {}
-};
+export const initErrors = {};
 
 const errors = (state: IErrors = initErrors, action: AnyAction) => {
   const { type, payload } = action;
   switch (type) {
     case SET_ERRORS:
       return payload;
-    case CLEAR_ERRORS:
-      return initErrors;
 
     default:
       return state;
