@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
@@ -11,6 +11,7 @@ import {
   TextField
 } from '@material-ui/core';
 import I18n from '../../../I18n';
+import useApi from '../../../Hooks';
 
 const useStyles = makeStyles(() => ({
   cardContent: {
@@ -22,15 +23,28 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-// name: string
-// price: number
-// lpReward: number
-// images: string[]
-
 function AccountDetails() {
   const classes = useStyles();
+  const [infos, setInfos] = useState({});
+
+  const _setInfos = useCallback(obj => {
+    setInfos(s => ({ ...s, ...obj }));
+  }, []);
 
   const t = useContext(I18n);
+
+  const api = useApi();
+
+  const createNew = useCallback(
+    infos => {
+      api
+        .post('/api/bo/products', {
+          body: JSON.stringify(infos)
+        })
+        .json();
+    },
+    [api]
+  );
 
   return (
     <Card>
@@ -43,6 +57,7 @@ function AccountDetails() {
           <Grid item md={12} xs={12}>
             <TextField
               fullWidth
+              onChange={evt => _setInfos({ name: evt.currentTarget.value })}
               label={t('int.name')}
               margin="dense"
               required
@@ -52,6 +67,7 @@ function AccountDetails() {
           <Grid item md={12} xs={12}>
             <TextField
               fullWidth
+              onChange={evt => _setInfos({ price: evt.currentTarget.value })}
               type={'number'}
               label={t('int.price')}
               margin="dense"
@@ -66,16 +82,7 @@ function AccountDetails() {
               type={'number'}
               label={t('int.lpReward')}
               margin="dense"
-              required
-              variant="outlined"
-            />
-          </Grid>
-
-          <Grid item md={12} xs={12}>
-            <TextField
-              fullWidth
-              label={t('int.result')}
-              margin="dense"
+              onChange={evt => _setInfos({ lpReward: evt.currentTarget.value })}
               required
               variant="outlined"
             />
@@ -85,7 +92,10 @@ function AccountDetails() {
       <Divider />
       <CardActions>
         <span className={classes.spacer}></span>
-        <Button color="primary" variant="outlined">
+        <Button
+          onClick={() => createNew(infos)}
+          color="primary"
+          variant="outlined">
           {t('int.save')}
         </Button>
       </CardActions>

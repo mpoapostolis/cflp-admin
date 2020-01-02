@@ -16,7 +16,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { cx, css } from 'emotion';
 import * as R from 'ramda';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
-import useFetch from '../../../Hooks';
+import useApi from '../../../Hooks';
 
 const useStyles = makeStyles((theme: any) => ({
   cardContent: {
@@ -86,7 +86,7 @@ function AccountProfile() {
     setSelected([]);
   };
 
-  const header = useFetch();
+  const api = useApi();
 
   const handleSelectImg = (img: Image) => {
     if (selected.includes(img)) {
@@ -99,16 +99,13 @@ function AccountProfile() {
 
   const handleSubmit = () => {
     const formData = new FormData();
-    const files = images.map(f => f.file as Blob);
     images.forEach(f => formData.append('image', f.file));
 
-    fetch('/api/bo/products/images', {
-      method: 'POST',
-      headers: new Headers({
-        ...header
-      }),
-      body: formData
-    }).then(e => console.log(e));
+    api
+      .post('/api/bo/products/images', {
+        body: formData
+      })
+      .then(e => console.log(e));
   };
 
   const selectedTitle =
