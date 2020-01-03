@@ -29,6 +29,7 @@ function AllProducts() {
     limit: 100
   });
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
   const api = useApi();
 
   useEffect(() => {
@@ -39,11 +40,15 @@ function AllProducts() {
 
   const getProducts = useCallback(
     (obj: Record<string, any>) => {
+      setLoading(true);
       const url = queryString.stringify(obj);
       api
         .get(`/api/bo/products?${url}`)
         .then(e => e.json())
-        .then(infos => setInfos(infos));
+        .then(infos => {
+          setInfos(infos);
+          setLoading(false);
+        });
     },
     [history.location.search]
   );
@@ -156,7 +161,12 @@ function AllProducts() {
       </div>
       <br />
       <Filters onSubmit={getProducts} filterConf={filterConf} />
-      <MaterialTable columns={columns} {...infos} onChange={getProducts} />
+      <MaterialTable
+        loading={loading}
+        columns={columns}
+        {...infos}
+        onChange={getProducts}
+      />
     </>
   );
 }

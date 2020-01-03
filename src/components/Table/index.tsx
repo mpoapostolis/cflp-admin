@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo, useCallback, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -34,6 +34,9 @@ const useStyles = makeStyles({
   textField: {
     width: '200px'
   },
+  loading: {
+    opacity: 0.2
+  },
   underline: {
     '&::before': {
       borderBottom: 'solid 1px #0002'
@@ -56,6 +59,7 @@ type Props = {
   limit: number;
   total: number;
   onChange: (e: Record<string, any>) => void;
+  loading?: boolean;
 };
 
 function MaterialTable(props: Props) {
@@ -67,16 +71,27 @@ function MaterialTable(props: Props) {
   const debounceOnChange = debounce(props.onChange, 200);
   const params = queryString.parse(history.location.search);
 
-  const filters = {
-    offset: params.offset,
-    limit: params.limit,
-    searchTerm: params.searchTerm
-  };
-  function handleChange(obj: Record<string, any>) {
-    const url = queryString.stringify({ ...params, ...obj });
-    debounceOnChange({ ...filters, ...obj });
-    debouncePush(`?${url}`);
-  }
+  const filters = useMemo(
+    () => ({
+      offset: params.offset,
+      limit: params.limit,
+      searchTerm: params.searchTerm
+    }),
+    [params]
+  );
+  useEffect(() => {
+    const url = queryString.stringify({ offset: 0, limit: 10, ...params });
+    history.replace(`?${url}`);
+  }, []);
+
+  const handleChange = useCallback(
+    (obj: Record<string, any>) => {
+      const url = queryString.stringify({ ...params, ...obj });
+      debounceOnChange({ ...filters, ...obj });
+      debouncePush(`?${url}`);
+    },
+    [params]
+  );
 
   return (
     <Paper className={classes.root}>
@@ -114,7 +129,7 @@ function MaterialTable(props: Props) {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody className={cx({ [classes.loading]: props.loading })}>
             {props.data.map((row, idx) => (
               <TableRow key={idx} hover role="checkbox" tabIndex={-1}>
                 {props.columns.map((column, idx) => (
@@ -134,9 +149,9 @@ function MaterialTable(props: Props) {
         component="div"
         count={props.total}
         rowsPerPage={Number(params.limit) || 10}
-        page={Number(params.offset) || 0}
+        page={Number(Number(params.offset) / Number(params.limit)) || 0}
         onChangePage={(_, offset) => {
-          handleChange({ offset: +offset });
+          handleChange({ offset: +offset * Number(params.limit) });
         }}
         onChangeRowsPerPage={evt => {
           handleChange({
