@@ -9,6 +9,9 @@ import * as R from 'ramda';
 import Login from './routes/Login';
 import Layout from './Layout';
 import PrivateRoute from './components/PrivateRoute';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+toast.configure();
 
 function App() {
   const [translations, lang] = useSelector((store: IReduxStore) => [

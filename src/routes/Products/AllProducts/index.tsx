@@ -111,23 +111,19 @@ function AllProducts() {
     },
     {
       title: t('int.actions'),
-      render: (obj: any, idx: number) => {
-        const { lpReward, name, price, _id } = obj;
-        const url = queryString.stringify({ lpReward, name, price });
-        return (
-          <>
-            <IconButton
-              onClick={() => history.push(`/products/${_id}/edit?${url}`)}
-              title={t('int.view')}
-              size="small">
-              <EditIcon />
-            </IconButton>
-            <IconButton title={t('int.delete')} size="small">
-              <DeleteIcon />
-            </IconButton>
-          </>
-        );
-      }
+      render: (obj: any, idx: number) => (
+        <>
+          <IconButton
+            onClick={() => history.push(`/products/${obj._id}/edit`)}
+            title={t('int.view')}
+            size="small">
+            <EditIcon />
+          </IconButton>
+          <IconButton title={t('int.delete')} size="small">
+            <DeleteIcon />
+          </IconButton>
+        </>
+      )
     }
   ];
 

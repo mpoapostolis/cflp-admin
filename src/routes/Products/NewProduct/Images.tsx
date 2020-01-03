@@ -16,9 +16,6 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { cx } from 'emotion';
 import * as R from 'ramda';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
-import useApi from '../../../Hooks';
-import queryString from 'query-string';
-import { useHistory, useParams } from 'react-router';
 
 const useStyles = makeStyles(() => ({
   cardContent: {
@@ -77,6 +74,8 @@ type Image = {
 type Props = {
   images: Image[];
   setImages: React.Dispatch<React.SetStateAction<Image[]>>;
+  isEdit: boolean;
+  deleteImages: (paths: string[]) => void;
 };
 
 function AccountProfile(props: Props) {
@@ -89,6 +88,10 @@ function AccountProfile(props: Props) {
   const handleDeleteImage = () => {
     const union = R.intersection(images, selected);
     const _images = images.filter(img => !union.includes(img));
+    if (props.isEdit) {
+      const paths = selected.filter(f => !f.file).map(f => f.url);
+      props.deleteImages(paths);
+    }
     setImages(_images);
     setSelected([]);
   };

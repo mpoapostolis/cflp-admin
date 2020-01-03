@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react';
+import React, { useContext, useCallback, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
@@ -28,20 +28,29 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function AccountDetails() {
-  const classes = useStyles();
-  const errors = useSelector((store: IReduxStore) => store.errors);
-  const history = useHistory();
-  const params = history.location.search;
-  const objParams = queryString.parse(params);
+type Props = {
+  infos: {
+    name: string;
+    price: number;
+    lpReward: number;
+  };
+  setInfos: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      price: number;
+      lpReward: number;
+    }>
+  >;
+};
 
-  const _setParam = useCallback(
-    obj => {
-      const url = queryString.stringify({ ...objParams, ...obj });
-      history.replace(`?${url}`);
-    },
-    [params]
-  );
+function AccountDetails(props: Props) {
+  const classes = useStyles();
+  const { infos, setInfos } = props;
+  const errors = useSelector((store: IReduxStore) => store.errors);
+
+  const _setParam = useCallback(obj => {
+    setInfos(s => ({ ...s, ...obj }));
+  }, []);
 
   const t = useContext(I18n);
 
@@ -55,10 +64,10 @@ function AccountDetails() {
         <Grid container spacing={2}>
           <Grid item md={12} xs={12}>
             <TextField
-              defaultValue={objParams['name']}
               fullWidth
+              value={R.propOr('', 'name', infos)}
               error={Boolean(R.prop('name', errors))}
-              onBlur={evt => _setParam({ name: evt.currentTarget.value })}
+              onChange={evt => _setParam({ name: evt.currentTarget.value })}
               helperText={R.propOr('', 'name', errors)}
               label={t('int.name')}
               margin="dense"
@@ -68,11 +77,11 @@ function AccountDetails() {
           </Grid>
           <Grid item md={12} xs={12}>
             <TextField
-              defaultValue={objParams['price']}
+              value={R.propOr('', 'price', infos)}
               fullWidth
               error={Boolean(R.prop('price', errors))}
               helperText={R.propOr('', 'price', errors)}
-              onBlur={evt => _setParam({ price: +evt.currentTarget.value })}
+              onChange={evt => _setParam({ price: +evt.currentTarget.value })}
               type={'number'}
               label={t('int.price')}
               margin="dense"
@@ -83,13 +92,15 @@ function AccountDetails() {
 
           <Grid item md={12} xs={12}>
             <TextField
-              defaultValue={objParams['lpReward']}
+              value={R.propOr('', 'lpReward', infos)}
               fullWidth
               error={Boolean(R.prop('lpReward', errors))}
               helperText={R.propOr('', 'lpReward', errors)}
               label={t('int.lpReward')}
               margin="dense"
-              onBlur={evt => _setParam({ lpReward: +evt.currentTarget.value })}
+              onChange={evt =>
+                _setParam({ lpReward: +evt.currentTarget.value })
+              }
               required
               variant="outlined"
             />

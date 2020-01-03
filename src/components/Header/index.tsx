@@ -75,9 +75,7 @@ function Header(props: Props) {
             <MenuIcon />
           </IconButton>
         </Hidden>
-        <Typography variant="h6" className={classes.title}>
-          News
-        </Typography>
+        <Typography variant="h6" className={classes.title}></Typography>
         {token && (
           <IconButton
             aria-label="account of current user"
