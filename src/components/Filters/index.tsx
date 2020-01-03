@@ -86,6 +86,10 @@ function Filters(props: Props) {
     setState(newState);
   }, [open, history]);
 
+  useEffect(() => {
+    props.onSubmit(state);
+  }, []);
+
   function getComponent(obj: FilterType) {
     switch (obj.type) {
       case 'select':
@@ -128,6 +132,19 @@ function Filters(props: Props) {
             }}
             value={dateValues}
             selectRange
+          />
+        );
+
+      case 'number':
+        return (
+          <TextField
+            label={obj.label}
+            fullWidth
+            type="number"
+            margin="dense"
+            value={state[obj.keyName] || ''}
+            onChange={e => handleChangeValue({ [obj.keyName]: e.target.value })}
+            variant="outlined"
           />
         );
 

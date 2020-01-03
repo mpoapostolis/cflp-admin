@@ -64,6 +64,7 @@ function MaterialTable(props: Props) {
   const t = useContext(I18n);
   const history = useHistory();
   const debouncePush = debounce(history.push, 200);
+  const debounceOnChange = debounce(props.onChange, 200);
   const params = queryString.parse(history.location.search);
 
   const filters = {
@@ -73,7 +74,7 @@ function MaterialTable(props: Props) {
   };
   function handleChange(obj: Record<string, any>) {
     const url = queryString.stringify({ ...params, ...obj });
-    props.onChange({ ...filters, ...obj });
+    debounceOnChange({ ...filters, ...obj });
     debouncePush(`?${url}`);
   }
 
@@ -119,7 +120,7 @@ function MaterialTable(props: Props) {
                 {props.columns.map((column, idx) => (
                   <TableCell key={idx}>
                     {'render' in column
-                      ? column.render(column, idx)
+                      ? column.render(row, idx)
                       : row[column.field]}
                   </TableCell>
                 ))}

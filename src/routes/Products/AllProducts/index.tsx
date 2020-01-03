@@ -1,30 +1,67 @@
-import React, { useContext, useMemo } from 'react';
+import React, {
+  useContext,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback
+} from 'react';
 import I18n from '../../../I18n';
 import Filters from '../../../components/Filters';
 import { FilterType } from '../../../components/Filters/types';
 import MaterialTable from '../../../components/Table';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography, IconButton } from '@material-ui/core';
 import { Columns } from '../../../components/Table/types';
-import { rows } from './dummy';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import useApi from '../../../Hooks';
+import ImageIcon from '@material-ui/icons/Image';
+import queryString from 'query-string';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import * as R from 'ramda';
 
 function AllProducts() {
   const t = useContext(I18n);
+  const [infos, setInfos] = useState({
+    data: [],
+    offset: 0,
+    total: 20,
+    limit: 100
+  });
+  const history = useHistory();
+  const api = useApi();
+
+  const getProducts = useCallback((obj: Record<string, any>) => {
+    const url = queryString.stringify(obj);
+    api
+      .get(`/api/bo/products?${url}`)
+      .then(e => e.json())
+      .then(infos => setInfos(infos));
+  }, []);
 
   const filterConf = useMemo(
     () =>
       [
         {
-          type: 'select',
-          keyName: 'type',
-          label: t('int.product-type'),
-          options: []
+          type: 'number',
+          keyName: 'minLp',
+          label: t('int.min-lp')
+        },
+
+        {
+          type: 'number',
+          keyName: 'maxPrice',
+          label: t('int.max-lp')
         },
         {
-          label: t('int.date'),
-          keyNameFrom: 'dateFrom',
-          keyNameTo: 'dateTo',
-          type: 'date'
+          type: 'number',
+          keyName: 'minPrice',
+          label: t('int.min-price')
+        },
+
+        {
+          type: 'number',
+          keyName: 'maxPrice',
+          label: t('int.max-price')
         }
       ] as FilterType[],
     [t]
@@ -32,12 +69,56 @@ function AllProducts() {
 
   const columns: Columns = [
     {
-      title: 'name',
+      title: t('int.name'),
       field: 'name'
     },
     {
-      title: 'code',
-      field: 'code'
+      title: t('int.lpReward'),
+      field: 'lpReward'
+    },
+    {
+      title: t('int.price'),
+      field: 'price'
+    },
+    {
+      title: t('int.images'),
+      render: (obj: any, idx: number) => {
+        const tmp: unknown[] = R.propOr([], 'images', obj);
+        const howMany = tmp.length;
+
+        return (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {howMany > 0 && (
+              <>
+                <IconButton>
+                  <ImageIcon key={idx} />
+                </IconButton>
+                <Typography variant="body2">x {howMany}</Typography>
+              </>
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      title: t('int.actions'),
+      render: (obj: any, idx: number) => {
+        const { lpReward, name, price, _id } = obj;
+        const url = queryString.stringify({ lpReward, name, price });
+        return (
+          <>
+            <IconButton
+              onClick={() => history.push(`/products/${_id}/edit?${url}`)}
+              title={t('int.view')}
+              size="small">
+              <EditIcon />
+            </IconButton>
+            <IconButton title={t('int.delete')} size="small">
+              <DeleteIcon />
+            </IconButton>
+          </>
+        );
+      }
     }
   ];
 
@@ -56,15 +137,8 @@ function AllProducts() {
         </Button>
       </div>
       <br />
-      <Filters onSubmit={console.log} filterConf={filterConf} />
-      <MaterialTable
-        columns={columns}
-        data={rows}
-        offset={0}
-        total={200}
-        limit={20}
-        onChange={console.log}
-      />
+      <Filters onSubmit={getProducts} filterConf={filterConf} />
+      <MaterialTable columns={columns} {...infos} onChange={getProducts} />
     </>
   );
 }

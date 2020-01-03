@@ -10,8 +10,7 @@ function Reports() {
     <Switch>
       <Route path="/products" exact component={AllProducts} />
       <Route path="/products/new" exact component={NewProduct} />
-      <Route path="/products/:id" component={Render} />
-      <Route path="/products/:id/edit" component={Render} />
+      <Route path="/products/:id/edit" exact component={NewProduct} />
     </Switch>
   );
 }

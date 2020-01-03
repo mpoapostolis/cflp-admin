@@ -12,9 +12,17 @@ export type SelectFilter = {
 
 export type DateFilter = {
   label: string;
-  keyNameFrom: string;
   keyNameTo: string;
+  keyNameFrom: string;
   type: 'date';
 };
 
-export type FilterType = SelectFilter | DateFilter;
+export type NumberFilter = {
+  type: 'number';
+  min: number;
+  max: number;
+  label: string;
+  keyName: string;
+};
+
+export type FilterType = SelectFilter | DateFilter | NumberFilter;

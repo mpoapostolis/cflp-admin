@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
@@ -18,7 +18,7 @@ import * as R from 'ramda';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import useApi from '../../../Hooks';
 import queryString from 'query-string';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 const useStyles = makeStyles(() => ({
   cardContent: {
@@ -81,23 +81,30 @@ function AccountProfile() {
   const handleAddImage = useCallback(img => setImages(s => [...s, img]), []);
   const t = useContext(I18n);
 
+  const params = useParams<{ id?: string }>();
   const history = useHistory();
-  const params = history.location.search;
-  const _infos = queryString.parse(params);
+  const search = history.location.search;
+  const _infos = queryString.parse(search);
 
   const infos = {
     name: _infos.name,
     price: Number(_infos.price),
     lpReward: Number(_infos.lpReward)
   };
+  const api = useApi();
+
+  useEffect(() => {
+    if (params.id) {
+      api.get(`/products/${params.id}`).catch(console.log);
+    }
+  }, []);
+
   const handleDeleteImage = () => {
     const union = R.intersection(images, selected);
     const _images = images.filter(img => !union.includes(img));
     setImages(_images);
     setSelected([]);
   };
-
-  const api = useApi();
 
   const handleSelectImg = (img: Image) => {
     if (selected.includes(img)) {
@@ -114,10 +121,41 @@ function AccountProfile() {
     formData.append('infos', JSON.stringify(infos));
 
     api
-      .post('/api/bo/products/images', {
+      .post('/api/bo/products', {
         body: formData
       })
-      .then(e => console.log(e));
+      .then(e => history.push('/products?offset=0&limit=10'));
+  };
+
+  const g = () =>
+    Math.random()
+      .toString(36)
+      .substring(2, 15) +
+    Math.random()
+      .toString(36)
+      .substring(2, 15);
+  const b = () => {
+    const y = Array(500)
+      .fill('')
+      .map(_ => g());
+
+    y.forEach(k => {
+      const formData = new FormData();
+
+      formData.append(
+        'infos',
+        JSON.stringify({
+          name: k,
+          price: (() => Math.random() * 200)(),
+          lpReward: (() => Math.random() * 200)()
+        })
+      );
+
+      api.post('/api/bo/products', {
+        body: formData
+      });
+    });
+    //   .then(e => history.push('/products?offset=0&limit=10'));
   };
 
   const selectedTitle =
@@ -130,6 +168,7 @@ function AccountProfile() {
         subheader={t('int.edit-view-delete-images')}
       />
       <Divider />
+      <Button onClick={() => b()}>asdas</Button>
 
       <CardContent className={classes.cardContent}>
         {images.map((obj, idx) => (

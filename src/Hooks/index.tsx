@@ -25,9 +25,7 @@ function useApi() {
       afterResponse: [
         async (_request, _options, response) => {
           const data = await response.json();
-          console.log(data);
           if ('error' in data) _setErr(data.error);
-          return data;
         }
       ]
     }

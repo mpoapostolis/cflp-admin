@@ -5,7 +5,7 @@ export type ColumnWithField = {
 
 export type ColumnWithRender = {
   title: string;
-  render: (obj: any, idx?: number) => void;
+  render: (obj: any, idx: number) => void;
 };
 
 export type Columns = (ColumnWithField | ColumnWithRender)[];
