@@ -3,10 +3,13 @@ import { IReduxStore } from '../redux/reducers';
 import { useSelector, useDispatch } from 'react-redux';
 import ky from 'ky';
 import { setErrors } from '../redux/actions/errors';
+import * as R from 'ramda';
 
 function useApi() {
   const token = useSelector((store: IReduxStore) => store.account.token);
+  const err = useSelector((store: IReduxStore) => store.errors);
   const dispatch = useDispatch();
+
   const _setErr = useCallback(
     errors => {
       dispatch(setErrors(errors));
@@ -18,7 +21,7 @@ function useApi() {
     hooks: {
       beforeRequest: [
         request => {
-          _setErr({});
+          if (!R.isEmpty(err)) _setErr({});
           request.headers.set('Authorization', `Bearer ${token}`);
         }
       ],

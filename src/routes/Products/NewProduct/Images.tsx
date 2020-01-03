@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
     alignItems: 'flex-start',
     flexWrap: 'wrap',
     minHeight: '167px',
-    maxHeight: '65vh',
+    maxHeight: '61vh',
     overflowY: 'auto'
   },
 
@@ -74,30 +74,17 @@ type Image = {
   url: string;
 };
 
-function AccountProfile() {
+type Props = {
+  images: Image[];
+  setImages: React.Dispatch<React.SetStateAction<Image[]>>;
+};
+
+function AccountProfile(props: Props) {
   const classes = useStyles();
-  const [images, setImages] = useState<Image[]>([]);
+  const { images, setImages } = props;
   const [selected, setSelected] = useState<Image[]>([]);
   const handleAddImage = useCallback(img => setImages(s => [...s, img]), []);
   const t = useContext(I18n);
-
-  const params = useParams<{ id?: string }>();
-  const history = useHistory();
-  const search = history.location.search;
-  const _infos = queryString.parse(search);
-
-  const infos = {
-    name: _infos.name,
-    price: Number(_infos.price),
-    lpReward: Number(_infos.lpReward)
-  };
-  const api = useApi();
-
-  useEffect(() => {
-    if (params.id) {
-      api.get(`/products/${params.id}`).catch(console.log);
-    }
-  }, []);
 
   const handleDeleteImage = () => {
     const union = R.intersection(images, selected);
@@ -115,49 +102,6 @@ function AccountProfile() {
     }
   };
 
-  const handleSubmit = () => {
-    const formData = new FormData();
-    images.forEach(f => formData.append('image', f.file));
-    formData.append('infos', JSON.stringify(infos));
-
-    api
-      .post('/api/bo/products', {
-        body: formData
-      })
-      .then(e => history.push('/products?offset=0&limit=10'));
-  };
-
-  const g = () =>
-    Math.random()
-      .toString(36)
-      .substring(2, 15) +
-    Math.random()
-      .toString(36)
-      .substring(2, 15);
-  const b = () => {
-    const y = Array(500)
-      .fill('')
-      .map(_ => g());
-
-    y.forEach(k => {
-      const formData = new FormData();
-
-      formData.append(
-        'infos',
-        JSON.stringify({
-          name: k,
-          price: (() => Math.random() * 200)(),
-          lpReward: (() => Math.random() * 200)()
-        })
-      );
-
-      api.post('/api/bo/products', {
-        body: formData
-      });
-    });
-    //   .then(e => history.push('/products?offset=0&limit=10'));
-  };
-
   const selectedTitle =
     selected.length > 0 ? `(${selected.length} ${t('int.selected')})` : '';
 
@@ -168,7 +112,6 @@ function AccountProfile() {
         subheader={t('int.edit-view-delete-images')}
       />
       <Divider />
-      <Button onClick={() => b()}>asdas</Button>
 
       <CardContent className={classes.cardContent}>
         {images.map((obj, idx) => (
@@ -215,9 +158,6 @@ function AccountProfile() {
         )}
 
         <Upload onChange={handleAddImage} />
-        <Button onClick={handleSubmit} color={'primary'} variant="outlined">
-          {t('int.save')}
-        </Button>
       </CardActions>
     </Card>
   );

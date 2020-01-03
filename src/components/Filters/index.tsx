@@ -86,10 +86,6 @@ function Filters(props: Props) {
     setState(newState);
   }, [open, history]);
 
-  useEffect(() => {
-    props.onSubmit(state);
-  }, []);
-
   function getComponent(obj: FilterType) {
     switch (obj.type) {
       case 'select':

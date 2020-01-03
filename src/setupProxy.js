@@ -9,6 +9,11 @@ module.exports = function(app) {
       secure: false,
       logLevel: 'debug'
     }),
+    proxy('/images', {
+      target,
+      secure: false,
+      logLevel: 'debug'
+    }),
     proxy('/auth', {
       target,
       secure: false,

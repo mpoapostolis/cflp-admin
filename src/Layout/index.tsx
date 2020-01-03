@@ -18,7 +18,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 function Layout() {
-  const isSmallDevice = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const isSmallDevice = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down('sm')
+  );
   const [open, setOpen] = useState(!isSmallDevice);
   const classes = useStyles();
 
@@ -32,7 +34,11 @@ function Layout() {
         <Header setOpen={() => setOpen(!open)} />
       </header>
       <div>
-        <Menu isSmallDevice={isSmallDevice} open={open} setOpen={() => setOpen(false)} />
+        <Menu
+          isSmallDevice={isSmallDevice}
+          open={open}
+          setOpen={() => setOpen(false)}
+        />
       </div>
       <main className={classes.root}>
         <div className={classes.content}>

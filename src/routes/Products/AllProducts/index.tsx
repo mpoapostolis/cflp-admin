@@ -30,13 +30,22 @@ function AllProducts() {
   const history = useHistory();
   const api = useApi();
 
-  const getProducts = useCallback((obj: Record<string, any>) => {
-    const url = queryString.stringify(obj);
-    api
-      .get(`/api/bo/products?${url}`)
-      .then(e => e.json())
-      .then(infos => setInfos(infos));
+  useEffect(() => {
+    const search = history.location.search;
+    const obj = queryString.parse(search);
+    getProducts(obj);
   }, []);
+
+  const getProducts = useCallback(
+    (obj: Record<string, any>) => {
+      const url = queryString.stringify(obj);
+      api
+        .get(`/api/bo/products?${url}`)
+        .then(e => e.json())
+        .then(infos => setInfos(infos));
+    },
+    [history.location.search]
+  );
 
   const filterConf = useMemo(
     () =>
