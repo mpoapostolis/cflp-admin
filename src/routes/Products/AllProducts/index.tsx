@@ -18,6 +18,7 @@ import queryString from 'query-string';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
+import { toast } from 'react-toastify';
 
 function AllProducts() {
   const t = useContext(I18n);
@@ -47,6 +48,15 @@ function AllProducts() {
     [history.location.search]
   );
 
+  const deleteProduct = useCallback(
+    (id: string) => {
+      const params = queryString.parse(history.location.search);
+      api.delete(`/api/bo/products/${id}`);
+      toast.success(t('int.product-delete-successfully'));
+      getProducts(params);
+    },
+    [history.location.search]
+  );
   const filterConf = useMemo(
     () =>
       [
@@ -119,7 +129,10 @@ function AllProducts() {
             size="small">
             <EditIcon />
           </IconButton>
-          <IconButton title={t('int.delete')} size="small">
+          <IconButton
+            onClick={() => deleteProduct(obj._id)}
+            title={t('int.delete')}
+            size="small">
             <DeleteIcon />
           </IconButton>
         </>
