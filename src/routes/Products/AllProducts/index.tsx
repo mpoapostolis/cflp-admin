@@ -94,11 +94,11 @@ function AllProducts() {
 
         {
           type: 'range',
-          keyNameMin: 'minLp',
-          keyNameMax: 'maxLp',
-          labelMin: t('int.min-lp'),
-          labelMax: t('int.max-lp'),
-          label: t('int.min-max-lp')
+          keyNameMin: 'minLpReward',
+          keyNameMax: 'maxLpReward',
+          labelMin: t('int.min-lp-reward'),
+          labelMax: t('int.max-lp-reward'),
+          label: t('int.min-max-lp-reward')
         }
       ] as FilterType[],
     [t]
