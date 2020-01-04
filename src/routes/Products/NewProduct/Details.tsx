@@ -33,12 +33,14 @@ type Props = {
     name: string;
     price: number;
     lpReward: number;
+    lpPrice?: number;
   };
   setInfos: React.Dispatch<
     React.SetStateAction<{
       name: string;
       price: number;
       lpReward: number;
+      lpPrice: number | undefined;
     }>
   >;
 };
@@ -48,7 +50,7 @@ function AccountDetails(props: Props) {
   const { infos, setInfos } = props;
   const errors = useSelector((store: IReduxStore) => store.errors);
 
-  const _setParam = useCallback(obj => {
+  const _setInfos = useCallback(obj => {
     setInfos(s => ({ ...s, ...obj }));
   }, []);
 
@@ -67,7 +69,7 @@ function AccountDetails(props: Props) {
               fullWidth
               value={R.propOr('', 'name', infos)}
               error={Boolean(R.prop('name', errors))}
-              onChange={evt => _setParam({ name: evt.currentTarget.value })}
+              onChange={evt => _setInfos({ name: evt.currentTarget.value })}
               helperText={R.propOr('', 'name', errors)}
               label={t('int.name')}
               margin="dense"
@@ -81,10 +83,30 @@ function AccountDetails(props: Props) {
               fullWidth
               error={Boolean(R.prop('price', errors))}
               helperText={R.propOr('', 'price', errors)}
-              onChange={evt => _setParam({ price: +evt.currentTarget.value })}
+              onChange={evt => _setInfos({ price: +evt.currentTarget.value })}
               type={'number'}
               label={t('int.price')}
               margin="dense"
+              variant="outlined"
+            />
+          </Grid>
+
+          <Grid item md={12} xs={12}>
+            <TextField
+              value={R.propOr('', 'lpPrice', infos)}
+              fullWidth
+              error={Boolean(R.prop('lpPrice', errors))}
+              helperText={R.propOr('', 'lpPrice', errors)}
+              label={t('int.lpPrice')}
+              margin="dense"
+              onChange={evt =>
+                _setInfos({
+                  lpPrice:
+                    +evt.currentTarget.value === 0
+                      ? undefined
+                      : +evt.currentTarget.value
+                })
+              }
               required
               variant="outlined"
             />
@@ -99,7 +121,7 @@ function AccountDetails(props: Props) {
               label={t('int.lpReward')}
               margin="dense"
               onChange={evt =>
-                _setParam({ lpReward: +evt.currentTarget.value })
+                _setInfos({ lpReward: +evt.currentTarget.value })
               }
               required
               variant="outlined"

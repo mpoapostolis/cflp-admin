@@ -98,12 +98,16 @@ function AllProducts() {
       field: 'name'
     },
     {
-      title: t('int.lpReward'),
-      field: 'lpReward'
-    },
-    {
       title: t('int.price'),
       field: 'price'
+    },
+    {
+      title: t('int.lpPrice'),
+      field: 'lpPrice'
+    },
+    {
+      title: t('int.lpReward'),
+      field: 'lpReward'
     },
     {
       title: t('int.images'),

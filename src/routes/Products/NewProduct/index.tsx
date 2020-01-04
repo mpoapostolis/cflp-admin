@@ -10,16 +10,21 @@ import { toast } from 'react-toastify';
 
 function NewProduct() {
   const t = useContext(I18n);
-  const history = useHistory();
   type Image = {
     file: File;
     url: string;
   };
   const [images, setImages] = useState<Image[]>([]);
-  const [infos, setInfos] = useState({
+  const [infos, setInfos] = useState<{
+    name: string;
+    price: number;
+    lpReward: number;
+    lpPrice: number | undefined;
+  }>({
     name: '',
     price: 0,
-    lpReward: 0
+    lpReward: 0,
+    lpPrice: undefined
   });
 
   const api = useApi();
@@ -43,13 +48,13 @@ function NewProduct() {
       .get(`/api/bo/products/${params.id}`)
       .then(res => res.json())
       .then(data => {
-        const { name = '', price = 0, lpReward = 0 } = data;
+        const { name = '', price = 0, lpReward = 0, lpPrice } = data;
         const images = data.images.map((url: string) => ({
           file: null,
           url
         }));
         setImages(images);
-        setInfos({ name, price, lpReward });
+        setInfos({ name, price, lpReward, lpPrice });
       })
       .catch(console.error);
   }, []);
@@ -58,6 +63,7 @@ function NewProduct() {
 
   const handleSubmit = () => {
     const formData = new FormData();
+
     images.forEach(f => formData.append('image', f.file));
     formData.append('infos', JSON.stringify(infos));
     const action = isEdit ? api.put : api.post;
@@ -69,7 +75,6 @@ function NewProduct() {
       body: formData
     }).then(() => {
       toast.success(successMsg);
-      history.push('/products?offset=0&limit=10');
     });
   };
 
