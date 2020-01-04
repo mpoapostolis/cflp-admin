@@ -37,6 +37,9 @@ const useStyles = makeStyles(() => ({
       color: `${red[500]}`
     }
   },
+  marginRight: {
+    marginRight: '15px'
+  },
   actionCont: { display: 'flex' }
 }));
 
@@ -158,6 +161,8 @@ function AllOffers() {
         <div className={classes.actionCont}>
           {obj.status === 'INACTIVE' && (
             <IconButton
+              size={'small'}
+              className={classes.marginRight}
               onClick={() => toggleStatus(obj._id, 'activate')}
               title={t('int.delete')}>
               <PlayArrowIcon htmlColor={green[500]} />
@@ -165,17 +170,23 @@ function AllOffers() {
           )}
           {obj.status === 'ACTIVE' && (
             <IconButton
+              size={'small'}
+              className={classes.marginRight}
               onClick={() => toggleStatus(obj._id, 'deactivate')}
               title={t('int.delete')}>
               <StopIcon htmlColor={red[500]} />
             </IconButton>
           )}
           <IconButton
+            size={'small'}
+            className={classes.marginRight}
             onClick={() => history.push(`/offers/${obj._id}/edit`)}
             title={t('int.view')}>
             <EditIcon />
           </IconButton>
           <IconButton
+            size={'small'}
+            className={classes.marginRight}
             onClick={() => deleteOffer(obj._id)}
             title={t('int.delete')}>
             <DeleteIcon />

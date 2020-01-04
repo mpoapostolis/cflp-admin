@@ -20,6 +20,11 @@ import * as R from 'ramda';
 import { toast } from 'react-toastify';
 import ImageRepresentation from '../../../components/ImageRepresentation';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import { css } from 'emotion';
+
+const marginRight = css`
+  margin-right: 15px !important;
+`;
 
 function AllProducts() {
   const t = useContext(I18n);
@@ -63,6 +68,7 @@ function AllProducts() {
     },
     [history.location.search]
   );
+
   const filterConf = useMemo(
     () =>
       [
@@ -139,17 +145,23 @@ function AllProducts() {
       render: (obj: any, idx: number) => (
         <>
           <IconButton
+            classes={{ root: marginRight }}
+            size={'small'}
             onClick={() => history.push(`/products/${obj._id}`)}
             title={t('int.view')}>
             <VisibilityIcon />
           </IconButton>
 
           <IconButton
+            classes={{ root: marginRight }}
+            size={'small'}
             onClick={() => history.push(`/products/${obj._id}/edit`)}
             title={t('int.edit')}>
             <EditIcon />
           </IconButton>
           <IconButton
+            classes={{ root: marginRight }}
+            size={'small'}
             onClick={() => deleteProduct(obj._id)}
             title={t('int.delete')}>
             <DeleteIcon />
