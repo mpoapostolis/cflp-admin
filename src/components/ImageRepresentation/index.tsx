@@ -5,7 +5,7 @@ import { grey } from '@material-ui/core/colors';
 
 function ImageRepresentation(props: { howMany: number }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', minWidth: '70px' }}>
       {props.howMany > 0 ? (
         <>
           <ImageIcon htmlColor={grey[500]} />
