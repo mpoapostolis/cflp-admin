@@ -13,15 +13,33 @@ import { Button, Typography, IconButton } from '@material-ui/core';
 import { Columns } from '../../../components/Table/types';
 import { Link, useHistory } from 'react-router-dom';
 import useApi from '../../../Hooks';
+import ImageIcon from '@material-ui/icons/Image';
 import queryString from 'query-string';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
 import { toast } from 'react-toastify';
-import { grey } from '@material-ui/core/colors';
+import { cx } from 'emotion';
+import { makeStyles } from '@material-ui/styles';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import StopIcon from '@material-ui/icons/Stop';
+import { red, green, grey, orange } from '@material-ui/core/colors';
 import ImageRepresentation from '../../../components/ImageRepresentation';
 
-function AllProducts() {
+const useStyles = makeStyles(() => ({
+  btn: {
+    '&.ACTIVE': {
+      border: `solid 1px ${green[500]}`,
+      color: `${green[500]}`
+    },
+    '&.INACTIVE': {
+      border: `solid 1px ${red[500]}`,
+      color: `${red[500]}`
+    }
+  }
+}));
+
+function AllOffers() {
   const t = useContext(I18n);
   const [infos, setInfos] = useState({
     data: [],
@@ -32,19 +50,20 @@ function AllProducts() {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const api = useApi();
+  const classes = useStyles();
 
   useEffect(() => {
     const search = history.location.search;
     const obj = queryString.parse(search);
-    getProducts(obj);
+    getOffers(obj);
   }, []);
 
-  const getProducts = useCallback(
+  const getOffers = useCallback(
     (obj: Record<string, any>) => {
       setLoading(true);
       const url = queryString.stringify(obj);
       api
-        .get(`/api/bo/products?${url}`)
+        .get(`/api/bo/offers?${url}`)
         .then(e => e.json())
         .then(infos => {
           setInfos(infos);
@@ -57,40 +76,32 @@ function AllProducts() {
   const deleteProduct = useCallback(
     (id: string) => {
       const params = queryString.parse(history.location.search);
-      api.delete(`/api/bo/products/${id}`);
+      api.delete(`/api/bo/offers/${id}`);
       toast.success(t('int.product-delete-successfully'));
-      getProducts(params);
+      getOffers(params);
     },
     [history.location.search]
   );
-  const filterConf = useMemo(
-    () =>
-      [
-        {
-          type: 'number',
-          keyName: 'minLp',
-          label: t('int.min-lp')
-        },
 
-        {
-          type: 'number',
-          keyName: 'maxPrice',
-          label: t('int.max-lp')
-        },
-        {
-          type: 'number',
-          keyName: 'minPrice',
-          label: t('int.min-price')
-        },
-
-        {
-          type: 'number',
-          keyName: 'maxPrice',
-          label: t('int.max-price')
+  const toggleStatus = useCallback(
+    (id: string, action: string) => {
+      const msg =
+        action === 'active'
+          ? 'int.offer-deactivated-successfully'
+          : 'int.offer-activated-successfully';
+      const params = queryString.parse(history.location.search);
+      api.post(`/api/bo/offers/${action}`, {
+        json: {
+          id
         }
-      ] as FilterType[],
-    [t]
+      });
+      toast.success(t(msg));
+      getOffers(params);
+    },
+    [history.location.search]
   );
+
+  const filterConf = useMemo(() => [] as FilterType[], [t]);
 
   const columns: Columns = [
     {
@@ -98,12 +109,12 @@ function AllProducts() {
       field: 'name'
     },
     {
-      title: t('int.lpReward'),
-      field: 'lpReward'
+      title: t('int.description'),
+      field: 'description'
     },
     {
-      title: t('int.price'),
-      field: 'price'
+      title: t('int.loyalty-points'),
+      field: 'loyaltyPoints'
     },
     {
       title: t('int.images'),
@@ -114,9 +125,37 @@ function AllProducts() {
       }
     },
     {
+      title: t('int.status'),
+      render: (obj: any, idx: number) => {
+        return (
+          <Button
+            size="small"
+            disabled
+            className={cx(classes.btn, obj.status)}
+            variant="outlined">
+            {obj.status}
+          </Button>
+        );
+      }
+    },
+    {
       title: t('int.actions'),
       render: (obj: any, idx: number) => (
         <>
+          {obj.status === 'INACTIVE' && (
+            <IconButton
+              onClick={() => toggleStatus(obj._id, 'activate')}
+              title={t('int.delete')}>
+              <PlayArrowIcon htmlColor={green[500]} />
+            </IconButton>
+          )}
+          {obj.status === 'ACTIVE' && (
+            <IconButton
+              onClick={() => toggleStatus(obj._id, 'deactivate')}
+              title={t('int.delete')}>
+              <StopIcon htmlColor={red[500]} />
+            </IconButton>
+          )}
           <IconButton
             onClick={() => history.push(`/products/${obj._id}/edit`)}
             title={t('int.view')}>
@@ -140,22 +179,22 @@ function AllProducts() {
           alignItems: 'flex-end',
           justifyContent: 'space-between'
         }}>
-        <Typography variant="h4">{t('int.products')}</Typography>
+        <Typography variant="h4">{t('int.offers')}</Typography>
 
-        <Button component={Link} to="/products/new" variant="contained">
+        <Button component={Link} to="/offers/new" variant="contained">
           {t('int.add-new')}
         </Button>
       </div>
       <br />
-      <Filters onSubmit={getProducts} filterConf={filterConf} />
+      <Filters onSubmit={getOffers} filterConf={filterConf} />
       <MaterialTable
         loading={loading}
         columns={columns}
         {...infos}
-        onChange={getProducts}
+        onChange={getOffers}
       />
     </>
   );
 }
 
-export default AllProducts;
+export default AllOffers;

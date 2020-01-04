@@ -1,11 +1,9 @@
 import React from 'react';
-import { Switch, Route, useHistory } from 'react-router';
-import { Render } from '../';
+import { Switch, Route } from 'react-router';
 import AllProducts from './AllProducts';
 import NewProduct from './NewProduct';
 
 function Reports() {
-  const history = useHistory();
   return (
     <Switch>
       <Route path="/products" exact component={AllProducts} />
