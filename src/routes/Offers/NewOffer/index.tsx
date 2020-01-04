@@ -8,7 +8,7 @@ import useApi from '../../../Hooks';
 import { useParams, useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 
-function NewProduct() {
+function NewOffer() {
   const t = useContext(I18n);
   const history = useHistory();
   type Image = {
@@ -18,8 +18,9 @@ function NewProduct() {
   const [images, setImages] = useState<Image[]>([]);
   const [infos, setInfos] = useState({
     name: '',
-    price: 0,
-    lpReward: 0
+    description: '',
+    status: 'INACTIVE',
+    loyaltyPoints: 0
   });
 
   const api = useApi();
@@ -27,7 +28,7 @@ function NewProduct() {
 
   const deleteImages = (paths: string[]) => {
     api
-      .delete(`/api/bo/products/${params.id}/images`, {
+      .delete(`/api/bo/offers/${params.id}/images`, {
         json: {
           paths
         }
@@ -40,16 +41,21 @@ function NewProduct() {
   useEffect(() => {
     if (!params.id) return;
     api
-      .get(`/api/bo/products/${params.id}`)
+      .get(`/api/bo/offers/${params.id}`)
       .then(res => res.json())
       .then(data => {
-        const { name = '', price = 0, lpReward = 0 } = data;
+        const {
+          name = '',
+          description = '',
+          status = 'INACTIVE',
+          loyaltyPoints = 0
+        } = data;
         const images = data.images.map((url: string) => ({
           file: null,
           url
         }));
         setImages(images);
-        setInfos({ name, price, lpReward });
+        setInfos({ name, description, status, loyaltyPoints });
       })
       .catch(console.error);
   }, []);
@@ -61,15 +67,14 @@ function NewProduct() {
     images.forEach(f => formData.append('image', f.file));
     formData.append('infos', JSON.stringify(infos));
     const action = isEdit ? api.put : api.post;
-    const url = isEdit ? `/api/bo/products/${params.id}` : `/api/bo/products`;
+    const url = isEdit ? `/api/bo/offers/${params.id}` : `/api/bo/offers`;
     const successMsg = isEdit
-      ? 'int.product-updated-successfully'
-      : 'int.product-created-successfully';
+      ? 'int.offer-updated-successfully'
+      : 'int.offer-created-successfully';
     action(url, {
       body: formData
     }).then(() => {
       toast.success(successMsg);
-      history.push('/products?offset=0&limit=10');
     });
   };
 
@@ -98,4 +103,4 @@ function NewProduct() {
   );
 }
 
-export default NewProduct;
+export default NewOffer;

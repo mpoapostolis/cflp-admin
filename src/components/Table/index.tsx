@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     width: '200px'
   },
   loading: {
-    opacity: 0.2
+    opacity: 0.5
   },
   underline: {
     '&::before': {
@@ -112,7 +112,7 @@ function MaterialTable(props: Props) {
               evt.currentTarget.value === ''
                 ? undefined
                 : evt.currentTarget.value;
-            handleChange({ searchTerm });
+            handleChange({ searchTerm, offset: 0 });
           }}
           placeholder={t('int.search')}
         />

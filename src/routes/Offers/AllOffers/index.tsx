@@ -36,7 +36,8 @@ const useStyles = makeStyles(() => ({
       border: `solid 1px ${red[500]}`,
       color: `${red[500]}`
     }
-  }
+  },
+  actionCont: { display: 'flex' }
 }));
 
 function AllOffers() {
@@ -73,11 +74,11 @@ function AllOffers() {
     [history.location.search]
   );
 
-  const deleteProduct = useCallback(
+  const deleteOffer = useCallback(
     (id: string) => {
       const params = queryString.parse(history.location.search);
       api.delete(`/api/bo/offers/${id}`);
-      toast.success(t('int.product-delete-successfully'));
+      toast.success(t('int.offer-delete-successfully'));
       getOffers(params);
     },
     [history.location.search]
@@ -145,7 +146,7 @@ function AllOffers() {
     {
       title: t('int.actions'),
       render: (obj: any, idx: number) => (
-        <>
+        <div className={classes.actionCont}>
           {obj.status === 'INACTIVE' && (
             <IconButton
               onClick={() => toggleStatus(obj._id, 'activate')}
@@ -161,16 +162,16 @@ function AllOffers() {
             </IconButton>
           )}
           <IconButton
-            onClick={() => history.push(`/products/${obj._id}/edit`)}
+            onClick={() => history.push(`/offers/${obj._id}/edit`)}
             title={t('int.view')}>
             <EditIcon />
           </IconButton>
           <IconButton
-            onClick={() => deleteProduct(obj._id)}
+            onClick={() => deleteOffer(obj._id)}
             title={t('int.delete')}>
             <DeleteIcon />
           </IconButton>
-        </>
+        </div>
       )
     }
   ];
