@@ -117,6 +117,10 @@ function AllOffers() {
       field: 'loyaltyPoints'
     },
     {
+      title: t('int.purchased'),
+      render: obj => R.propOr('-', 'purchased', obj)
+    },
+    {
       title: t('int.images'),
       render: (obj: any, idx: number) => {
         const tmp: unknown[] = R.propOr([], 'images', obj);

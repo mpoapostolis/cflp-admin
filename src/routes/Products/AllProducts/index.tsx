@@ -99,11 +99,15 @@ function AllProducts() {
     },
     {
       title: t('int.price'),
-      field: 'price'
+      render: obj => `${R.propOr('-', 'price', obj)} €`
+    },
+    {
+      title: t('int.purchased'),
+      render: obj => R.propOr('-', 'purchased', obj)
     },
     {
       title: t('int.lpPrice'),
-      field: 'lpPrice'
+      render: obj => R.propOr('-', 'lpPrice', obj)
     },
     {
       title: t('int.lpReward'),
