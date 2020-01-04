@@ -18,7 +18,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
 import { toast } from 'react-toastify';
-import { grey } from '@material-ui/core/colors';
 import ImageRepresentation from '../../../components/ImageRepresentation';
 
 function AllProducts() {
@@ -67,26 +66,39 @@ function AllProducts() {
     () =>
       [
         {
-          type: 'number',
-          keyName: 'minLp',
-          label: t('int.min-lp')
+          type: 'range',
+          keyNameMin: 'minPrice',
+          keyNameMax: 'maxPrice',
+          labelMin: t('int.min-price'),
+          labelMax: t('int.max-price'),
+          label: t('int.min-max-price')
         },
 
         {
-          type: 'number',
-          keyName: 'maxPrice',
-          label: t('int.max-lp')
-        },
-        {
-          type: 'number',
-          keyName: 'minPrice',
-          label: t('int.min-price')
+          type: 'range',
+          keyNameMin: 'minPurchased',
+          keyNameMax: 'maxPurchased',
+          labelMin: t('int.min-purchased'),
+          labelMax: t('int.max-purchased'),
+          label: t('int.min-max-purchased')
         },
 
         {
-          type: 'number',
-          keyName: 'maxPrice',
-          label: t('int.max-price')
+          type: 'range',
+          keyNameMin: 'minLpPrice',
+          keyNameMax: 'maxLpPrice',
+          labelMin: t('int.min-lp-price'),
+          labelMax: t('int.max-lp-price'),
+          label: t('int.min-max-lp-price')
+        },
+
+        {
+          type: 'range',
+          keyNameMin: 'minLp',
+          keyNameMax: 'maxLp',
+          labelMin: t('int.min-lp'),
+          labelMax: t('int.max-lp'),
+          label: t('int.min-max-lp')
         }
       ] as FilterType[],
     [t]

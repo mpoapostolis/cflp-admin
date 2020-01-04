@@ -26,6 +26,8 @@ import I18n from '../../I18n';
 import { FilterType } from './types';
 import { useHistory } from 'react-router-dom';
 import { formatDate } from '../../utils';
+import { cx } from 'emotion';
+import { letterSpacing } from '@material-ui/system';
 
 const useStyles = makeStyles((theme: Theme) => ({
   list: {
@@ -33,6 +35,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: 10
   },
 
+  range: {
+    display: 'flex',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  rangeTextfield: {
+    width: '135px'
+  },
   icon: {
     marginRight: theme.spacing(1)
   },
@@ -73,7 +84,11 @@ function Filters(props: Props) {
     const params = queryString.parse(history.location.search);
     const keys = props.filterConf
       .map(obj =>
-        obj.type === 'date' ? [obj.keyNameFrom, obj.keyNameTo] : obj.keyName
+        obj.type === 'date'
+          ? [obj.keyNameFrom, obj.keyNameTo]
+          : obj.type === 'range'
+          ? [obj.keyNameMin, obj.keyNameMax]
+          : obj.keyName
       )
       .flatMap(e => e);
     const newState = keys.reduce(
@@ -104,6 +119,35 @@ function Filters(props: Props) {
               </MenuItem>
             ))}
           </TextField>
+        );
+
+      case 'range':
+        return (
+          <div className={classes.range}>
+            <TextField
+              className={cx(classes.rangeTextfield, 'margin')}
+              type={'number'}
+              margin="dense"
+              label={obj.labelMin}
+              value={state[obj.keyNameMin] || ''}
+              onChange={e =>
+                handleChangeValue({ [obj.keyNameMin]: e.target.value })
+              }
+              variant="outlined"
+            />
+            <div>-</div>
+            <TextField
+              className={classes.rangeTextfield}
+              type={'number'}
+              margin="dense"
+              label={obj.labelMax}
+              value={state[obj.keyNameMax] || ''}
+              onChange={e =>
+                handleChangeValue({ [obj.keyNameMax]: e.target.value })
+              }
+              variant="outlined"
+            />
+          </div>
         );
 
       case 'date':
@@ -181,6 +225,15 @@ function Filters(props: Props) {
                     formatDate(Number(state[obj.keyNameFrom])),
                     formatDate(Number(state[obj.keyNameTo]))
                   ].join(' - ')
+                }
+              ]
+            : obj.type === 'range'
+            ? [
+                {
+                  label: [obj.label],
+                  value: [state[obj.keyNameMin], state[obj.keyNameMax]].join(
+                    ' - '
+                  )
                 }
               ]
             : { label: [obj.label], value: state[obj.keyName] };

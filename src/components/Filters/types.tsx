@@ -17,6 +17,14 @@ export type DateFilter = {
   type: 'date';
 };
 
+export type RangeFilter = {
+  type: 'range';
+  keyNameMin: string;
+  keyNameMax: string;
+  labelMin: string;
+  labelMax: string;
+  label: string;
+};
 export type NumberFilter = {
   type: 'number';
   min: number;
@@ -25,4 +33,4 @@ export type NumberFilter = {
   keyName: string;
 };
 
-export type FilterType = SelectFilter | DateFilter | NumberFilter;
+export type FilterType = SelectFilter | DateFilter | NumberFilter | RangeFilter;
