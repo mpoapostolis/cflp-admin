@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, useEffect } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
@@ -29,14 +29,12 @@ type Props = {
     name: string;
     description: string;
     status: string;
-    loyaltyPoints: number;
   };
   setInfos: React.Dispatch<
     React.SetStateAction<{
       name: string;
       description: string;
       status: string;
-      loyaltyPoints: number;
     }>
   >;
 };
@@ -90,21 +88,6 @@ function AccountDetails(props: Props) {
             />
           </Grid>
 
-          <Grid item md={12} xs={12}>
-            <TextField
-              value={R.propOr('', 'loyaltyPoints', infos)}
-              fullWidth
-              error={Boolean(R.prop('loyaltyPoints', errors))}
-              helperText={R.propOr('', 'loyaltyPoints', errors)}
-              label={t('int.loyaltyPoints')}
-              margin="dense"
-              onChange={evt =>
-                _setInfos({ loyaltyPoints: +evt.currentTarget.value })
-              }
-              required
-              variant="outlined"
-            />
-          </Grid>
           <Grid item md={12} xs={12}>
             <TextField
               select

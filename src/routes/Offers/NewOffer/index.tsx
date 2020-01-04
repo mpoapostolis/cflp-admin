@@ -5,12 +5,11 @@ import Details from './Details';
 import ActionHeader from '../../../components/ActionHeader';
 import I18n from '../../../I18n';
 import useApi from '../../../Hooks';
-import { useParams, useHistory } from 'react-router';
+import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 
 function NewOffer() {
   const t = useContext(I18n);
-  const history = useHistory();
   type Image = {
     file: File;
     url: string;
@@ -19,8 +18,7 @@ function NewOffer() {
   const [infos, setInfos] = useState({
     name: '',
     description: '',
-    status: 'INACTIVE',
-    loyaltyPoints: 0
+    status: 'INACTIVE'
   });
 
   const api = useApi();
@@ -44,18 +42,13 @@ function NewOffer() {
       .get(`/api/bo/offers/${params.id}`)
       .then(res => res.json())
       .then(data => {
-        const {
-          name = '',
-          description = '',
-          status = 'INACTIVE',
-          loyaltyPoints = 0
-        } = data;
+        const { name = '', description = '', status = 'INACTIVE' } = data;
         const images = data.images.map((url: string) => ({
           file: null,
           url
         }));
         setImages(images);
-        setInfos({ name, description, status, loyaltyPoints });
+        setInfos({ name, description, status });
       })
       .catch(console.error);
   }, []);

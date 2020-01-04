@@ -18,9 +18,9 @@ import {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mapCont: {
-    width: '600px',
     padding: '15px',
-    height: '600px'
+    width: 'calc(100% - 30px)',
+    height: 'calc(100% - 30px)'
   },
   map: {
     width: '100%',

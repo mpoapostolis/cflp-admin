@@ -19,6 +19,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
 import { toast } from 'react-toastify';
 import ImageRepresentation from '../../../components/ImageRepresentation';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 function AllProducts() {
   const t = useContext(I18n);
@@ -138,8 +139,14 @@ function AllProducts() {
       render: (obj: any, idx: number) => (
         <>
           <IconButton
-            onClick={() => history.push(`/products/${obj._id}/edit`)}
+            onClick={() => history.push(`/products/${obj._id}`)}
             title={t('int.view')}>
+            <VisibilityIcon />
+          </IconButton>
+
+          <IconButton
+            onClick={() => history.push(`/products/${obj._id}/edit`)}
+            title={t('int.edit')}>
             <EditIcon />
           </IconButton>
           <IconButton

@@ -13,7 +13,6 @@ import { Button, Typography, IconButton } from '@material-ui/core';
 import { Columns } from '../../../components/Table/types';
 import { Link, useHistory } from 'react-router-dom';
 import useApi from '../../../Hooks';
-import ImageIcon from '@material-ui/icons/Image';
 import queryString from 'query-string';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -23,7 +22,8 @@ import { cx } from 'emotion';
 import { makeStyles } from '@material-ui/styles';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
-import { red, green, grey, orange } from '@material-ui/core/colors';
+import { red, green } from '@material-ui/core/colors';
+
 import ImageRepresentation from '../../../components/ImageRepresentation';
 
 const useStyles = makeStyles(() => ({
@@ -50,8 +50,17 @@ function AllOffers() {
   });
   const history = useHistory();
   const [loading, setLoading] = useState(false);
+  const [coords, setCoords] = useState([0, 0]);
   const api = useApi();
   const classes = useStyles();
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(p => {
+        setCoords([p.coords.latitude, p.coords.longitude]);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const search = history.location.search;
