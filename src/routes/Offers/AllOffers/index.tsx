@@ -23,7 +23,7 @@ import { makeStyles } from '@material-ui/styles';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import { red, green } from '@material-ui/core/colors';
-
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageRepresentation from '../../../components/ImageRepresentation';
 
 const useStyles = makeStyles(() => ({
@@ -158,7 +158,15 @@ function AllOffers() {
     {
       title: t('int.actions'),
       render: (obj: any, idx: number) => (
-        <div className={classes.actionCont}>
+        <div>
+          <IconButton
+            className={classes.marginRight}
+            size={'small'}
+            onClick={() => history.push(`/offers/${obj._id}`)}
+            title={t('int.view')}>
+            <VisibilityIcon />
+          </IconButton>
+
           {obj.status === 'INACTIVE' && (
             <IconButton
               size={'small'}
