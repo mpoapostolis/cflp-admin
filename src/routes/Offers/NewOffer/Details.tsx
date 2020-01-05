@@ -232,7 +232,7 @@ function AccountDetails(props: Props) {
                       : '',
                     opacity: discounts[idx].discount ? '0.5' : ''
                   }}>
-                  {`${obj?.price}€` ?? ''}
+                  {obj.price ? `${obj.price}€` : ''}
                 </Typography>
                 {discounts[idx].discount ? (
                   <Typography>
