@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { Grid, Button } from '@material-ui/core';
-import Images from './Images';
 import Details from './Details';
 import ActionHeader from '../../../components/ActionHeader';
 import I18n from '../../../I18n';
 import useApi from '../../../Hooks';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
+import EditImages from '../../../components/EditImages';
 
 function NewOffer() {
   const t = useContext(I18n);
@@ -84,7 +84,7 @@ function NewOffer() {
           <Details infos={infos} setInfos={setInfos} />
         </Grid>
         <Grid item xl={6} lg={6} md={12} xs={12}>
-          <Images
+          <EditImages
             deleteImages={deleteImages}
             isEdit={isEdit}
             images={images}
