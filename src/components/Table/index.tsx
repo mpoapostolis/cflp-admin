@@ -136,7 +136,7 @@ function MaterialTable(props: Props) {
                   <TableCell key={idx}>
                     {'render' in column
                       ? column.render(row, idx)
-                      : row[column.field]}
+                      : row[column.field] || '-'}
                   </TableCell>
                 ))}
               </TableRow>

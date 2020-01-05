@@ -27,6 +27,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import IconRepresentation from '../../../components/ImageRepresentation';
+import { render } from 'react-dom';
 
 const useStyles = makeStyles(() => ({
   btn: {
@@ -125,11 +126,30 @@ function AllOffers() {
     },
     {
       title: t('int.description'),
-      field: 'description'
+      render: (obj, idx) => (
+        <Typography
+          style={{
+            maxHeight: '100px',
+            overflow: 'auto',
+            width: '150px'
+          }}
+          variant="body1">
+          {obj.description}
+        </Typography>
+      )
     },
     {
-      title: t('int.loyalty-points'),
-      field: 'loyaltyPoints'
+      title: t('int.type'),
+      field: 'type'
+    },
+
+    {
+      title: t('int.lp-price'),
+      field: 'lpPrice'
+    },
+    {
+      title: t('int.lp-reward'),
+      field: 'lpReward'
     },
     {
       title: t('int.purchased'),
@@ -178,7 +198,7 @@ function AllOffers() {
       title: t('int.actions'),
       render: (obj: any, idx: number) => (
         <div>
-          {obj.status === 'INACTIVE' && (
+          {obj.status === 'DRAFT' && (
             <IconButton
               size={'small'}
               className={classes.marginRight}

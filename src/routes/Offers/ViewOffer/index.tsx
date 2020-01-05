@@ -11,7 +11,8 @@ import {
   CardContent,
   Divider,
   IconButton,
-  Grid
+  Grid,
+  Typography
 } from '@material-ui/core';
 import I18n from '../../../I18n';
 import { useParams, useHistory } from 'react-router';
@@ -23,6 +24,7 @@ import ImageModal from '../../../components/ImageModal';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { toast } from 'react-toastify';
+import { Discount } from '../NewOffer/Details';
 
 const imgModal = css`
   max-width: 250px;
@@ -48,7 +50,13 @@ const imgCont = css`
 function ViewOffer() {
   const t = useContext(I18n);
   const api = useApi();
-  const [infos, setInfos] = useState({});
+  const [infos, setInfos] = useState<{
+    name: string;
+    description: string;
+    purchased: number;
+    status: string;
+    discounts: Discount[];
+  }>();
   const [images, setImages] = useState<{ url: string }[]>([]);
   const params = useParams<{ id?: string }>();
   const history = useHistory();
@@ -59,11 +67,17 @@ function ViewOffer() {
       .get(`/api/bo/offers/${params.id}`)
       .then(res => res.json())
       .then(data => {
-        const { name = '', description = '', purchased = 0, status } = data;
+        const {
+          name = '',
+          description = '',
+          purchased = 0,
+          status,
+          discounts = []
+        } = data;
         const images = data.images.map((url: string) => ({
           url
         }));
-        setInfos({ name, description, purchased, status });
+        setInfos({ name, description, purchased, status, discounts });
         setImages(images);
       })
       .catch(console.error);
@@ -75,16 +89,12 @@ function ViewOffer() {
     history.push('/offers');
   }, [params]);
 
-  console.log(infos, images);
-
-  const keys = useMemo(
-    () =>
-      Object.keys(infos).map(k => ({
-        label: t(`int.${k.toLocaleLowerCase()}`),
-        value: R.propOr('', k, infos) as string
-      })),
-    [infos]
-  );
+  const keys = useMemo(() => {
+    return ['name', 'description', 'purchased', 'status'].map(k => ({
+      label: t(`int.${k.toLocaleLowerCase()}`),
+      value: R.propOr('', k, infos) as string
+    }));
+  }, [infos]);
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -114,7 +124,30 @@ function ViewOffer() {
             {keys.map((obj, idx) => (
               <InfoItem key={idx} {...obj} />
             ))}
-            <br />
+
+            {infos?.discounts && infos?.discounts.length > 0 && (
+              <>
+                <br />
+                <Divider />
+                <br />
+                <Typography variant="h6">{t('int.discounts')}:</Typography>
+                <br />
+              </>
+            )}
+            {infos?.discounts.map((obj, idx) => {
+              const keys = ['name', 'price', 'discount'].map(k => ({
+                label: t(`int.${k.toLocaleLowerCase()}`),
+                value: R.propOr('', k, obj) as string
+              }));
+              return (
+                <div key={idx}>
+                  {keys.map((o, idx) => (
+                    <InfoItem key={idx} label={o.label} value={o.value} />
+                  ))}
+                  <br />
+                </div>
+              );
+            })}
           </CardContent>
         </Card>
       </Grid>
