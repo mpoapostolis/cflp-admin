@@ -20,4 +20,7 @@ export const header = css`
 
 export const main = css`
   grid-area: main;
+  * {
+    max-width: 90vw !important;
+  }
 `;

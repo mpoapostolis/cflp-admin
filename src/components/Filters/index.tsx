@@ -52,12 +52,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '0 15px 0 15px',
     alignItems: 'center',
     background: '#fff',
-    height: '60px'
+    height: '60px',
+    overflowX: 'scroll'
   },
   spacer: {
     marginLeft: 'auto'
   },
-  giveMeMargin: { marginRight: '20px' },
+  giveMeMargin: { minWidth: '100px', marginRight: '20px' },
 
   closeBtnIcon: {
     marginRight: theme.spacing(1)

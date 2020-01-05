@@ -10,7 +10,8 @@ import Routes from '../routes';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(3),
-    gridArea: 'main'
+    gridArea: 'main',
+    maxWidth: '90vw !important'
   },
   content: {
     marginTop: theme.spacing(2)
