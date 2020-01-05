@@ -263,6 +263,7 @@ function AccountDetails(props: Props) {
         <span className={classes.spacer}></span>
 
         <Button
+          size={'small'}
           onClick={addDiscount}
           className={classes.btn}
           title={t('int.add-discount')}

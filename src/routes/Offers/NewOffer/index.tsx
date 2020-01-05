@@ -7,6 +7,7 @@ import useApi from '../../../Hooks';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import EditImages from '../../../components/EditImages';
+import * as R from 'ramda';
 
 function NewOffer() {
   const t = useContext(I18n);
@@ -68,8 +69,14 @@ function NewOffer() {
 
   const handleSubmit = () => {
     const formData = new FormData();
+    const _infos = {
+      ...infos,
+      discounts: infos.discounts.map(o =>
+        R.pick(['name', 'price', 'discount'], o)
+      )
+    };
     images.forEach(f => formData.append('image', f.file));
-    formData.append('infos', JSON.stringify(infos));
+    formData.append('infos', JSON.stringify(_infos));
     const action = isEdit ? api.put : api.post;
     const url = isEdit ? `/api/bo/offers/${params.id}` : `/api/bo/offers`;
     const successMsg = isEdit
