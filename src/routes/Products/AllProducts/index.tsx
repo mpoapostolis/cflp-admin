@@ -20,6 +20,7 @@ import * as R from 'ramda';
 import { toast } from 'react-toastify';
 import ImageRepresentation from '../../../components/ImageRepresentation';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import ImageIcon from '@material-ui/icons/Image';
 import { css } from 'emotion';
 
 const marginRight = css`
@@ -137,7 +138,11 @@ function AllProducts() {
       render: (obj: any, idx: number) => {
         const tmp: unknown[] = R.propOr([], 'images', obj);
         const howMany = tmp.length;
-        return <ImageRepresentation howMany={howMany} />;
+        return (
+          <ImageRepresentation howMany={howMany}>
+            <ImageIcon htmlColor={'#546e7a'} />
+          </ImageRepresentation>
+        );
       }
     },
     {

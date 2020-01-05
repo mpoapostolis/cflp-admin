@@ -59,11 +59,11 @@ function ViewOffer() {
       .get(`/api/bo/offers/${params.id}`)
       .then(res => res.json())
       .then(data => {
-        const { name = '', description = '', purchased = 0 } = data;
+        const { name = '', description = '', purchased = 0, status } = data;
         const images = data.images.map((url: string) => ({
           url
         }));
-        setInfos({ name, description, purchased });
+        setInfos({ name, description, purchased, status });
         setImages(images);
       })
       .catch(console.error);

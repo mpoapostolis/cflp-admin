@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { Grid, Button } from '@material-ui/core';
-import Details from './Details';
+import Details, { Discount } from './Details';
 import ActionHeader from '../../../components/ActionHeader';
 import I18n from '../../../I18n';
 import useApi from '../../../Hooks';
@@ -15,10 +15,16 @@ function NewOffer() {
     url: string;
   };
   const [images, setImages] = useState<Image[]>([]);
-  const [infos, setInfos] = useState({
+  const [infos, setInfos] = useState<{
+    name: string;
+    description: string;
+    status: string;
+    discounts: Discount[];
+  }>({
     name: '',
     description: '',
-    status: 'INACTIVE'
+    status: 'INACTIVE',
+    discounts: []
   });
 
   const api = useApi();
@@ -42,13 +48,18 @@ function NewOffer() {
       .get(`/api/bo/offers/${params.id}`)
       .then(res => res.json())
       .then(data => {
-        const { name = '', description = '', status = 'INACTIVE' } = data;
+        const {
+          name = '',
+          description = '',
+          status = 'INACTIVE',
+          discounts = []
+        } = data;
         const images = data.images.map((url: string) => ({
           file: null,
           url
         }));
         setImages(images);
-        setInfos({ name, description, status });
+        setInfos({ name, description, status, discounts });
       })
       .catch(console.error);
   }, []);

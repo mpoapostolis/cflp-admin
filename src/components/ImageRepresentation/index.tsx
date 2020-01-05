@@ -1,14 +1,12 @@
-import ImageIcon from '@material-ui/icons/Image';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Typography } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
 
-function ImageRepresentation(props: { howMany: number }) {
+function IconRepresentation(props: { howMany: number; children: ReactNode }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', minWidth: '70px' }}>
       {props.howMany > 0 ? (
         <>
-          <ImageIcon htmlColor={grey[500]} />
+          {props.children}
           <Typography style={{ marginLeft: '10px' }} variant="body2">
             x {props.howMany}
           </Typography>
@@ -20,4 +18,4 @@ function ImageRepresentation(props: { howMany: number }) {
   );
 }
 
-export default ImageRepresentation;
+export default IconRepresentation;

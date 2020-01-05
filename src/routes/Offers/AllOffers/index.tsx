@@ -24,7 +24,9 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import { red, green } from '@material-ui/core/colors';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import ImageRepresentation from '../../../components/ImageRepresentation';
+import ImageIcon from '@material-ui/icons/Image';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import IconRepresentation from '../../../components/ImageRepresentation';
 
 const useStyles = makeStyles(() => ({
   btn: {
@@ -134,11 +136,28 @@ function AllOffers() {
       render: obj => R.propOr('-', 'purchased', obj)
     },
     {
+      title: t('int.discounts'),
+      render: (obj: any, idx: number) => {
+        const tmp: unknown[] = R.propOr([], 'discounts', obj);
+        const howMany = tmp.length;
+        return (
+          <IconRepresentation howMany={howMany}>
+            <LocalOfferIcon htmlColor={'#546e7a'} />
+          </IconRepresentation>
+        );
+      }
+    },
+
+    {
       title: t('int.images'),
       render: (obj: any, idx: number) => {
         const tmp: unknown[] = R.propOr([], 'images', obj);
         const howMany = tmp.length;
-        return <ImageRepresentation howMany={howMany} />;
+        return (
+          <IconRepresentation howMany={howMany}>
+            <ImageIcon htmlColor={'#546e7a'} />
+          </IconRepresentation>
+        );
       }
     },
     {
@@ -159,14 +178,6 @@ function AllOffers() {
       title: t('int.actions'),
       render: (obj: any, idx: number) => (
         <div>
-          <IconButton
-            className={classes.marginRight}
-            size={'small'}
-            onClick={() => history.push(`/offers/${obj._id}`)}
-            title={t('int.view')}>
-            <VisibilityIcon />
-          </IconButton>
-
           {obj.status === 'INACTIVE' && (
             <IconButton
               size={'small'}
@@ -185,6 +196,14 @@ function AllOffers() {
               <StopIcon htmlColor={red[500]} />
             </IconButton>
           )}
+          <IconButton
+            className={classes.marginRight}
+            size={'small'}
+            onClick={() => history.push(`/offers/${obj._id}`)}
+            title={t('int.view')}>
+            <VisibilityIcon />
+          </IconButton>
+
           <IconButton
             size={'small'}
             className={classes.marginRight}

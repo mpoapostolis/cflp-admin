@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react';
+import React, { useContext, useCallback, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
@@ -50,17 +50,19 @@ type Props = {
     name: string;
     description: string;
     status: string;
+    discounts: Discount[];
   };
   setInfos: React.Dispatch<
     React.SetStateAction<{
       name: string;
       description: string;
       status: string;
+      discounts: Discount[];
     }>
   >;
 };
 
-type Discount = {
+export type Discount = {
   name?: string;
   price?: number;
   discount?: number;
@@ -70,11 +72,14 @@ type Discount = {
 function AccountDetails(props: Props) {
   const classes = useStyles();
   const { infos, setInfos } = props;
-  const [discounts, setDiscounts] = useState<Discount[]>([]);
   const errors = useSelector((store: IReduxStore) => store.errors);
 
+  const discounts = infos.discounts;
+  const setDiscounts = (discounts: Discount[]) =>
+    setInfos(s => ({ ...s, discounts }));
+
   function addDiscount() {
-    setDiscounts(s => [...s, { tableId: randomString() }]);
+    setDiscounts([...discounts, { tableId: randomString() }]);
   }
 
   const chooseProduct = useCallback(
@@ -84,7 +89,7 @@ function AccountDetails(props: Props) {
         discount: 0,
         tableId: discounts[idx].tableId
       };
-      setDiscounts(s => s.map((o, i) => (i === idx ? infos : o)));
+      setDiscounts(discounts.map((o, i) => (i === idx ? infos : o)));
     },
     [discounts]
   );
@@ -102,7 +107,7 @@ function AccountDetails(props: Props) {
   );
 
   const deleteDiscount = (idx: number) => {
-    setDiscounts(s => s.filter((_, i) => i !== idx));
+    setDiscounts(discounts.filter((_, i) => i !== idx));
   };
 
   const _setInfos = useCallback(obj => {
@@ -181,7 +186,6 @@ function AccountDetails(props: Props) {
             <Grid item md={12} xs={12}>
               <br />
               <Typography variant={'h5'}>{t('int.discounts')}</Typography>
-              <br />
             </Grid>
           )}
 
@@ -247,7 +251,7 @@ function AccountDetails(props: Props) {
                   onClick={() => deleteDiscount(idx)}
                   size={'small'}
                   title={t('int.delete')}>
-                  <DeleteIcon htmlColor={red[500]} />
+                  <DeleteIcon />
                 </IconButton>
               </Grid>
             </React.Fragment>
