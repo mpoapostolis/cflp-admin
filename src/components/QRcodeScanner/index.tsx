@@ -6,14 +6,18 @@ import queryString from 'query-string';
 import QrReader from 'react-qr-reader';
 import useApi from '../../Hooks';
 import { product } from 'ramda';
+import LinkedCameraIcon from '@material-ui/icons/LinkedCamera';
+import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     maxWidth: 'none',
-    marginRight: '15px'
+    marginRight: '10px'
   },
   small: {
     width: theme.spacing(4),
+    background: '#fffa',
+    padding: '5px',
     height: theme.spacing(4)
   },
   paper: {
@@ -63,14 +67,14 @@ function QRcodeScanner(props: {}) {
   return (
     <>
       <IconButton className={classes.root} onClick={handleClickOpen}>
-        <Avatar className={classes.small} src="/images/qrScan.png"></Avatar>
+        <LinkedCameraIcon htmlColor={red[100]} />
       </IconButton>
       <Dialog classes={classes} onClose={handleClose} open={open}>
         <QrReader
           delay={500}
           onError={handleError}
           onScan={handleScan}
-          style={{ width: '45vw' }}
+          style={{ width: '70vw' }}
         />
       </Dialog>
     </>
