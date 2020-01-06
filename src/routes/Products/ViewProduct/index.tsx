@@ -98,7 +98,6 @@ function ViewProduct() {
             <>
               <QRCodeModal
                 userId="5e130ddc2bb8dda103401eef"
-                storeId="5e0d8933e71c14e44b317e1e"
                 productId={params.id || ''}
               />
               <IconButton

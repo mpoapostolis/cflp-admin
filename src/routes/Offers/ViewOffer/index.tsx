@@ -27,6 +27,7 @@ import { toast } from 'react-toastify';
 import { Discount } from '../NewOffer/Details';
 import { applyDiscount } from '../../../utils';
 import ActionHeader from '../../../components/ActionHeader';
+import QRCodeModal from '../../../components/QRcodeModal';
 
 function DiscountSum(obj: Discount) {
   const t = useContext(I18n);
@@ -121,6 +122,10 @@ function ViewOffer() {
         <Card>
           <ActionHeader>
             <>
+              <QRCodeModal
+                userId="5e130ddc2bb8dda103401eef"
+                offerId={params.id || ''}
+              />
               <IconButton
                 onClick={() => history.push(`/offers/${params.id}/edit`)}
                 title={t('int.edit')}>

@@ -19,9 +19,8 @@ const useStyles = makeStyles({
 });
 
 function QRCodeModal(props: {
-  productId: string;
+  productId?: string;
   offerId?: string;
-  storeId?: string;
   userId: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -38,7 +37,9 @@ function QRCodeModal(props: {
   const classes = useStyles();
   return (
     <>
-      <Button onClick={handleClickOpen}>Generate QrCode</Button>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Generate QrCode
+      </Button>
       <Dialog classes={classes} onClose={handleClose} open={open}>
         <QRcode size={500} value={url} />
       </Dialog>

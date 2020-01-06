@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1
     },
-    small: {
+    xx: {
       width: theme.spacing(4),
       height: theme.spacing(4)
     },
@@ -85,13 +85,12 @@ function Header(props: Props) {
         <QRCodeScanner />
         {token && (
           <IconButton
-            size="small"
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleMenu}
             color="inherit">
-            <Avatar className={classes.small} />
+            <Avatar className={classes.xx} />
           </IconButton>
         )}
         <Popover

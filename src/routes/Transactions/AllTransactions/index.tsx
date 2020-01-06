@@ -14,7 +14,7 @@ import { Columns } from '../../../components/Table/types';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import useApi from '../../../Hooks';
 import queryString from 'query-string';
-import { EUROSIGN } from '../../../utils';
+import { EUROSIGN, formatDate } from '../../../utils';
 import * as R from 'ramda';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { css } from 'emotion';
@@ -80,6 +80,15 @@ function AllTransactions() {
               label: t('int.sortBy'),
               options: [
                 {
+                  label: t('int.date-asc'),
+                  value: 'date:ASC'
+                },
+                {
+                  label: t('int.date-desc'),
+                  value: 'date:DESC'
+                },
+
+                {
                   label: t('int.product-price-asc'),
                   value: 'productPrice:ASC'
                 },
@@ -99,6 +108,15 @@ function AllTransactions() {
               keyName: 'sortBy',
               label: t('int.sortBy'),
               options: [
+                {
+                  label: t('int.date-asc'),
+                  value: 'date:ASC'
+                },
+                {
+                  label: t('int.date-desc'),
+                  value: 'date:DESC'
+                },
+
                 { label: t('int.lpPrice-asc'), value: 'offerPrice:ASC' },
                 { label: t('int.lpPrice-desc'), value: 'offerPrice:DESC' },
 
@@ -118,6 +136,14 @@ function AllTransactions() {
               title: t('int.product-name'),
               field: 'productName'
             },
+            {
+              title: t('int.date-created'),
+              render: obj => {
+                const d = new Date(obj.dateCreated);
+                return formatDate(d.getTime());
+              }
+            },
+
             {
               title: t('int.product-price'),
               render: obj => (
@@ -155,6 +181,14 @@ function AllTransactions() {
               title: t('int.offer-name'),
               field: 'offerName'
             },
+            {
+              title: t('int.date-created'),
+              render: obj => {
+                const d = new Date(obj.dateCreated);
+                return formatDate(d.getTime());
+              }
+            },
+
             {
               title: t('int.purchased-by'),
               field: 'userName'
