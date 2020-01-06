@@ -21,20 +21,16 @@ import { IReduxStore } from '../../../redux/reducers';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
 import AsyncAutoComplete from './AsyncAutoComplete';
-import { red } from '@material-ui/core/colors';
 
-const randomString = () =>
-  Math.random()
-    .toString(36)
-    .substring(2, 15) +
-  Math.random()
-    .toString(36)
-    .substring(2, 15);
+export type Discount = {
+  name?: string;
+  price?: number;
+  discount?: number;
+};
 
 const useStyles = makeStyles(() => ({
   root: {},
   cardContent: {
-    maxHeight: '62vh',
     minHeight: '167px',
     overflow: 'auto'
   },
@@ -71,13 +67,6 @@ type Props = {
   >;
 };
 
-export type Discount = {
-  name?: string;
-  price?: number;
-  discount?: number;
-  tableId: string;
-};
-
 function AccountDetails(props: Props) {
   const classes = useStyles();
   const { infos, setInfos } = props;
@@ -88,15 +77,14 @@ function AccountDetails(props: Props) {
     setInfos(s => ({ ...s, discounts }));
 
   function addDiscount() {
-    setDiscounts([...discounts, { tableId: randomString() }]);
+    setDiscounts([...discounts, {}]);
   }
 
   const chooseProduct = useCallback(
     (obj: Partial<Discount>, idx: number) => {
       const infos = {
         ...R.pick(['name', 'price', '_id'], { ...obj }),
-        discount: 0,
-        tableId: discounts[idx].tableId
+        discount: 0
       };
       setDiscounts(discounts.map((o, i) => (i === idx ? infos : o)));
     },
@@ -115,8 +103,8 @@ function AccountDetails(props: Props) {
     [discounts]
   );
 
-  const deleteDiscount = (idx: number) => {
-    setDiscounts(discounts.filter((_, i) => i !== idx));
+  const deleteDiscount = (obj: any) => {
+    setDiscounts(discounts.filter(o => o !== obj));
   };
 
   const _setInfos = useCallback(obj => {
@@ -264,7 +252,7 @@ function AccountDetails(props: Props) {
           )}
 
           {discounts.map((obj, idx) => (
-            <React.Fragment key={obj.tableId}>
+            <React.Fragment key={idx}>
               <Grid item md={10} xs={10}>
                 <Typography variant="caption">
                   {t('int.discount')}: {idx + 1}
@@ -273,6 +261,7 @@ function AccountDetails(props: Props) {
               </Grid>
               <Grid item md={4} xs={9}>
                 <AsyncAutoComplete
+                  value={obj}
                   url={'/api/bo/products'}
                   onChange={obj => chooseProduct(obj, idx)}
                 />
@@ -322,7 +311,7 @@ function AccountDetails(props: Props) {
               </Grid>
               <Grid item md={1} xs={1}>
                 <IconButton
-                  onClick={() => deleteDiscount(idx)}
+                  onClick={() => deleteDiscount(obj)}
                   size={'small'}
                   title={t('int.delete')}>
                   <DeleteIcon />

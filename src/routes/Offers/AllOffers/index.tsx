@@ -129,9 +129,7 @@ function AllOffers() {
       render: (obj, idx) => (
         <Typography
           style={{
-            maxHeight: '100px',
-            overflow: 'auto',
-            width: '150px'
+            maxWidth: '250px'
           }}
           variant="body1">
           {obj.description}

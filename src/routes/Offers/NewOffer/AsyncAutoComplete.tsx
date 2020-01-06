@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useCallback } from 'react';
+import React, { useEffect, useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -6,10 +6,12 @@ import useApi from '../../../Hooks';
 import { debounce } from '../../../utils';
 import { ListItemText } from '@material-ui/core';
 import I18n from '../../../I18n';
+import { Discount } from './Details';
 
 type Props = {
   url: string;
   onChange: (obj: any) => void;
+  value: Discount;
 };
 function AsyncAutoComplete(props: Props) {
   const [open, setOpen] = React.useState(false);
@@ -48,8 +50,9 @@ function AsyncAutoComplete(props: Props) {
       onClose={() => {
         setOpen(false);
       }}
+      value={props.value}
       getOptionSelected={(option, value) => option.name === value.name}
-      getOptionLabel={option => option.name}
+      getOptionLabel={(option: Discount) => option.name || ''}
       options={options}
       loading={loading}
       onChange={(_, value) => {

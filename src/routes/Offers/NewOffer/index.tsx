@@ -60,14 +60,26 @@ function NewOffer() {
           description = '',
           status = 'DRAFT',
           discounts = [],
-          type = 'REWARD'
+          type = 'REWARD',
+          lpPrice,
+          lpReward
         } = data;
         const images = data.images.map((url: string) => ({
           file: null,
           url
         }));
         setImages(images);
-        setInfos({ name, description, status, discounts, type });
+        setInfos({
+          name,
+          description,
+          status,
+          discounts: discounts.map((o: Discount) => ({
+            ...o
+          })),
+          type,
+          lpPrice,
+          lpReward
+        });
       })
       .catch(console.error);
   }, []);
