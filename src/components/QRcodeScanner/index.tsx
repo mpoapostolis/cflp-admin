@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Dialog } from '@material-ui/core';
+import { Dialog, Avatar, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import queryString from 'query-string';
 import QrReader from 'react-qr-reader';
@@ -42,7 +42,9 @@ function QRcodeScanner(props: {}) {
   const classes = useStyles();
   return (
     <>
-      <Button onClick={handleClickOpen}>Generate QrCode</Button>
+      <IconButton onClick={handleClickOpen}>
+        <Avatar />
+      </IconButton>
       <Dialog classes={classes} onClose={handleClose} open={open}>
         <QrReader
           delay={300}

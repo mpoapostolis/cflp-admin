@@ -35,7 +35,6 @@ function QRCodeModal(props: {
 
   const url = queryString.stringify(props);
 
-  console.log(url);
   const classes = useStyles();
   return (
     <>
