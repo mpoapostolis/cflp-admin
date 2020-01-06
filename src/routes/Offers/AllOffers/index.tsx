@@ -66,8 +66,9 @@ function AllOffers() {
 
   const getOffers = useCallback(
     (obj: Record<string, any>) => {
+      const params = queryString.parse(history.location.search);
       setLoading(true);
-      const url = queryString.stringify(obj);
+      const url = queryString.stringify({ ...params, ...obj });
       api
         .get(`/api/bo/offers?${url}`)
         .then(e => e.json())
@@ -133,8 +134,8 @@ function AllOffers() {
           keyName: 'type',
           label: t('int.type'),
           options: [
-            { label: t('int.charge'), value: 'CHARGE' },
-            { label: t('int.REWARD'), value: 'REWARD' }
+            { label: t('int.debit'), value: 'DEBIT' },
+            { label: t('int.credit'), value: 'CREDIT' }
           ]
         },
         {
@@ -174,7 +175,7 @@ function AllOffers() {
         <Typography
           variant={'button'}
           style={{
-            color: obj.type === 'CHARGE' ? red[500] : green[500]
+            color: obj.type === 'CREDIT' ? red[500] : green[500]
           }}>
           {obj.type}
         </Typography>

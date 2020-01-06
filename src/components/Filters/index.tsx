@@ -196,10 +196,10 @@ function Filters(props: Props) {
 
   function handleSubmit() {
     const params = queryString.parse(history.location.search);
-    const newParams = { ...params, ...state };
+    const newParams = { ...params, ...state, offset: 0 };
     const url = queryString.stringify(newParams);
     history.push(`?${url}`);
-    props.onSubmit(state);
+    props.onSubmit({ ...state, offset: 0 });
     setOpen(false);
   }
 

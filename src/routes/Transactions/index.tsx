@@ -1,11 +1,12 @@
 import React from 'react';
-import { Switch, Route } from 'react-router';
+import { Route, Switch, Redirect } from 'react-router';
 import AllTransactions from './AllTransactions';
 
 function Transactions() {
   return (
     <Switch>
-      <Route path="/transactions" exact component={AllTransactions} />
+      <Route path="/transactions/:tab" exact component={AllTransactions} />;
+      <Redirect to="/transactions/products" />;
     </Switch>
   );
 }

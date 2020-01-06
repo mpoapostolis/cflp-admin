@@ -23,12 +23,12 @@ function NewOffer() {
     discounts: Discount[];
     lpReward?: number;
     lpPrice?: number;
-    type: 'REWARD' | 'CHARGE';
+    type: 'CREDIT' | 'DEBIT';
   }>({
     name: '',
     lpReward: undefined,
     lpPrice: undefined,
-    type: 'REWARD',
+    type: 'CREDIT',
     description: '',
     status: 'DRAFT',
     discounts: []
@@ -58,7 +58,7 @@ function NewOffer() {
           description = '',
           status = 'DRAFT',
           discounts = [],
-          type = 'REWARD',
+          type = 'CREDIT',
           lpPrice,
           lpReward
         } = data;

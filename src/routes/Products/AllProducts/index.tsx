@@ -47,8 +47,9 @@ function AllProducts() {
 
   const getProducts = useCallback(
     (obj: Record<string, any>) => {
+      const params = queryString.parse(history.location.search);
       setLoading(true);
-      const url = queryString.stringify(obj);
+      const url = queryString.stringify({ ...params, ...obj });
       api
         .get(`/api/bo/products?${url}`)
         .then(e => e.json())

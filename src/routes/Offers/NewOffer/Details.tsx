@@ -53,7 +53,7 @@ type Props = {
     discounts: Discount[];
     lpReward?: number;
     lpPrice?: number;
-    type: 'REWARD' | 'CHARGE';
+    type: 'CREDIT' | 'DEBIT';
   };
   setInfos: React.Dispatch<
     React.SetStateAction<{
@@ -63,7 +63,7 @@ type Props = {
       discounts: Discount[];
       lpReward?: number;
       lpPrice?: number;
-      type: 'REWARD' | 'CHARGE';
+      type: 'CREDIT' | 'DEBIT';
     }>
   >;
 };
@@ -187,7 +187,7 @@ function AccountDetails(props: Props) {
               onChange={evt =>
                 _setInfos({
                   type: evt.target.value,
-                  [evt.target.value === 'CHARGE'
+                  [evt.target.value === 'DEBIT'
                     ? 'lpReward'
                     : 'lpPrice']: undefined
                 })
@@ -197,8 +197,8 @@ function AccountDetails(props: Props) {
               required
               variant="outlined">
               {[
-                { label: t('int.reward'), value: 'REWARD' },
-                { label: t('int.charge'), value: 'CHARGE' }
+                { label: t('int.credit'), value: 'CREDIT' },
+                { label: t('int.debit'), value: 'DEBIT' }
               ].map((obj, idx) => (
                 <MenuItem key={idx} value={obj.value}>
                   {obj.label}
@@ -207,7 +207,7 @@ function AccountDetails(props: Props) {
             </TextField>
           </Grid>
 
-          {infos.type === 'CHARGE' && (
+          {infos.type === 'DEBIT' && (
             <Grid item md={12} xs={12}>
               <TextField
                 fullWidth
@@ -224,7 +224,7 @@ function AccountDetails(props: Props) {
               />
             </Grid>
           )}
-          {infos.type === 'REWARD' && (
+          {infos.type === 'CREDIT' && (
             <Grid item md={12} xs={12}>
               <TextField
                 fullWidth
