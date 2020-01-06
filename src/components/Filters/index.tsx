@@ -214,6 +214,10 @@ function Filters(props: Props) {
     setState(clearObj);
   }
 
+  useEffect(() => {
+    // handleClear();
+  }, [props.filterConf]);
+
   const filtersInfo = useMemo(
     () =>
       props.filterConf

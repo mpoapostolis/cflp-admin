@@ -18,6 +18,7 @@ import { EUROSIGN } from '../../../utils';
 import * as R from 'ramda';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { css } from 'emotion';
+import { red, green } from '@material-ui/core/colors';
 
 function a11yProps(index: any) {
   return {
@@ -71,31 +72,43 @@ function AllTransactions() {
 
   const filterConf = useMemo(
     () =>
-      [
-        {
-          type: 'select',
-          keyName: 'sortBy',
-          label: t('int.sortBy'),
-          options: [
-            { label: t('int.date-asc'), value: 'date:ASC' },
-            { label: t('int.date-desc'), value: 'date:DESC' },
+      tab === 0
+        ? [
+            {
+              type: 'select',
+              keyName: 'sortBy',
+              label: t('int.sortBy'),
+              options: [
+                {
+                  label: t('int.product-price-asc'),
+                  value: 'productPrice:ASC'
+                },
+                {
+                  label: t('int.product-price-desc'),
+                  value: 'productPrice:DESC'
+                },
 
-            { label: t('int.price-asc'), value: 'price:ASC' },
-            { label: t('int.price-desc'), value: 'price:DESC' },
-
-            { label: t('int.purchased-asc'), value: 'purchased:ASC' },
-            { label: t('int.purchased-desc'), value: 'purchased:DESC' },
-
-            { label: t('int.lpPrice-asc'), value: 'lpPrice:ASC' },
-            { label: t('int.lpPrice-desc'), value: 'lpPrice:DESC' },
-
-            { label: t('int.lpReward-asc'), value: 'lpReward:ASC' },
-            { label: t('int.lpReward-desc'), value: 'lpReward:DESC' }
+                { label: t('int.lp-reward-asc'), value: 'productReward:ASC' },
+                { label: t('int.lp-reward-desc'), value: 'productReward:DESC' }
+              ]
+            }
           ]
-        }
-      ] as FilterType[],
-    [t]
-  );
+        : [
+            {
+              type: 'select',
+              keyName: 'sortBy',
+              label: t('int.sortBy'),
+              options: [
+                { label: t('int.lpPrice-asc'), value: 'offerPrice:ASC' },
+                { label: t('int.lpPrice-desc'), value: 'offerPrice:DESC' },
+
+                { label: t('int.lpReward-asc'), value: 'offerReward:ASC' },
+                { label: t('int.lpReward-desc'), value: 'offerReward:DESC' }
+              ]
+            }
+          ],
+    [t, tab]
+  ) as FilterType[];
 
   const columns: Columns = useMemo(
     () =>
@@ -116,9 +129,15 @@ function AllTransactions() {
             },
 
             {
-              title: t('int.username'),
+              title: t('int.purchased-by'),
               field: 'userName'
             },
+
+            {
+              title: t('int.lpReward'),
+              field: 'productReward'
+            },
+
             {
               title: t('int.actions'),
               render: obj => (
@@ -137,9 +156,33 @@ function AllTransactions() {
               field: 'offerName'
             },
             {
-              title: t('int.username'),
+              title: t('int.purchased-by'),
               field: 'userName'
             },
+
+            {
+              title: t('int.type'),
+              render: obj => (
+                <Typography
+                  variant={'button'}
+                  style={{
+                    color: obj.offerType === 'CREDIT' ? red[500] : green[500]
+                  }}>
+                  {obj.offerType}
+                </Typography>
+              )
+            },
+
+            {
+              title: t('int.lpPrice'),
+              field: 'offerPrice'
+            },
+
+            {
+              title: t('int.lpReward'),
+              field: 'offerReward'
+            },
+
             {
               title: t('int.actions'),
               render: obj => (
