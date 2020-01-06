@@ -4,6 +4,7 @@ import { Route, useHistory } from 'react-router';
 import NotFound from './NotFound';
 import Products from './Products';
 import Offers from './Offers';
+import Transactions from './Transactions';
 
 export function Render() {
   const history = useHistory();
@@ -18,7 +19,7 @@ const Routes = () => {
       <Route path="/products" component={Products} />
       <Route path="/offers" component={Offers} />
       <Route path="/settings" component={Render} />
-      <Route path="/transactions" component={Render} />
+      <Route path="/transactions" component={Transactions} />
       <Route path="/employees" component={Render} />
       <Redirect to="/not-found" />
     </Switch>

@@ -55,17 +55,8 @@ function AllOffers() {
   });
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [coords, setCoords] = useState([0, 0]);
   const api = useApi();
   const classes = useStyles();
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(p => {
-        setCoords([p.coords.latitude, p.coords.longitude]);
-      });
-    }
-  }, []);
 
   useEffect(() => {
     const search = history.location.search;
