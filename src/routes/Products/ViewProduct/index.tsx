@@ -24,6 +24,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { toast } from 'react-toastify';
 import ActionHeader from '../../../components/ActionHeader';
+import QRCodeModal from '../../../components/QRcodeModal';
 
 const imgModal = css`
   max-width: 250px;
@@ -86,12 +87,20 @@ function ViewProduct() {
       })),
     [infos]
   );
+
+  console.log(R.propOr('', '_id', infos));
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Card>
           <ActionHeader>
             <>
+              <QRCodeModal
+                userId="5e130ddc2bb8dda103401eef"
+                storeId="5e0d8933e71c14e44b317e1e"
+                productId={params.id || ''}
+              />
               <IconButton
                 onClick={() => history.push(`/products/${params.id}/edit`)}
                 title={t('int.edit')}>

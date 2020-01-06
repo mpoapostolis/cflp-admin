@@ -24,6 +24,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IReduxStore } from '../../redux/reducers';
 import { useHistory } from 'react-router-dom';
 import { logout } from '../../redux/actions/account';
+import QRCodeScanner from '../QRcodeScanner';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,6 +77,7 @@ function Header(props: Props) {
           </IconButton>
         </Hidden>
         <Typography variant="h6" className={classes.title}></Typography>
+        <QRCodeScanner />
         {token && (
           <IconButton
             aria-label="account of current user"
