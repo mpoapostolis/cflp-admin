@@ -181,7 +181,7 @@ function ViewOffer() {
         <br />
         {infos?.discounts && (
           <Card>
-            <CardHeader title={t('int.offers-infos')}></CardHeader>
+            <CardHeader title={t('int.products-infos')}></CardHeader>
             <Divider />
             <CardContent>
               {infos.discounts.map((o, idx) => (
