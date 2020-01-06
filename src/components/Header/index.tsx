@@ -14,7 +14,8 @@ import {
   ListItem,
   List,
   Divider,
-  ListItemText
+  ListItemText,
+  Avatar
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/styles';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1
+    },
+    small: {
+      width: theme.spacing(4),
+      height: theme.spacing(4)
     },
     menuButton: {
       marginRight: theme.spacing(2)
@@ -80,12 +85,13 @@ function Header(props: Props) {
         <QRCodeScanner />
         {token && (
           <IconButton
+            size="small"
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleMenu}
             color="inherit">
-            <AccountCircle />
+            <Avatar className={classes.small} />
           </IconButton>
         )}
         <Popover

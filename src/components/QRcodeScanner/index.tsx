@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 
-import { Dialog, Avatar, IconButton } from '@material-ui/core';
+import { Dialog, Avatar, IconButton, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import queryString from 'query-string';
 import QrReader from 'react-qr-reader';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    maxWidth: 'none'
+    maxWidth: 'none',
+    marginRight: '15px'
+  },
+  small: {
+    width: theme.spacing(4),
+    height: theme.spacing(4)
   },
   paper: {
     display: 'flex',
@@ -17,7 +22,7 @@ const useStyles = makeStyles({
     width: 'inherit',
     maxWidth: 'unset'
   }
-});
+}));
 
 function QRcodeScanner(props: {}) {
   const [open, setOpen] = useState(false);
@@ -42,8 +47,11 @@ function QRcodeScanner(props: {}) {
   const classes = useStyles();
   return (
     <>
-      <IconButton onClick={handleClickOpen}>
-        <Avatar />
+      <IconButton className={classes.root} onClick={handleClickOpen}>
+        <Avatar
+          sizes="small"
+          className={classes.small}
+          src="/images/qrScan.png"></Avatar>
       </IconButton>
       <Dialog classes={classes} onClose={handleClose} open={open}>
         <QrReader
