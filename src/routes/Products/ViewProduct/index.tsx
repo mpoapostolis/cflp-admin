@@ -23,6 +23,7 @@ import ImageModal from '../../../components/ImageModal';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { toast } from 'react-toastify';
+import ActionHeader from '../../../components/ActionHeader';
 
 const imgModal = css`
   max-width: 250px;
@@ -95,21 +96,18 @@ function ViewProduct() {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader
-            title={t('int.actions')}
-            action={
-              <>
-                <IconButton
-                  onClick={() => history.push(`/products/${params.id}/edit`)}
-                  title={t('int.edit')}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton onClick={deleteProduct} title={t('int.delete')}>
-                  <DeleteIcon />
-                </IconButton>
-              </>
-            }
-          />
+          <ActionHeader>
+            <>
+              <IconButton
+                onClick={() => history.push(`/products/${params.id}/edit`)}
+                title={t('int.edit')}>
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={deleteProduct} title={t('int.delete')}>
+                <DeleteIcon />
+              </IconButton>
+            </>
+          </ActionHeader>
         </Card>
       </Grid>
       <Grid item xs={12} md={6}>

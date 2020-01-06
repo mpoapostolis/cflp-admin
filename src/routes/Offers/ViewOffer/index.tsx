@@ -26,7 +26,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { toast } from 'react-toastify';
 import { Discount } from '../NewOffer/Details';
 import { applyDiscount } from '../../../utils';
-import MaterialTable from '../../../components/Table';
+import ActionHeader from '../../../components/ActionHeader';
 
 function DiscountSum(obj: Discount) {
   const t = useContext(I18n);
@@ -66,38 +66,6 @@ const imgCont = css`
   max-height: 67vh;
   overflow: auto;
 `;
-
-const discountSumCont = css`
-  display: flex;
-  align-items: center;
-  .item {
-    margin-right: 15px;
-  }
-`;
-
-// function DiscountSum(obj: Discount & { idx: number }) {
-//   const t = useContext(I18n);
-//   return (
-//     <div className={discountSumCont}>
-//       <Typography className="item">{obj.name}</Typography>
-//       <Typography className="item">x</Typography>
-//       <Typography className="item">{obj.discount}%</Typography>
-//       <Typography className="item">=</Typography>
-//       <div className="item">
-//         <Typography
-//           variant="caption"
-//           style={{
-//             textDecoration: 'line-through'
-//           }}>
-//           {obj.price}€
-//         </Typography>
-//         <Typography variant="caption">
-//           {applyDiscount(obj.discount, obj.price)}
-//         </Typography>
-//       </div>
-//     </div>
-//   );
-// }
 
 function ViewOffer() {
   const t = useContext(I18n);
@@ -151,21 +119,18 @@ function ViewOffer() {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader
-            title={t('int.actions')}
-            action={
-              <>
-                <IconButton
-                  onClick={() => history.push(`/offers/${params.id}/edit`)}
-                  title={t('int.edit')}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton onClick={deleteProduct} title={t('int.delete')}>
-                  <DeleteIcon />
-                </IconButton>
-              </>
-            }
-          />
+          <ActionHeader>
+            <>
+              <IconButton
+                onClick={() => history.push(`/offers/${params.id}/edit`)}
+                title={t('int.edit')}>
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={deleteProduct} title={t('int.delete')}>
+                <DeleteIcon />
+              </IconButton>
+            </>
+          </ActionHeader>
         </Card>
       </Grid>
       <Grid item xs={12} md={6}>
@@ -179,7 +144,7 @@ function ViewOffer() {
           </CardContent>
         </Card>
         <br />
-        {infos?.discounts && (
+        {infos?.discounts && infos?.discounts.length > 0 && (
           <Card>
             <CardHeader title={t('int.products-infos')}></CardHeader>
             <Divider />

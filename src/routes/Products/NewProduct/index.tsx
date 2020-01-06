@@ -4,7 +4,7 @@ import Details from './Details';
 import ActionHeader from '../../../components/ActionHeader';
 import I18n from '../../../I18n';
 import useApi from '../../../Hooks';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import EditImages from '../../../components/EditImages';
 
@@ -60,7 +60,7 @@ function NewProduct() {
   }, []);
 
   const isEdit = Boolean(params.id);
-
+  const history = useHistory();
   const handleSubmit = () => {
     const formData = new FormData();
 
@@ -75,6 +75,7 @@ function NewProduct() {
       body: formData
     }).then(() => {
       toast.success(successMsg);
+      history.push('/products');
     });
   };
 

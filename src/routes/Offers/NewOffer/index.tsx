@@ -4,7 +4,7 @@ import Details, { Discount } from './Details';
 import ActionHeader from '../../../components/ActionHeader';
 import I18n from '../../../I18n';
 import useApi from '../../../Hooks';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import EditImages from '../../../components/EditImages';
 import * as R from 'ramda';
@@ -83,7 +83,7 @@ function NewOffer() {
   }, []);
 
   const isEdit = Boolean(params.id);
-
+  const history = useHistory();
   const handleSubmit = () => {
     const formData = new FormData();
     const _infos = {
@@ -103,6 +103,7 @@ function NewOffer() {
       body: formData
     }).then(() => {
       toast.success(successMsg);
+      history.push('/products');
     });
   };
 
