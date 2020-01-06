@@ -43,6 +43,8 @@ const imgClass = css`
 const imgCont = css`
   display: flex;
   flex-wrap: wrap;
+  max-height: 67vh;
+  overflow: auto;
 `;
 
 function ViewProduct() {
@@ -125,10 +127,9 @@ function ViewProduct() {
       {images.length > 0 && (
         <Grid item xs={12} md={6}>
           <Card>
+            <CardHeader title={t('int.images')} />
+            <Divider />
             <CardContent>
-              <CardHeader title={t('int.images')} />
-              <Divider />
-
               <div className={imgCont}>
                 {images.map((f, idx) => (
                   <ImageModal key={idx} className={imgModal} src={f.url}>

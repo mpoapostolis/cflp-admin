@@ -32,8 +32,11 @@ const randomString = () =>
     .substring(2, 15);
 
 const useStyles = makeStyles(() => ({
+  root: {},
   cardContent: {
-    minHeight: '167px'
+    maxHeight: '62vh',
+    minHeight: '167px',
+    overflow: 'auto'
   },
   btn: {
     display: 'flex',
@@ -51,6 +54,9 @@ type Props = {
     description: string;
     status: string;
     discounts: Discount[];
+    lpReward?: number;
+    lpPrice?: number;
+    type: 'REWARD' | 'CHARGE';
   };
   setInfos: React.Dispatch<
     React.SetStateAction<{
@@ -58,6 +64,9 @@ type Props = {
       description: string;
       status: string;
       discounts: Discount[];
+      lpReward?: number;
+      lpPrice?: number;
+      type: 'REWARD' | 'CHARGE';
     }>
   >;
 };
@@ -122,7 +131,7 @@ function AccountDetails(props: Props) {
   }
 
   return (
-    <Card>
+    <Card className={classes.root}>
       <CardHeader
         subheader={t('int.edit-product-info')}
         title={t('int.product')}></CardHeader>
@@ -173,7 +182,7 @@ function AccountDetails(props: Props) {
               variant="outlined">
               {[
                 { label: t('int.active'), value: 'ACTIVE' },
-                { label: t('int.inactive'), value: 'INACTIVE' }
+                { label: t('int.draft'), value: 'DRAFT' }
               ].map((obj, idx) => (
                 <MenuItem key={idx} value={obj.value}>
                   {obj.label}
@@ -181,6 +190,71 @@ function AccountDetails(props: Props) {
               ))}
             </TextField>
           </Grid>
+
+          <Grid item md={12} xs={12}>
+            <TextField
+              select
+              value={R.propOr('', 'type', infos)}
+              fullWidth
+              error={Boolean(R.prop('type', errors))}
+              helperText={R.propOr('', 'type', errors)}
+              onChange={evt =>
+                _setInfos({
+                  type: evt.target.value,
+                  [evt.target.value === 'CHARGE'
+                    ? 'lpReward'
+                    : 'lpPrice']: undefined
+                })
+              }
+              label={t('int.type')}
+              margin="dense"
+              required
+              variant="outlined">
+              {[
+                { label: t('int.reward'), value: 'REWARD' },
+                { label: t('int.charge'), value: 'CHARGE' }
+              ].map((obj, idx) => (
+                <MenuItem key={idx} value={obj.value}>
+                  {obj.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+
+          {infos.type === 'CHARGE' && (
+            <Grid item md={12} xs={12}>
+              <TextField
+                fullWidth
+                value={R.propOr('', 'lpPrice', infos)}
+                error={Boolean(R.prop('lpPrice', errors))}
+                onChange={evt =>
+                  _setInfos({ lpPrice: evt.currentTarget.value })
+                }
+                helperText={R.propOr('', 'lpPrice', errors)}
+                label={t('int.lpPrice')}
+                margin="dense"
+                required
+                variant="outlined"
+              />
+            </Grid>
+          )}
+          {infos.type === 'REWARD' && (
+            <Grid item md={12} xs={12}>
+              <TextField
+                fullWidth
+                value={R.propOr('', 'lpReward', infos)}
+                error={Boolean(R.prop('lpReward', errors))}
+                onChange={evt =>
+                  _setInfos({ lpReward: evt.currentTarget.value })
+                }
+                helperText={R.propOr('', 'lpReward', errors)}
+                label={t('int.lpReward')}
+                margin="dense"
+                required
+                variant="outlined"
+              />
+            </Grid>
+          )}
 
           {discounts.length > 0 && (
             <Grid item md={12} xs={12}>
@@ -220,7 +294,7 @@ function AccountDetails(props: Props) {
                     max: 100
                   }}
                   InputProps={{
-                    endAdornment: (
+                    startAdornment: (
                       <InputAdornment position="start">%</InputAdornment>
                     )
                   }}

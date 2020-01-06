@@ -103,7 +103,7 @@ function AllOffers() {
     (id: string, action: string) => {
       const msg =
         action === 'active'
-          ? 'int.offer-deactivated-successfully'
+          ? 'int.offer-stopped-successfully'
           : 'int.offer-activated-successfully';
       const params = queryString.parse(history.location.search);
       api.post(`/api/bo/offers/${action}`, {
@@ -138,9 +138,18 @@ function AllOffers() {
         </Typography>
       )
     },
+
     {
       title: t('int.type'),
-      field: 'type'
+      render: obj => (
+        <Typography
+          variant={'button'}
+          style={{
+            color: obj.type === 'CHARGE' ? red[500] : green[500]
+          }}>
+          {obj.type}
+        </Typography>
+      )
     },
 
     {
@@ -180,6 +189,7 @@ function AllOffers() {
         );
       }
     },
+
     {
       title: t('int.status'),
       render: (obj: any, idx: number) => {
@@ -194,6 +204,7 @@ function AllOffers() {
         );
       }
     },
+
     {
       title: t('int.actions'),
       render: (obj: any, idx: number) => (
@@ -203,7 +214,7 @@ function AllOffers() {
               size={'small'}
               className={classes.marginRight}
               onClick={() => toggleStatus(obj._id, 'activate')}
-              title={t('int.delete')}>
+              title={t('int.activate')}>
               <PlayArrowIcon htmlColor={green[500]} />
             </IconButton>
           )}
@@ -212,7 +223,7 @@ function AllOffers() {
               size={'small'}
               className={classes.marginRight}
               onClick={() => toggleStatus(obj._id, 'deactivate')}
-              title={t('int.delete')}>
+              title={t('int.stop')}>
               <StopIcon htmlColor={red[500]} />
             </IconButton>
           )}

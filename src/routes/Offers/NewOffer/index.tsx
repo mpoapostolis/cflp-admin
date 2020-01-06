@@ -21,10 +21,16 @@ function NewOffer() {
     description: string;
     status: string;
     discounts: Discount[];
+    lpReward?: number;
+    lpPrice?: number;
+    type: 'REWARD' | 'CHARGE';
   }>({
     name: '',
+    lpReward: undefined,
+    lpPrice: undefined,
+    type: 'REWARD',
     description: '',
-    status: 'INACTIVE',
+    status: 'DRAFT',
     discounts: []
   });
 
@@ -52,15 +58,16 @@ function NewOffer() {
         const {
           name = '',
           description = '',
-          status = 'INACTIVE',
-          discounts = []
+          status = 'DRAFT',
+          discounts = [],
+          type = 'REWARD'
         } = data;
         const images = data.images.map((url: string) => ({
           file: null,
           url
         }));
         setImages(images);
-        setInfos({ name, description, status, discounts });
+        setInfos({ name, description, status, discounts, type });
       })
       .catch(console.error);
   }, []);

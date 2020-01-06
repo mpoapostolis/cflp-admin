@@ -8,19 +8,19 @@ import {
   Divider,
   Grid,
   Button,
-  TextField
+  TextField,
+  InputAdornment
 } from '@material-ui/core';
 import I18n from '../../../I18n';
-import useApi from '../../../Hooks';
 import { useSelector } from 'react-redux';
 import { IReduxStore } from '../../../redux/reducers';
-import { useHistory } from 'react-router';
-import queryString from 'query-string';
 import * as R from 'ramda';
 
 const useStyles = makeStyles(() => ({
   cardContent: {
-    minHeight: '167px'
+    maxHeight: '62vh',
+    minHeight: '167px',
+    overflow: 'auto'
   },
 
   spacer: {
@@ -85,7 +85,13 @@ function AccountDetails(props: Props) {
               helperText={R.propOr('', 'price', errors)}
               onChange={evt => _setInfos({ price: +evt.currentTarget.value })}
               type={'number'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">€</InputAdornment>
+                )
+              }}
               label={t('int.price')}
+              required
               margin="dense"
               variant="outlined"
             />
@@ -107,7 +113,6 @@ function AccountDetails(props: Props) {
                       : +evt.currentTarget.value
                 })
               }
-              required
               variant="outlined"
             />
           </Grid>
