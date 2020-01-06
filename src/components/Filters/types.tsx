@@ -25,6 +25,18 @@ export type RangeFilter = {
   labelMax: string;
   label: string;
 };
+
+/**
+ * example
+ * {
+ *    type: 'range',
+ *    keyNameMin: 'minPrice',
+ *    keyNameMax: 'maxPrice',
+ *    labelMin: t('int.min-price'),
+ *    labelMax: t('int.max-price'),
+ *    label: t('int.min-max-price')
+ * },
+ * */
 export type NumberFilter = {
   type: 'number';
   min: number;

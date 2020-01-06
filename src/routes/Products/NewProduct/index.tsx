@@ -37,9 +37,7 @@ function NewProduct() {
           paths
         }
       })
-      .then(d => d.json())
-      .then(data => console.log(data))
-      .catch(console.error);
+      .then(d => d.json());
   };
 
   useEffect(() => {

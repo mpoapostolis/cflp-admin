@@ -18,7 +18,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
 import { toast } from 'react-toastify';
-import ImageRepresentation from '../../../components/ImageRepresentation';
+import IconRepresentation from '../../../components/IconRepresentation';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import { css } from 'emotion';
@@ -74,39 +74,25 @@ function AllProducts() {
     () =>
       [
         {
-          type: 'range',
-          keyNameMin: 'minPrice',
-          keyNameMax: 'maxPrice',
-          labelMin: t('int.min-price'),
-          labelMax: t('int.max-price'),
-          label: t('int.min-max-price')
-        },
+          type: 'select',
+          keyName: 'sortBy',
+          label: t('int.sortBy'),
+          options: [
+            { label: t('int.date-asc'), value: 'date:ASC' },
+            { label: t('int.date-desc'), value: 'date:DESC' },
 
-        {
-          type: 'range',
-          keyNameMin: 'minPurchased',
-          keyNameMax: 'maxPurchased',
-          labelMin: t('int.min-purchased'),
-          labelMax: t('int.max-purchased'),
-          label: t('int.min-max-purchased')
-        },
+            { label: t('int.price-asc'), value: 'price:ASC' },
+            { label: t('int.price-desc'), value: 'price:DESC' },
 
-        {
-          type: 'range',
-          keyNameMin: 'minLpPrice',
-          keyNameMax: 'maxLpPrice',
-          labelMin: t('int.min-lp-price'),
-          labelMax: t('int.max-lp-price'),
-          label: t('int.min-max-lp-price')
-        },
+            { label: t('int.purchased-asc'), value: 'purchased:ASC' },
+            { label: t('int.purchased-desc'), value: 'purchased:DESC' },
 
-        {
-          type: 'range',
-          keyNameMin: 'minLpReward',
-          keyNameMax: 'maxLpReward',
-          labelMin: t('int.min-lp-reward'),
-          labelMax: t('int.max-lp-reward'),
-          label: t('int.min-max-lp-reward')
+            { label: t('int.lpPrice-asc'), value: 'lpPrice:ASC' },
+            { label: t('int.lpPrice-desc'), value: 'lpPrice:DESC' },
+
+            { label: t('int.lpReward-asc'), value: 'lpReward:ASC' },
+            { label: t('int.lpReward-desc'), value: 'lpReward:DESC' }
+          ]
         }
       ] as FilterType[],
     [t]
@@ -139,9 +125,9 @@ function AllProducts() {
         const tmp: unknown[] = R.propOr([], 'images', obj);
         const howMany = tmp.length;
         return (
-          <ImageRepresentation howMany={howMany}>
+          <IconRepresentation howMany={howMany}>
             <ImageIcon htmlColor={'#546e7a'} />
-          </ImageRepresentation>
+          </IconRepresentation>
         );
       }
     },

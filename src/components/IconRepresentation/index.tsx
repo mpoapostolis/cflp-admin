@@ -3,7 +3,12 @@ import { Typography } from '@material-ui/core';
 
 function IconRepresentation(props: { howMany: number; children: ReactNode }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', minWidth: '70px' }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        minWidth: '65px'
+      }}>
       {props.howMany > 0 ? (
         <>
           {props.children}

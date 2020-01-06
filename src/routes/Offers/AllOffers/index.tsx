@@ -26,8 +26,7 @@ import { red, green } from '@material-ui/core/colors';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import IconRepresentation from '../../../components/ImageRepresentation';
-import { render } from 'react-dom';
+import IconRepresentation from '../../../components/IconRepresentation';
 
 const useStyles = makeStyles(() => ({
   btn: {
@@ -117,7 +116,48 @@ function AllOffers() {
     [history.location.search]
   );
 
-  const filterConf = useMemo(() => [] as FilterType[], [t]);
+  const filterConf = useMemo(
+    () =>
+      [
+        {
+          type: 'select',
+          keyName: 'sortBy',
+          label: t('int.sortBy'),
+          options: [
+            { label: t('int.date-asc'), value: 'date:ASC' },
+            { label: t('int.date-desc'), value: 'date:DESC' },
+
+            { label: t('int.lpPrice-asc'), value: 'lpPrice:ASC' },
+            { label: t('int.lpPrice-desc'), value: 'lpPrice:DESC' },
+
+            { label: t('int.lpReward-asc'), value: 'lpReward:ASC' },
+            { label: t('int.lpReward-desc'), value: 'lpReward:DESC' },
+
+            { label: t('int.purchased-asc'), value: 'purchased:ASC' },
+            { label: t('int.purchased-desc'), value: 'purchased:DESC' }
+          ]
+        },
+        {
+          type: 'select',
+          keyName: 'type',
+          label: t('int.type'),
+          options: [
+            { label: t('int.charge'), value: 'CHARGE' },
+            { label: t('int.REWARD'), value: 'REWARD' }
+          ]
+        },
+        {
+          type: 'select',
+          keyName: 'status',
+          label: t('int.status'),
+          options: [
+            { label: t('int.active'), value: 'ACTIVE' },
+            { label: t('int.DRAFT'), value: 'DRAFT' }
+          ]
+        }
+      ] as FilterType[],
+    [t]
+  );
 
   const columns: Columns = [
     {
