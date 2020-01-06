@@ -19,12 +19,10 @@ function NewProduct() {
     name: string;
     price: number;
     lpReward: number;
-    lpPrice: number | undefined;
   }>({
     name: '',
     price: 0,
-    lpReward: 0,
-    lpPrice: undefined
+    lpReward: 0
   });
 
   const api = useApi();
@@ -46,13 +44,13 @@ function NewProduct() {
       .get(`/api/bo/products/${params.id}`)
       .then(res => res.json())
       .then(data => {
-        const { name = '', price = 0, lpReward = 0, lpPrice } = data;
+        const { name = '', price = 0, lpReward = 0 } = data;
         const images = data.images.map((url: string) => ({
           file: null,
           url
         }));
         setImages(images);
-        setInfos({ name, price, lpReward, lpPrice });
+        setInfos({ name, price, lpReward });
       })
       .catch(console.error);
   }, []);

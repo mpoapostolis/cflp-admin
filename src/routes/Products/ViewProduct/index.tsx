@@ -62,17 +62,11 @@ function ViewProduct() {
       .get(`/api/bo/products/${params.id}`)
       .then(res => res.json())
       .then(data => {
-        const {
-          name = '',
-          price = 0,
-          lpReward = 0,
-          lpPrice,
-          purchased = 0
-        } = data;
+        const { name = '', price = 0, lpReward = 0, purchased = 0 } = data;
         const images = data.images.map((url: string) => ({
           url
         }));
-        setInfos({ name, price, purchased, lpReward, lpPrice });
+        setInfos({ name, price, purchased, lpReward });
         setImages(images);
       })
       .catch(console.error);

@@ -33,14 +33,12 @@ type Props = {
     name: string;
     price: number;
     lpReward: number;
-    lpPrice?: number;
   };
   setInfos: React.Dispatch<
     React.SetStateAction<{
       name: string;
       price: number;
       lpReward: number;
-      lpPrice: number | undefined;
     }>
   >;
 };
@@ -93,26 +91,6 @@ function AccountDetails(props: Props) {
               label={t('int.price')}
               required
               margin="dense"
-              variant="outlined"
-            />
-          </Grid>
-
-          <Grid item md={12} xs={12}>
-            <TextField
-              value={R.propOr('', 'lpPrice', infos)}
-              fullWidth
-              error={Boolean(R.prop('lpPrice', errors))}
-              helperText={R.propOr('', 'lpPrice', errors)}
-              label={t('int.lpPrice')}
-              margin="dense"
-              onChange={evt =>
-                _setInfos({
-                  lpPrice:
-                    +evt.currentTarget.value === 0
-                      ? undefined
-                      : +evt.currentTarget.value
-                })
-              }
               variant="outlined"
             />
           </Grid>

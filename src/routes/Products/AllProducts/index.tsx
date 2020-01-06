@@ -88,9 +88,6 @@ function AllProducts() {
             { label: t('int.purchased-asc'), value: 'purchased:ASC' },
             { label: t('int.purchased-desc'), value: 'purchased:DESC' },
 
-            { label: t('int.lpPrice-asc'), value: 'lpPrice:ASC' },
-            { label: t('int.lpPrice-desc'), value: 'lpPrice:DESC' },
-
             { label: t('int.lpReward-asc'), value: 'lpReward:ASC' },
             { label: t('int.lpReward-desc'), value: 'lpReward:DESC' }
           ]
@@ -112,10 +109,7 @@ function AllProducts() {
       title: t('int.purchased'),
       render: obj => R.propOr('-', 'purchased', obj)
     },
-    {
-      title: t('int.lpPrice'),
-      render: obj => R.propOr('-', 'lpPrice', obj)
-    },
+
     {
       title: t('int.lpReward'),
       field: 'lpReward'
