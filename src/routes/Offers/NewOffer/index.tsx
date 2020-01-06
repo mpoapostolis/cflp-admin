@@ -73,9 +73,7 @@ function NewOffer() {
           name,
           description,
           status,
-          discounts: discounts.map((o: Discount) => ({
-            ...o
-          })),
+          discounts,
           type,
           lpPrice,
           lpReward
@@ -90,9 +88,9 @@ function NewOffer() {
     const formData = new FormData();
     const _infos = {
       ...infos,
-      discounts: infos.discounts.map(o =>
-        R.pick(['name', 'price', 'discount'], o)
-      )
+      discounts: infos.discounts
+        .map(o => R.pick(['name', 'price', 'discount'], o))
+        .filter(o => !R.isEmpty(o))
     };
     images.forEach(f => formData.append('image', f.file));
     formData.append('infos', JSON.stringify(_infos));

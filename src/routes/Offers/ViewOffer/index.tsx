@@ -25,6 +25,24 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { toast } from 'react-toastify';
 import { Discount } from '../NewOffer/Details';
+import { applyDiscount } from '../../../utils';
+import MaterialTable from '../../../components/Table';
+
+function DiscountSum(obj: Discount) {
+  const t = useContext(I18n);
+  return (
+    <>
+      <InfoItem label={t('int.name')} value={obj.name || ''} />
+      <InfoItem label={t('int.initial-price')} value={`${obj.price}€`} />
+      <InfoItem label={t('int.discount')} value={`${obj.discount}%`} />
+      <InfoItem
+        label={t('int.price-after-discount')}
+        value={applyDiscount(obj.discount, obj.price)}
+      />
+      <br />
+    </>
+  );
+}
 
 const imgModal = css`
   max-width: 250px;
@@ -48,6 +66,38 @@ const imgCont = css`
   max-height: 67vh;
   overflow: auto;
 `;
+
+const discountSumCont = css`
+  display: flex;
+  align-items: center;
+  .item {
+    margin-right: 15px;
+  }
+`;
+
+// function DiscountSum(obj: Discount & { idx: number }) {
+//   const t = useContext(I18n);
+//   return (
+//     <div className={discountSumCont}>
+//       <Typography className="item">{obj.name}</Typography>
+//       <Typography className="item">x</Typography>
+//       <Typography className="item">{obj.discount}%</Typography>
+//       <Typography className="item">=</Typography>
+//       <div className="item">
+//         <Typography
+//           variant="caption"
+//           style={{
+//             textDecoration: 'line-through'
+//           }}>
+//           {obj.price}€
+//         </Typography>
+//         <Typography variant="caption">
+//           {applyDiscount(obj.discount, obj.price)}
+//         </Typography>
+//       </div>
+//     </div>
+//   );
+// }
 
 function ViewOffer() {
   const t = useContext(I18n);
@@ -120,38 +170,26 @@ function ViewOffer() {
       </Grid>
       <Grid item xs={12} md={6}>
         <Card>
-          <CardHeader title={t('int.product-infos')}></CardHeader>
+          <CardHeader title={t('int.offers-infos')}></CardHeader>
           <Divider />
           <CardContent>
             {keys.map((obj, idx) => (
               <InfoItem key={idx} {...obj} />
             ))}
-
-            {infos?.discounts && infos?.discounts.length > 0 && (
-              <>
-                <br />
-                <Divider />
-                <br />
-                <Typography variant="h6">{t('int.discounts')}:</Typography>
-                <br />
-              </>
-            )}
-            {infos?.discounts.map((obj, idx) => {
-              const keys = ['name', 'price', 'discount'].map(k => ({
-                label: t(`int.${k.toLocaleLowerCase()}`),
-                value: R.propOr('', k, obj) as string
-              }));
-              return (
-                <div key={idx}>
-                  {keys.map((o, idx) => (
-                    <InfoItem key={idx} label={o.label} value={o.value} />
-                  ))}
-                  <br />
-                </div>
-              );
-            })}
           </CardContent>
         </Card>
+        <br />
+        {infos?.discounts && (
+          <Card>
+            <CardHeader title={t('int.offers-infos')}></CardHeader>
+            <Divider />
+            <CardContent>
+              {infos.discounts.map((o, idx) => (
+                <DiscountSum key={idx} {...o} />
+              ))}
+            </CardContent>
+          </Card>
+        )}
       </Grid>
       {images.length > 0 && (
         <Grid item xs={12} md={6}>

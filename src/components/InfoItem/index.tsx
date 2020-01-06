@@ -4,12 +4,12 @@ import { css, cx } from 'emotion';
 
 const container = css`
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   padding: 5.5px;
 `;
 
 const labelClass = css`
-  width: 150px;
+  min-width: 150px;
   padding-right: 20px;
 `;
 

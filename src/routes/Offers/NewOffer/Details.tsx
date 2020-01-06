@@ -21,6 +21,7 @@ import { IReduxStore } from '../../../redux/reducers';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
 import AsyncAutoComplete from './AsyncAutoComplete';
+import { applyDiscount } from '../../../utils';
 
 export type Discount = {
   name?: string;
@@ -77,6 +78,8 @@ function AccountDetails(props: Props) {
     setInfos(s => ({ ...s, discounts }));
 
   function addDiscount() {
+    const lastElement = discounts[discounts.length - 1];
+    if (R.isEmpty(lastElement)) return;
     setDiscounts([...discounts, {}]);
   }
 
@@ -112,11 +115,6 @@ function AccountDetails(props: Props) {
   }, []);
 
   const t = useContext(I18n);
-
-  function finalPrice(discount: number = 0, price?: number) {
-    if (!price) return '';
-    return `${(price * ((100 - discount) / 100)).toFixed(2)} €`;
-  }
 
   return (
     <Card className={classes.root}>
@@ -303,7 +301,7 @@ function AccountDetails(props: Props) {
                 </Typography>
                 {discounts[idx].discount ? (
                   <Typography>
-                    {finalPrice(discounts[idx].discount, obj.price)}
+                    {applyDiscount(discounts[idx].discount, obj.price)}
                   </Typography>
                 ) : (
                   ''

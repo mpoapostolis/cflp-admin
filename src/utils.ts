@@ -25,3 +25,8 @@ export const debounce = (func: any, wait: any, immediate?: any) => {
     }
   };
 };
+
+export function applyDiscount(discount: number = 0, price?: number) {
+  if (!price) return '';
+  return `${(price * ((100 - discount) / 100)).toFixed(2)} €`;
+}
