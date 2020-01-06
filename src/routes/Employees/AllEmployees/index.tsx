@@ -108,22 +108,22 @@ function Allusers() {
     {
       title: t('int.email'),
       field: 'email'
-    },
-
-    {
-      title: t('int.actions'),
-      render: (obj: any, idx: number) => (
-        <>
-          <IconButton
-            classes={{ root: marginRight }}
-            size={'small'}
-            onClick={() => history.push(`/users/${obj._id}`)}
-            title={t('int.view')}>
-            <VisibilityIcon />
-          </IconButton>
-        </>
-      )
     }
+
+    // {
+    //   title: t('int.actions'),
+    //   render: (obj: any, idx: number) => (
+    //     <>
+    //       <IconButton
+    //         classes={{ root: marginRight }}
+    //         size={'small'}
+    //         onClick={() => history.push(`/users/${obj._id}`)}
+    //         title={t('int.view')}>
+    //         <VisibilityIcon />
+    //       </IconButton>
+    //     </>
+    //   )
+    // }
   ];
 
   return (
