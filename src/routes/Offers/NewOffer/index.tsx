@@ -103,7 +103,7 @@ function NewOffer() {
       body: formData
     }).then(() => {
       toast.success(successMsg);
-      history.push('/products');
+      history.push('/offers');
     });
   };
 
