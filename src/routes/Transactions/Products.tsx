@@ -90,8 +90,8 @@ function Products() {
       },
       {
         label: t('int.date'),
-        keyNameTo: 'from',
-        keyNameFrom: 'to',
+        keyNameTo: 'to',
+        keyNameFrom: 'from',
         type: 'date'
       }
     ],

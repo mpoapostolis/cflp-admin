@@ -84,8 +84,8 @@ function Offers() {
       },
       {
         label: t('int.date'),
-        keyNameTo: 'from',
-        keyNameFrom: 'to',
+        keyNameTo: 'to',
+        keyNameFrom: 'from',
         type: 'date'
       }
     ],

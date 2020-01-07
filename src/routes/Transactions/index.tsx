@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import I18n from '../../I18n';
 import { Tabs, Tab } from '@material-ui/core';
 import {
@@ -22,9 +22,9 @@ function AllTransactions() {
   const t = useContext(I18n);
 
   const history = useHistory();
-  const param = useParams<{ tab: 'product' | 'offer' }>();
-
-  const [tab, setTab] = React.useState(param.tab === 'offers' ? 1 : 0);
+  const [tab, setTab] = React.useState(
+    history.location.pathname.split('/')[2] === 'offers' ? 1 : 0
+  );
 
   const handleChange = (_: any, newValue: number) => {
     const tab = newValue === 0 ? 'products' : 'offers';
