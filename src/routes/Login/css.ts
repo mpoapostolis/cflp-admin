@@ -14,8 +14,8 @@ export const loginContainer = css`
 export const cardContainer = css`
   position: relative;
   width: 65vw;
-  height: 410px;
-
+  height: 450px;
+  padding: 20px;
   ${mq[1]} {
     width: 70vw;
   }

@@ -76,31 +76,38 @@ const Login = () => {
               subheader={
                 <Typography variant="caption">{dateNow}</Typography>
               }></CardHeader>
-            <TextField
-              onChange={evt =>
-                handleChange({
-                  username: evt.currentTarget.value
-                })
-              }
-              error={Boolean(R.propOr('', 'username', err))}
-              helperText={R.propOr('', 'username', err)}
-              label={t('int.username')}
-              required
-              variant="outlined"
-              fullWidth></TextField>
-            <TextField
-              onChange={evt =>
-                handleChange({
-                  password: evt.currentTarget.value
-                })
-              }
-              type="password"
-              error={Boolean(R.propOr('', 'password', err))}
-              helperText={R.propOr('', 'password', err)}
-              label={t('int.password')}
-              required
-              variant="outlined"
-              fullWidth></TextField>
+            <div>
+              <TextField
+                onChange={evt =>
+                  handleChange({
+                    username: evt.currentTarget.value
+                  })
+                }
+                error={Boolean(R.propOr('', 'username', err))}
+                helperText={R.propOr('', 'username', err)}
+                label={t('int.username')}
+                required
+                variant="outlined"
+                fullWidth
+              />
+              <br />
+              <br />
+              <br />
+              <TextField
+                onChange={evt =>
+                  handleChange({
+                    password: evt.currentTarget.value
+                  })
+                }
+                type="password"
+                error={Boolean(R.propOr('', 'password', err))}
+                helperText={R.propOr('', 'password', err)}
+                label={t('int.password')}
+                required
+                variant="outlined"
+                fullWidth
+              />
+            </div>
             <Button
               type="submit"
               variant="contained"
