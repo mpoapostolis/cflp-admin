@@ -8,6 +8,7 @@ import useApi from '../../Hooks';
 import { product } from 'ramda';
 import LinkedCameraIcon from '@material-ui/icons/LinkedCamera';
 import { red } from '@material-ui/core/colors';
+import { toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -56,6 +57,8 @@ function QRcodeScanner(props: {}) {
           json: data
         });
       }
+
+      toast.success('ok');
 
       setOpen(false);
     }
