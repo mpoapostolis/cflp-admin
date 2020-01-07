@@ -22,7 +22,7 @@ export const cardContainer = css`
 
   ${mq[0]} {
     width: 80vw;
-    height: 50vh;
+    min-height: 45vh;
   }
   display: flex;
 `;
@@ -50,7 +50,6 @@ export const content = css`
   padding: 50px 30px 10px 30px !important;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   flex: 1;
 `;
 export const media = css`
@@ -59,4 +58,8 @@ export const media = css`
     display: none !important;
     flex: 1;
   }
+`;
+
+export const btn = css`
+  align-self: flex-end;
 `;

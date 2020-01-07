@@ -9,7 +9,14 @@ import {
   Divider,
   CardMedia
 } from '@material-ui/core';
-import { cardContainer, loginContainer, card, media, content } from './css';
+import {
+  cardContainer,
+  loginContainer,
+  card,
+  media,
+  content,
+  btn
+} from './css';
 import CardHeader from '@material-ui/core/CardHeader';
 import { format } from 'date-fns/esm';
 import LockIcon from './LockIcon';
@@ -76,40 +83,44 @@ const Login = () => {
               subheader={
                 <Typography variant="caption">{dateNow}</Typography>
               }></CardHeader>
-            <div>
-              <TextField
-                onChange={evt =>
-                  handleChange({
-                    username: evt.currentTarget.value
-                  })
-                }
-                error={Boolean(R.propOr('', 'username', err))}
-                helperText={R.propOr('', 'username', err)}
-                label={t('int.username')}
-                required
-                variant="outlined"
-                fullWidth
-              />
-              <br />
-              <br />
-              <br />
-              <TextField
-                onChange={evt =>
-                  handleChange({
-                    password: evt.currentTarget.value
-                  })
-                }
-                type="password"
-                error={Boolean(R.propOr('', 'password', err))}
-                helperText={R.propOr('', 'password', err)}
-                label={t('int.password')}
-                required
-                variant="outlined"
-                fullWidth
-              />
-            </div>
+            <br />
+            <br />
+            <TextField
+              onChange={evt =>
+                handleChange({
+                  username: evt.currentTarget.value
+                })
+              }
+              error={Boolean(R.propOr('', 'username', err))}
+              helperText={R.propOr('', 'username', err)}
+              label={t('int.username')}
+              required
+              variant="outlined"
+              fullWidth
+            />
+
+            <br />
+            <TextField
+              onChange={evt =>
+                handleChange({
+                  password: evt.currentTarget.value
+                })
+              }
+              type="password"
+              error={Boolean(R.propOr('', 'password', err))}
+              helperText={R.propOr('', 'password', err)}
+              label={t('int.password')}
+              required
+              variant="outlined"
+              fullWidth
+            />
+            <br />
+            <br />
+            <br />
             <Button
+              classes={{ root: btn }}
               type="submit"
+              size="large"
               variant="contained"
               color="secondary"
               fullWidth>
