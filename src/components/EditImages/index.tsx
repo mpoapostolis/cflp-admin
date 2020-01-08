@@ -154,7 +154,10 @@ function EditImages(props: Props) {
                   color={selected.includes(obj) ? 'secondary' : 'action'}
                 />
               </IconButton>
-              <ImageModal key={idx} className={classes.imgModal} src={obj.url}>
+              <ImageModal
+                key={idx}
+                className={classes.imgModal}
+                src={`/uploads/${obj.url}`}>
                 <img
                   className={cx(classes.imgClass, {
                     selected: selected.includes(obj)

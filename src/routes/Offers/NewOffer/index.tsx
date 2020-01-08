@@ -64,7 +64,7 @@ function NewOffer() {
         } = data;
         const images = data.images.map((url: string) => ({
           file: null,
-          url
+          url: `/uploads/${url}`
         }));
         setImages(images);
         setInfos({

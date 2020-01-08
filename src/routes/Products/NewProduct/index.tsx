@@ -47,7 +47,7 @@ function NewProduct() {
         const { name = '', price = 0, lpReward = 0 } = data;
         const images = data.images.map((url: string) => ({
           file: null,
-          url
+          url: `/uploads/${url}`
         }));
         setImages(images);
         setInfos({ name, price, lpReward });
@@ -60,7 +60,7 @@ function NewProduct() {
   const handleSubmit = () => {
     const formData = new FormData();
 
-    images.forEach(f => formData.append('image', f.file));
+    images.filter(f => f.file).forEach(f => formData.append('image', f.file));
     formData.append('infos', JSON.stringify(infos));
     const action = isEdit ? api.put : api.post;
     const url = isEdit ? `/api/bo/products/${params.id}` : `/api/bo/products`;
