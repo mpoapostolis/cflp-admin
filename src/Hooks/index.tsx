@@ -1,12 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { IReduxStore } from '../redux/reducers';
 import { useSelector, useDispatch } from 'react-redux';
 import ky from 'ky';
 import { setErrors } from '../redux/actions/errors';
 import * as R from 'ramda';
+import { updateToken, logout } from '../redux/actions/account';
 
 function useApi() {
-  const token = useSelector((store: IReduxStore) => store.account.token);
+  const account = useSelector((store: IReduxStore) => store.account);
   const err = useSelector((store: IReduxStore) => store.errors);
   const dispatch = useDispatch();
 
@@ -17,12 +18,42 @@ function useApi() {
     [dispatch]
   );
 
+  const _updateToken = useCallback(
+    infos => {
+      dispatch(updateToken(infos));
+    },
+    [dispatch]
+  );
+
+  const _logout = useCallback(() => dispatch(logout()), [dispatch]);
+
   const api = ky.extend({
     hooks: {
       beforeRequest: [
-        request => {
+        async request => {
+          if (!account.refreshToken) {
+            _logout();
+            return;
+          }
+          if (account.tokenExp && account.tokenExp < Date.now()) {
+            const res = await ky.post('/auth/refresh-token', {
+              json: {
+                refreshToken: account.refreshToken
+              }
+            });
+            const infos = await res.json();
+            _updateToken(infos);
+            return request.headers.set(
+              'Authorization',
+              `Bearer ${infos.token}`
+            );
+          }
+
           if (!R.isEmpty(err)) _setErr({});
-          request.headers.set('Authorization', `Bearer ${token}`);
+          return request.headers.set(
+            'Authorization',
+            `Bearer ${account.token}`
+          );
         }
       ],
       afterResponse: [
