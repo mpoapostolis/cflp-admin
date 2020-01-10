@@ -47,7 +47,7 @@ function NewProduct() {
         const { name = '', price = 0, lpReward = 0 } = data;
         const images = data.images.map((url: string) => ({
           file: null,
-          url: `/uploads/${url}`
+          url
         }));
         setImages(images);
         setInfos({ name, price, lpReward });

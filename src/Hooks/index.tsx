@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { IReduxStore } from '../redux/reducers';
 import { useSelector, useDispatch } from 'react-redux';
-import ky from 'ky';
 import { setErrors } from '../redux/actions/errors';
-import * as R from 'ramda';
 import { updateToken, logout } from '../redux/actions/account';
+import * as R from 'ramda';
+import ky from 'ky';
 
 function useApi() {
   const account = useSelector((store: IReduxStore) => store.account);
