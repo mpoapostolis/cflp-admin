@@ -35,6 +35,7 @@ function useApi() {
             _logout();
             return;
           }
+
           if (account.tokenExp && account.tokenExp < Date.now()) {
             const res = await ky.post('/auth/refresh-token', {
               json: {
