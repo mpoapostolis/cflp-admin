@@ -1,4 +1,4 @@
-import React, { useContext, ReactNode, ReactElement } from 'react';
+import React, { useContext, ReactNode, ReactElement, Fragment } from 'react';
 import {
   Card,
   CardContent,
@@ -10,7 +10,6 @@ import {
   Button
 } from '@material-ui/core';
 import { cx } from 'emotion';
-import { EUROSIGN } from '../../utils';
 import { makeStyles } from '@material-ui/styles';
 
 type IconColor = 'orange' | 'blue' | 'green';
@@ -61,6 +60,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&.isNegative': {
       color: 'red'
     }
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row-reverse'
   }
 }));
 
@@ -71,6 +75,7 @@ type Props = {
   icon: ReactNode;
   primary?: boolean;
   iconColor?: IconColor;
+  actions?: ReactNode[];
 };
 function InfoCard(props: Props) {
   const classes = useStyles();
@@ -100,13 +105,15 @@ function InfoCard(props: Props) {
           </Grid>
         </Grid>
       </CardContent>
-      <CardActions style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button size="small" color="secondary">
-          see More
-        </Button>
+      <CardActions className={classes.actions}>
+        {props.actions?.map((action, idx) => (
+          <Fragment key={idx}>{action}</Fragment>
+        ))}
       </CardActions>
     </Card>
   );
 }
+
+export { COLORS as InfoCardColors };
 
 export default InfoCard;
