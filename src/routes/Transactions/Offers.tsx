@@ -9,9 +9,9 @@ import I18n from '../../I18n';
 import Filters from '../../components/Filters';
 import { FilterType } from '../../components/Filters/types';
 import MaterialTable from '../../components/Table';
-import { Typography, IconButton, Tabs, Tab } from '@material-ui/core';
+import { Typography, IconButton } from '@material-ui/core';
 import { Columns } from '../../components/Table/types';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import useApi from '../../Hooks';
 import queryString from 'query-string';
 import { formatDate } from '../../utils';
@@ -105,31 +105,6 @@ function Offers() {
           return formatDate(d.getTime());
         }
       },
-      {
-        title: t('int.description'),
-        render: (obj, idx) => (
-          <Typography
-            style={{
-              maxWidth: '250px'
-            }}
-            variant="body1">
-            {obj.description}
-          </Typography>
-        )
-      },
-
-      {
-        title: t('int.type'),
-        render: obj => (
-          <Typography
-            variant={'button'}
-            style={{
-              color: obj.type === 'CREDIT' ? red[500] : green[500]
-            }}>
-            {obj.type}
-          </Typography>
-        )
-      },
 
       {
         title: t('int.lp-price'),
@@ -138,22 +113,6 @@ function Offers() {
       {
         title: t('int.lp-reward'),
         field: 'lpReward'
-      },
-      {
-        title: t('int.purchased'),
-        render: obj => R.propOr('-', 'purchased', obj)
-      },
-      {
-        title: t('int.discounts'),
-        render: (obj: any, idx: number) => {
-          const tmp: unknown[] = R.propOr([], 'discounts', obj);
-          const howMany = tmp.length;
-          return (
-            <IconRepresentation howMany={howMany}>
-              <LocalOfferIcon htmlColor={'#546e7a'} />
-            </IconRepresentation>
-          );
-        }
       },
 
       {
@@ -175,6 +134,7 @@ function Offers() {
     <>
       <Filters onSubmit={getTransactions} filterConf={filterConf} />
       <MaterialTable
+        hideSearch
         loading={loading}
         columns={columns}
         {...infos}

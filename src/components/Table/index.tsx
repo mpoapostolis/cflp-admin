@@ -29,7 +29,8 @@ const useStyles = makeStyles({
   searchTermCont: {
     display: 'flex',
     justifyContent: 'flex-end',
-    padding: '10px'
+    padding: '10px',
+    height: '20px'
   },
   textField: {
     width: '200px'
@@ -60,6 +61,7 @@ type Props = {
   total: number;
   onChange: (e: Record<string, any>) => void;
   loading?: boolean;
+  hideSearch?: boolean;
 };
 
 function MaterialTable(props: Props) {
@@ -96,26 +98,28 @@ function MaterialTable(props: Props) {
   return (
     <Paper className={classes.root}>
       <div className={classes.searchTermCont}>
-        <TextField
-          InputProps={{
-            classes: { underline: classes.underline },
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            )
-          }}
-          className={cx(classes.textField, 'without-padding')}
-          defaultValue={R.propOr('', 'searchTerm', params)}
-          onChange={evt => {
-            const searchTerm =
-              evt.currentTarget.value === ''
-                ? undefined
-                : evt.currentTarget.value;
-            handleChange({ searchTerm, offset: 0 });
-          }}
-          placeholder={t('int.search')}
-        />
+        {!props.hideSearch && (
+          <TextField
+            InputProps={{
+              classes: { underline: classes.underline },
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              )
+            }}
+            className={cx(classes.textField, 'without-padding')}
+            defaultValue={R.propOr('', 'searchTerm', params)}
+            onChange={evt => {
+              const searchTerm =
+                evt.currentTarget.value === ''
+                  ? undefined
+                  : evt.currentTarget.value;
+              handleChange({ searchTerm, offset: 0 });
+            }}
+            placeholder={t('int.search')}
+          />
+        )}
       </div>
       <br />
       <TableContainer className={classes.container}>

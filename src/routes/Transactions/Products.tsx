@@ -115,26 +115,10 @@ function Products() {
         title: t('int.price'),
         render: obj => `${R.propOr('-', 'price', obj)} ${EUROSIGN}`
       },
-      {
-        title: t('int.purchased'),
-        render: obj => R.propOr('-', 'purchased', obj)
-      },
 
       {
         title: t('int.lpReward'),
         field: 'lpReward'
-      },
-      {
-        title: t('int.images'),
-        render: (obj: any, idx: number) => {
-          const tmp: unknown[] = R.propOr([], 'images', obj);
-          const howMany = tmp.length;
-          return (
-            <IconRepresentation howMany={howMany}>
-              <ImageIcon htmlColor={'#546e7a'} />
-            </IconRepresentation>
-          );
-        }
       },
 
       {
@@ -157,6 +141,7 @@ function Products() {
       <Filters onSubmit={getTransactions} filterConf={filterConf} />
       <MaterialTable
         loading={loading}
+        hideSearch
         columns={columns}
         {...infos}
         onChange={getTransactions}
