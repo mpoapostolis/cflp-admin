@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import InfoCard from '../../components/InfoCard';
 import { sliderCont } from './css';
 import I18n from '../../I18n';
@@ -23,6 +23,8 @@ import { subDays, format } from 'date-fns';
 import LineChart from '../../components/LineChart';
 import DonutChart from '../../components/DonutChart';
 import BarChart from '../../components/BarChart';
+import useApi from '../../Hooks';
+import { uniq } from 'ramda';
 
 export const formatDate = (date?: number) =>
   date ? format(+date, 'd MMM yyy') : '';
@@ -34,6 +36,9 @@ function Dashboard() {
   const [anchorDateEl, setAnchorDateEl] = useState<HTMLButtonElement | null>(
     null
   );
+
+  const api = useApi();
+
   const [
     anchorRadiusEl,
     setAnchorRadiusEl
@@ -42,6 +47,9 @@ function Dashboard() {
   const [dates, setDates] = useState(defautDates);
   const [radius, setRadius] = useState(1);
   const [from, to] = dates;
+
+  const [products, setProducts] = useState();
+  const [offers, setOffers] = useState();
 
   const handleOpenDates = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorDateEl(event.currentTarget);
@@ -74,6 +82,33 @@ function Dashboard() {
       {t('int.see-more')}
     </Button>
   ];
+
+  useEffect(() => {
+    api
+      .get(`/api/bo/transactions/offers/timeseries`)
+      .then(e => e.json())
+      .then(infos => setOffers(uniq(infos.data)));
+
+    api
+      .get(`/api/bo/transactions/products/timeseries`)
+      .then(e => e.json())
+      .then(infos => setProducts(uniq(infos.data)));
+  }, [dates]);
+
+  const totalProducts = useMemo(
+    () => products?.reduce((acc: any, curr: any) => acc + curr.purchased, 0),
+    [products]
+  );
+
+  const totalOffers = useMemo(
+    () => offers?.reduce((acc: any, curr: any) => acc + curr.purchased, 0),
+    [offers]
+  );
+
+  const totalProfit = products?.reduce(
+    (acc: number, obj: any) => acc + obj.purchased * obj.price,
+    0
+  );
 
   return (
     <>
@@ -116,7 +151,7 @@ function Dashboard() {
           <InfoCard
             actions={commonActions}
             icon={<AllInboxIcon />}
-            value={'10'}
+            value={totalProducts}
             iconColor="blue"
             title={t('int.products-purchased')}
           />
@@ -125,7 +160,7 @@ function Dashboard() {
           <InfoCard
             iconColor="orange"
             icon={<LocalOfferIcon />}
-            value={'2'}
+            value={totalOffers}
             title={t('int.offers-purchased')}
             actions={commonActions}
           />
@@ -136,7 +171,7 @@ function Dashboard() {
             iconColor="green"
             icon={<AttachMoneyIcon />}
             title={t('int.total-profit')}
-            value={`${12}${EUROSIGN}`}
+            value={`${totalProfit}${EUROSIGN}`}
           />
         </Grid>
 
@@ -180,23 +215,10 @@ function Dashboard() {
         <Grid xs={12} md={6} item>
           <BarChart
             title={t('int.revenue-pre-product')}
-            labels={[
-              'product1',
-              'product2',
-              'product3',
-              'product4',
-              'product5',
-              'product5',
-              'product5',
-              'product5',
-              'product5',
-              'product5',
-              'product5',
-              'product6'
-            ]}
+            labels={products?.map((obj: any) => obj.name)}
             datasets={[
               {
-                data: [1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 6],
+                data: products?.map((obj: any) => obj.purchased),
                 backgroundColor: colorArray,
                 borderColor: colorArray,
                 borderWidth: 1
@@ -207,54 +229,12 @@ function Dashboard() {
         <Grid xs={12} md={6} item>
           <DonutChart
             title={t('int.purchased-per-offer')}
-            labels={[
-              'offer1',
-              'offer2',
-              'offer3',
-              'offer4',
-              'offer5',
-              'offer5',
-              'offer5',
-              'offer5',
-              'offer5',
-              'offer5',
-              'offer5',
-              'offer6'
-            ]}
+            labels={offers?.map((obj: any) => obj.name)}
             datasets={[
               {
-                label: '# of Votes',
-                data: [
-                  12,
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6
-                ],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)'
-                ],
+                label: 'XX',
+                data: offers?.map((obj: any) => obj.purchased),
+                backgroundColor: [],
                 borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
                 borderWidth: 1
               }
@@ -264,11 +244,13 @@ function Dashboard() {
         <Grid xs={12} md={6} item>
           <LineChart
             title={t('int.revenue')}
-            labels={[1, 2, 3, 4, 5, 6, 7]}
+            labels={products?.map((obj: any) => obj.dateCreated ?? '')}
             datasets={[
               {
                 label: 'Revenue',
-                data: [1, 6, 1, 2, 4, 15, 6, 1, 2, 3, 4, 5, 6],
+                data: products?.map(
+                  (obj: any) => obj.purchased * obj.price ?? ''
+                ),
                 backgroundColor: '#49A44C6F',
                 borderWidth: 1
               }

@@ -1,13 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import I18n from '../../I18n';
 import { Tabs, Tab } from '@material-ui/core';
-import {
-  useHistory,
-  useParams,
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom';
+import { useHistory, Switch, Route, Redirect } from 'react-router-dom';
 import Products from './Products';
 import Offers from './Offers';
 

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
-import { Dialog, Avatar, IconButton, Theme } from '@material-ui/core';
+import { Dialog, IconButton, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import queryString from 'query-string';
 import QrReader from 'react-qr-reader';
 import useApi from '../../Hooks';
-import { product } from 'ramda';
 import LinkedCameraIcon from '@material-ui/icons/LinkedCamera';
 import { red } from '@material-ui/core/colors';
 import { toast } from 'react-toastify';
@@ -15,12 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: 'none',
     marginRight: '10px'
   },
-  small: {
-    width: theme.spacing(4),
-    background: '#fffa',
-    padding: '5px',
-    height: theme.spacing(4)
-  },
+
   paper: {
     display: 'flex',
     justifyContent: 'center',

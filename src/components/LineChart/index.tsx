@@ -30,6 +30,12 @@ function LineChart(props: Props) {
         },
 
         scales: {
+          xAxes: [
+            {
+              type: 'time',
+              distribution: 'series'
+            }
+          ],
           yAxes: [
             {
               ticks: {
@@ -40,7 +46,7 @@ function LineChart(props: Props) {
         }
       }
     });
-  }, []);
+  }, [props]);
 
   return (
     <Card>

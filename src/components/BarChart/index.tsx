@@ -28,10 +28,18 @@ function BarChart(props: Props) {
         legend: {
           display: false
         },
-        scales: {}
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true
+              }
+            }
+          ]
+        }
       }
     });
-  }, []);
+  }, [props]);
 
   return (
     <Card>

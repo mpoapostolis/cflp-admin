@@ -119,8 +119,8 @@ function AccountDetails(props: Props) {
   return (
     <Card className={classes.root}>
       <CardHeader
-        subheader={t('int.edit-product-info')}
-        title={t('int.product')}></CardHeader>
+        subheader={t('int.edit-offers-info')}
+        title={t('int.offers')}></CardHeader>
       <Divider />
       <CardContent className={classes.cardContent}>
         <Grid container alignItems="center" spacing={2}>

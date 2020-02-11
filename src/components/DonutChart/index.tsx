@@ -30,10 +30,18 @@ function DonutChart(props: Props) {
           display: false
         },
 
-        scales: {}
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true
+              }
+            }
+          ]
+        }
       }
     });
-  }, []);
+  }, [props]);
 
   return (
     <Card>
