@@ -1,5 +1,6 @@
 import { css } from 'emotion';
 
-export const sliderCont = css`
-  width: 250px;
+export const filterClass = css`
+  display: flex;
+  justify-content: flex-end;
 `;
