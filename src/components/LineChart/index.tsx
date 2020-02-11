@@ -174,9 +174,8 @@ function LineChart(props: Props) {
 
     const xAxis = axisBottom(xScale)
       .tickSize(-height)
-      .ticks(8)
-      // @ts-ignore
-      .tickFormat(timeFormat('%d %b %y'));
+      .ticks(8);
+    // @ts-ignore
 
     const yAxis = axisLeft(yScale)
       .tickSize(-width)
@@ -187,7 +186,7 @@ function LineChart(props: Props) {
     groupLine
       .select('.d3__line')
       .attr('fill', 'none')
-      .attr('stroke-width', '2')
+      .attr('stroke-width', '1')
       .attr('d', line => linePath(line.points))
       .attr('stroke', line => line.color);
 
@@ -222,7 +221,9 @@ function LineChart(props: Props) {
         toolTip.style('display', 'block');
         const posX = isFireFox ? layerX : offsetX;
         const posY = isFireFox ? layerY : offsetY;
-        toolTip.style('left', `${posX}px`).style('top', `${posY + 30}px`);
+        const _offsetX = posX + 200 > _dims.width ? posX - 100 : posX + 20;
+        const _offsetY = posY + 75 > _dims.height ? posY - 75 : posY + 75;
+        toolTip.style('left', `${_offsetX}px`).style('top', `${_offsetY}px`);
       })
       .on('mouseleave', () => {
         setToolTipInfos(undefined);

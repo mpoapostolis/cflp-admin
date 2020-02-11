@@ -1,8 +1,34 @@
 import React, { useContext } from 'react';
 import I18n from '../../I18n';
-import { Grid, Card } from '@material-ui/core';
+import { Grid, Card, CardContent } from '@material-ui/core';
 import LineChart from '../../components/LineChart';
+import { addDays } from 'date-fns';
+import { makeStyles } from '@material-ui/styles';
 // import BarChart from '../../components/BarChart';
+
+const useStyles = makeStyles(() => ({
+  card: {
+    height: '350px',
+    padding: 0,
+    margin: 0
+  },
+
+  cardContent: {
+    width: '97%',
+    height: '87%',
+    padding: 0,
+    margin: 0
+  }
+}));
+
+const r = Array(10)
+  .fill('')
+  .map((e, i) => ({
+    x: addDays(Date.now(), i).getTime(),
+    y: i
+  }));
+
+console.log(r);
 
 type Props = {
   products: any[];
@@ -12,44 +38,37 @@ type Props = {
 
 function Analytics(props: Props) {
   const { products = [], offers = [], transactions = [] } = props;
+  const classes = useStyles();
 
   const t = useContext(I18n);
   return (
     <>
       <Grid xs={12} md={6} item>
-        <Card>
-          <LineChart
-            data={[
-              {
-                label: 'line1',
-                points: [
-                  { x: 1, y: 3 },
-                  { x: 1, y: 2 },
-                  { x: 1, y: 3 },
-                  { x: 1, y: 4 },
-                  { x: 1, y: 5 }
-                ]
-              }
-            ]}
-          />
+        <Card component="div" className={classes.card}>
+          <CardContent className={classes.cardContent}>
+            <LineChart
+              data={[
+                {
+                  label: 'line1',
+                  points: r
+                }
+              ]}
+            />
+          </CardContent>
         </Card>
       </Grid>
       <Grid xs={12} md={6} item>
-        <Card>
-          <LineChart
-            data={[
-              {
-                label: 'line1',
-                points: [
-                  { x: 1, y: 3 },
-                  { x: 1, y: 2 },
-                  { x: 1, y: 3 },
-                  { x: 1, y: 4 },
-                  { x: 1, y: 5 }
-                ]
-              }
-            ]}
-          />
+        <Card component="div" className={classes.card}>
+          <CardContent className={classes.cardContent}>
+            <LineChart
+              data={[
+                {
+                  label: 'line1',
+                  points: r
+                }
+              ]}
+            />
+          </CardContent>
         </Card>
       </Grid>
       <Grid xs={12} md={6} item>

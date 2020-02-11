@@ -3,21 +3,22 @@ import { css } from 'emotion';
 export const container = css`
   background: #fff;
   position: relative;
-  width: 97.5%;
-  height: 100%;
+  width: 100%;
+  height: 97%;
+
   .xAxis path {
-    stroke: #0002;
+    stroke: #0001;
   }
   .yAxis path {
-    stroke: #0002;
+    stroke: #0001;
   }
   .tick line {
-    stroke-dasharray: 1;
-    stroke: #0002;
+    stroke: #0001;
   }
 `;
 
 export const headerClass = css`
+  height: 50px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
