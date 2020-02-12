@@ -6,6 +6,10 @@ export const container = css`
   width: 100%;
   height: 97%;
 
+  text {
+    font-size: 14px;
+  }
+
   .xAxis path {
     stroke: #0001;
   }

@@ -76,7 +76,7 @@ function Analytics(props: Props) {
       <Grid xs={12} md={6} item>
         <Card component="div" className={classes.card}>
           <CardContent className={classes.cardContent}>
-            <BarChart
+            {/* <BarChart
               data={[
                 { value: 1 },
                 { value: 2 },
@@ -89,7 +89,7 @@ function Analytics(props: Props) {
                 { value: 9 },
                 { value: 10 }
               ]}
-            />
+            /> */}
           </CardContent>
         </Card>
       </Grid>
