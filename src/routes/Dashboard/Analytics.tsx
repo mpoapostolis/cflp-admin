@@ -4,6 +4,7 @@ import { Grid, Card, CardContent } from '@material-ui/core';
 import LineChart from '../../components/LineChart';
 import { addDays } from 'date-fns';
 import { makeStyles } from '@material-ui/styles';
+import BarChart from '../../components/BarChart';
 // import BarChart from '../../components/BarChart';
 
 const useStyles = makeStyles(() => ({
@@ -71,18 +72,26 @@ function Analytics(props: Props) {
           </CardContent>
         </Card>
       </Grid>
+
       <Grid xs={12} md={6} item>
-        {/* <BarChart
-          title={t('int.purchased-per-offer')}
-          data={{
-            labels: products.map((obj: any) => obj.name),
-            datasets: [
-              {
-                data: products.map((obj: any) => obj.purchased)
-              }
-            ]
-          }}
-        /> */}
+        <Card component="div" className={classes.card}>
+          <CardContent className={classes.cardContent}>
+            <BarChart
+              data={[
+                { value: 1 },
+                { value: 2 },
+                { value: 3 },
+                { value: 4 },
+                { value: 5 },
+                { value: 6 },
+                { value: 7 },
+                { value: 8 },
+                { value: 9 },
+                { value: 10 }
+              ]}
+            />
+          </CardContent>
+        </Card>
       </Grid>
       <Grid xs={12} md={6} item>
         {/* <LineChart

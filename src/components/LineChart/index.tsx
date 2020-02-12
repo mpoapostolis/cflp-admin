@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState
 } from 'react';
-import { container, headerClass, labelPoint, toolTipClass } from './styles';
+import { container, headerClass, labelPoint, toolTipClass } from './css';
 import { LineChartData, LineChartPoint } from './types';
 import Label from './Label';
 import {
@@ -172,10 +172,7 @@ function LineChart(props: Props) {
       .y(point => yScale(point.y))
       .curve(curveMonotoneX);
 
-    const xAxis = axisBottom(xScale)
-      .tickSize(-height)
-      .ticks(8);
-    // @ts-ignore
+    const xAxis = axisBottom(xScale).tickSize(-height);
 
     const yAxis = axisLeft(yScale)
       .tickSize(-width)
