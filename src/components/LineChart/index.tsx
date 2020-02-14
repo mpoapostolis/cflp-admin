@@ -135,7 +135,8 @@ function LineChart(props: Props) {
     const toolTip = select(toolTipNode.current);
 
     const width = Number(svg.attr('width')) - -MARGINS.left - MARGINS.right;
-    const height = Number(svg.attr('height')) - MARGINS.bottom - MARGINS.top;
+    const height =
+      Number(svg.attr('height')) - MARGINS.bottom - MARGINS.top - 60; // 60 is the header Label and rotate Xaxis text
     const board = svg.select('.d3__board');
     const driverLine = board.select('.driverLine');
 
@@ -218,8 +219,8 @@ function LineChart(props: Props) {
         toolTip.style('display', 'block');
         const posX = isFireFox ? layerX : offsetX;
         const posY = isFireFox ? layerY : offsetY;
-        const _offsetX = posX + 200 > _dims.width ? posX - 100 : posX + 20;
-        const _offsetY = posY + 75 > _dims.height ? posY - 75 : posY + 75;
+        const _offsetX = posX + 150 > _dims.width ? posX - 150 : posX - 50;
+        const _offsetY = posY + 120 > _dims.height ? posY - 75 : posY + 75;
         toolTip.style('left', `${_offsetX}px`).style('top', `${_offsetY}px`);
       })
       .on('mouseleave', () => {

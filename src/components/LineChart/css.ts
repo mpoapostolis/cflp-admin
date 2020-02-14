@@ -1,17 +1,24 @@
 import { css } from 'emotion';
+import { mq } from '../../css';
 
 export const container = css`
   background: #fff;
   position: relative;
   width: 100%;
-  height: 97%;
-
+  height: 100%;
   text {
     font-size: 14px;
   }
 
-  .xAxis path {
-    stroke: #0001;
+  .xAxis {
+    path {
+      stroke: #0001;
+    }
+    text {
+      ${mq[5]} {
+        font-size: xx-small;
+      }
+    }
   }
   .yAxis path {
     stroke: #0001;
@@ -24,7 +31,6 @@ export const container = css`
 export const headerClass = css`
   height: 50px;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
 `;
 

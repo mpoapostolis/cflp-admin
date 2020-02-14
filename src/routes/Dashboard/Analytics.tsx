@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
 
   cardContent: {
     width: '97%',
-    height: '87%',
+    height: '100%',
     padding: 0,
     margin: 0
   }
@@ -44,7 +44,7 @@ function Analytics(props: Props) {
   const t = useContext(I18n);
   return (
     <>
-      <Grid xs={12} md={6} item>
+      <Grid xs={12} md={12} lg={6} item>
         <Card component="div" className={classes.card}>
           <CardContent className={classes.cardContent}>
             <LineChart
@@ -58,7 +58,7 @@ function Analytics(props: Props) {
           </CardContent>
         </Card>
       </Grid>
-      <Grid xs={12} md={6} item>
+      {/* <Grid xs={12} md={12} lg={6} item>
         <Card component="div" className={classes.card}>
           <CardContent className={classes.cardContent}>
             <LineChart
@@ -71,29 +71,25 @@ function Analytics(props: Props) {
             />
           </CardContent>
         </Card>
-      </Grid>
+      </Grid> */}
 
-      <Grid xs={12} md={6} item>
+      <Grid xs={12} md={12} lg={6} item>
         <Card component="div" className={classes.card}>
           <CardContent className={classes.cardContent}>
-            {/* <BarChart
+            <BarChart
+              title={t('int.top-5-selling-products')}
               data={[
-                { value: 1 },
-                { value: 2 },
-                { value: 3 },
-                { value: 4 },
-                { value: 5 },
-                { value: 6 },
-                { value: 7 },
-                { value: 8 },
-                { value: 9 },
-                { value: 10 }
+                { label: 'enas megalos titlos', value: 1 },
+                { label: 'enas megalos titlos1', value: 2 },
+                { label: 'enas megalos titlos2', value: 3 },
+                { label: 'enas megalos titlos3', value: 4 },
+                { label: 'enas megalos titlos4', value: 5 }
               ]}
-            /> */}
+            />
           </CardContent>
         </Card>
       </Grid>
-      <Grid xs={12} md={6} item>
+      <Grid xs={12} md={12} lg={6} item>
         {/* <LineChart
           title={t('int.revenue')}
           data={{
