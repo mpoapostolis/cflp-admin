@@ -1,6 +1,6 @@
 import React, { createRef, useEffect } from 'react';
 import { schemeCategory10 } from 'd3-scale-chromatic';
-import { select } from 'd3-selection';
+import { select, selectAll } from 'd3-selection';
 import { PieArcDatum, pie, arc } from 'd3-shape';
 import { css } from 'emotion';
 import { useWindowSize } from '../../Hooks/useWindowSize';
@@ -95,18 +95,37 @@ const PieChart = React.memo((props: IProps) => {
         .datum(isTotalZero ? emptyData : data)
         .selectAll('path')
         .data(_pie)
-        .attr('fill', (_d, i) => `${colors[i]}ff`)
+        .attr('fill', (_d, i) => `${colors[i]}af`)
         .attr('stroke', '#0001')
         .attr('d', _arc);
 
       body
         .selectAll('.d3DonutSlice')
         .on('mouseover', (_, idx, elements) => {
+          body
+            .selectAll('.d3DonutSlice')
+            .select('path')
+            .attr('opacity', 0.4);
+
+          select(elements[idx])
+            .select('path')
+            .attr('opacity', 1)
+            .attr('fill', colors[idx]);
+
           select(elements[idx])
             .selectAll('polyline, text')
             .attr('opacity', 1);
         })
         .on('mouseleave', (_, idx, elements) => {
+          body
+            .selectAll('.d3DonutSlice')
+            .select('path')
+            .attr('opacity', 1);
+
+          select(elements[idx])
+            .select('path')
+            .attr('fill', `${colors[idx]}Bf`);
+
           select(elements[idx])
             .selectAll('polyline, text')
             .attr('opacity', 0);
@@ -156,7 +175,7 @@ const PieChart = React.memo((props: IProps) => {
         <g>
           {data.map((_, key) => (
             <g className="d3DonutSlice" key={key}>
-              <polyline opacity="0" stroke="#0005" fill="none" />
+              <polyline stroke="#0005" opacity="0" fill="none" />
               <path className={path} key={key} />
               <g className="textGroup">
                 <text
@@ -166,10 +185,11 @@ const PieChart = React.memo((props: IProps) => {
                   opacity="0"
                 />
                 <text
+                  opacity={0}
                   className="d3TextValue"
-                  dy="20"
-                  textLength="120%"
-                  opacity="0">
+                  dy="5"
+                  dx="20"
+                  textLength="120%">
                   <tspan
                     fontWeight="bold"
                     fontSize="14px"
@@ -178,7 +198,8 @@ const PieChart = React.memo((props: IProps) => {
                   />
                   <tspan
                     fontSize="14px"
-                    dx="10px"
+                    dx="-35px"
+                    dy="20px"
                     fill="#717171"
                     className="actualValue"
                   />

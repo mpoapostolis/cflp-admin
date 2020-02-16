@@ -15,6 +15,7 @@ import AllInboxIcon from '@material-ui/icons/AllInbox';
 import Profile from './Profiles';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
@@ -107,6 +108,12 @@ function Menu(props: Props) {
       title: t('int.employees'),
       href: '/employees',
       icon: <SupervisorAccountIcon />,
+      perm: []
+    },
+    {
+      title: t('int.near'),
+      href: '/near',
+      icon: <PersonPinCircleIcon />,
       perm: []
     },
 

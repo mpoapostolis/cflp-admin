@@ -4,6 +4,7 @@ import { css, cx } from 'emotion';
 
 const cn = css`
   display: flex;
+  align-items: center;
 `;
 type Props = {
   color: string;
@@ -24,7 +25,7 @@ function Label(props: Props) {
           background: color,
           width: `${size}px`,
           height: `${size}px`,
-          marginRight: '10px'
+          marginRight: '15px'
         }}
       />
       <Typography variant={'caption'}>{label}</Typography>

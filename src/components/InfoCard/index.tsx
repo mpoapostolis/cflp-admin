@@ -1,4 +1,4 @@
-import React, { useContext, ReactNode, ReactElement, Fragment } from 'react';
+import React, { ReactNode, Fragment } from 'react';
 import {
   Card,
   CardContent,
@@ -12,12 +12,13 @@ import {
 import { cx } from 'emotion';
 import { makeStyles } from '@material-ui/styles';
 
-type IconColor = 'orange' | 'blue' | 'green';
+type IconColor = 'orange' | 'blue' | 'green' | 'red';
 
 const COLORS = {
   orange: 'linear-gradient(180deg, #ffa726 0%, #f57c00 100%)',
   blue: 'linear-gradient(180deg, #1976d2 0%, #0d47a1 100%)',
-  green: 'linear-gradient(180deg, #66bb6a 0%, #43a047 100%)'
+  green: 'linear-gradient(180deg, #66bb6a 0%, #43a047 100%)',
+  red: 'linear-gradient(180deg, #F54764 0%, #Ff0704 100%)'
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -49,6 +50,10 @@ const useStyles = makeStyles((theme: Theme) => ({
       background: COLORS.green
     },
 
+    '&.red': {
+      background: COLORS.red
+    },
+
     '&.blue': {
       background: COLORS.blue
     }
@@ -62,6 +67,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   actions: {
+    minHeight: '30px',
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row-reverse'
@@ -76,6 +82,7 @@ type Props = {
   primary?: boolean;
   iconColor?: IconColor;
   actions?: ReactNode[];
+  radius?: boolean;
 };
 function InfoCard(props: Props) {
   const classes = useStyles();
@@ -99,7 +106,9 @@ function InfoCard(props: Props) {
             </Typography>
           </Grid>
           <Grid item>
-            <Avatar className={cx(classes.avatar, props.iconColor)}>
+            <Avatar
+              variant="rounded"
+              className={cx(classes.avatar, props.iconColor)}>
               {props.icon}
             </Avatar>
           </Grid>

@@ -26,6 +26,7 @@ export const debounce = (func: any, wait: any, immediate?: any) => {
   };
 };
 export const EUROSIGN = '€';
+export const SECOND = 1000;
 
 export function applyDiscount(discount: number = 0, price?: number) {
   if (!price) return '';

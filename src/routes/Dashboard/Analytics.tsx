@@ -6,9 +6,6 @@ import { addDays } from 'date-fns';
 import { makeStyles } from '@material-ui/styles';
 import BarChart from '../../components/BarChart';
 import PieChart from '../../components/PieChart';
-import useApi from '../../Hooks';
-import { useHistory } from 'react-router-dom';
-import queryString from 'query-string';
 import { AggregateData, TimeSeriesData } from '.';
 
 const useStyles = makeStyles(() => ({

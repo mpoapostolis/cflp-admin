@@ -1,16 +1,18 @@
 import React, { useContext } from 'react';
 import I18n from '../../I18n';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Typography } from '@material-ui/core';
 import InfoCard from '../../components/InfoCard';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { EUROSIGN } from '../../utils';
+import { Link } from 'react-router-dom';
 
 type Props = {
   productsPurchased: number;
   offersPurchased: number;
   revenue: number;
+  live: number;
 };
 
 function Overview(props: Props) {
@@ -20,7 +22,11 @@ function Overview(props: Props) {
       <Grid item md={6} lg={3} xs={12}>
         <InfoCard
           actions={[
-            <Button size="small" color="secondary">
+            <Button
+              component={Link}
+              to="/transactions/products"
+              size="small"
+              color="secondary">
               {t('int.see-more')}
             </Button>
           ]}
@@ -37,7 +43,11 @@ function Overview(props: Props) {
           value={props.offersPurchased.toFixed(0)}
           title={t('int.offers-purchased')}
           actions={[
-            <Button size="small" color="secondary">
+            <Button
+              size="small"
+              component={Link}
+              to="/transactions/offers"
+              color="secondary">
               {t('int.see-more')}
             </Button>
           ]}
@@ -45,11 +55,6 @@ function Overview(props: Props) {
       </Grid>
       <Grid item md={6} lg={3} xs={12}>
         <InfoCard
-          actions={[
-            <Button size="small" color="secondary">
-              {t('int.see-more')}
-            </Button>
-          ]}
           iconColor="green"
           icon={<AttachMoneyIcon />}
           title={t('int.revenue')}
@@ -59,12 +64,23 @@ function Overview(props: Props) {
       <Grid item md={6} lg={3} xs={12}>
         <InfoCard
           actions={[
-            <Button size="small" color="secondary">
+            <Button size="small" component={Link} to="/near" color="secondary">
               {t('int.see-more')}
             </Button>
           ]}
-          icon={<img style={{ width: '30px' }} src="/images/live.svg" />}
-          value={'2'}
+          icon={
+            <Typography
+              style={{
+                color: 'white',
+                padding: '10px',
+                background: `linear-gradient(180deg, #F54764 0%, #Ff0704 100%)`
+              }}
+              variant="caption"
+              color="textPrimary">
+              Live
+            </Typography>
+          }
+          value={`${props.live}`}
           title={t('int.online-users')}
         />
       </Grid>

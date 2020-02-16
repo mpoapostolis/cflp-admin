@@ -10,6 +10,8 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import useApi from '../../Hooks';
 
+const SECOND = 1000;
+
 export const formatDate = (date?: number) =>
   date ? format(+date, 'd MMM yyy') : '';
 
@@ -34,7 +36,7 @@ function Dashboard() {
   const history = useHistory();
   const urlParams = queryString.parse(history.location.search);
   const { from, to } = urlParams as DashBoardParams;
-
+  const [live, setLive] = useState(0);
   const [revenue, setRevenue] = useState(0);
 
   const [aggregatedProducts, setAggregatedProducts] = useState<AggregateData>(
@@ -50,6 +52,21 @@ function Dashboard() {
   const api = useApi();
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      api
+        .get(`/api/bo/analytics/near/total`)
+        .then(e => e.json())
+        .then(infos => setLive(infos.total));
+    }, 60 * SECOND);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    api
+      .get(`/api/bo/analytics/near/total`)
+      .then(e => e.json())
+      .then(infos => setLive(infos.total));
+
     api
       .get(`/api/bo/analytics/revenue`)
       .then(e => e.json())
@@ -121,6 +138,7 @@ function Dashboard() {
 
       <Grid spacing={3} container>
         <Overview
+          live={live}
           offersPurchased={timeSeriesOffers.reduce(
             (acc, curr) => acc + curr.total,
             0

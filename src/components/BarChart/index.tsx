@@ -93,10 +93,11 @@ function LineChart(props: Props) {
     const xScale = scaleBand()
       .domain(xDomain)
       .rangeRound([0, width - 66])
+      .paddingOuter(0.1)
       .paddingInner(0.2);
 
     const yScale = scaleLinear()
-      .domain([0, yDomain[1] + 1])
+      .domain([0, yDomain[1] + yDomain[1] * 0.1])
       .range([height, 0]);
 
     const xAxis = axisBottom(xScale).tickSize(-height);
@@ -147,6 +148,7 @@ function LineChart(props: Props) {
           <g className={'yAxis'} />
           {props.data.map((d, idx) => (
             <rect
+              ry={3}
               key={d.label}
               opacity={0.7}
               fill={d.color || schemeCategory10[idx % 10]}
