@@ -94,7 +94,7 @@ function InfoCard(props: Props) {
               variant="body2">
               {props.title}
             </Typography>
-            <Typography color="inherit" variant="h2">
+            <Typography color="inherit" variant="h3">
               {props.value}
             </Typography>
           </Grid>

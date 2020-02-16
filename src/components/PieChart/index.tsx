@@ -84,7 +84,7 @@ const PieChart = React.memo((props: IProps) => {
         .value(d => d.value);
 
       const _arc = arc<DonutData>()
-        .innerRadius(radius * 0.0)
+        .innerRadius(radius * 0.6)
         .outerRadius(radius * 0.8);
 
       const outerArc = arc<DonutData>()

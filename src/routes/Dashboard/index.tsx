@@ -35,6 +35,8 @@ function Dashboard() {
   const urlParams = queryString.parse(history.location.search);
   const { from, to } = urlParams as DashBoardParams;
 
+  const [revenue, setRevenue] = useState(0);
+
   const [aggregatedProducts, setAggregatedProducts] = useState<AggregateData>(
     []
   );
@@ -48,7 +50,10 @@ function Dashboard() {
   const api = useApi();
 
   useEffect(() => {
-    const urlParams = queryString.parse(history.location.search);
+    api
+      .get(`/api/bo/analytics/revenue`)
+      .then(e => e.json())
+      .then(infos => setRevenue(infos.revenue));
 
     api
       .get(`/api/bo/analytics/timeseries/product`)
@@ -115,7 +120,17 @@ function Dashboard() {
       <br />
 
       <Grid spacing={3} container>
-        <Overview offersPurchased={0} totalProfit={2} productsPurchased={3} />
+        <Overview
+          offersPurchased={timeSeriesOffers.reduce(
+            (acc, curr) => acc + curr.total,
+            0
+          )}
+          revenue={revenue}
+          productsPurchased={timeSeriesProducts.reduce(
+            (acc, curr) => acc + curr.total,
+            0
+          )}
+        />
         <Analytics
           aggregatedProducts={aggregatedProducts}
           aggregatedOffers={aggregatedOffers}

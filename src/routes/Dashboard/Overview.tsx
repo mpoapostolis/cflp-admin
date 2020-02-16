@@ -10,7 +10,7 @@ import { EUROSIGN } from '../../utils';
 type Props = {
   productsPurchased: number;
   offersPurchased: number;
-  totalProfit: number;
+  revenue: number;
 };
 
 function Overview(props: Props) {
@@ -52,8 +52,8 @@ function Overview(props: Props) {
           ]}
           iconColor="green"
           icon={<AttachMoneyIcon />}
-          title={t('int.total-profit')}
-          value={`${props.totalProfit}${EUROSIGN}`}
+          title={t('int.revenue')}
+          value={`${props.revenue.toFixed(2)}${EUROSIGN}`}
         />
       </Grid>
       <Grid item md={6} lg={3} xs={12}>

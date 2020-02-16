@@ -161,7 +161,7 @@ function LineChart(props: Props) {
 
     const xScale = scaleTime()
       .domain(xDomain)
-      .rangeRound([0, width - 64]);
+      .rangeRound([0, width - 66]);
 
     const yScale = scaleLinear()
       .domain(yDomain)
