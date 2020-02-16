@@ -146,7 +146,7 @@ function LineChart(props: Props) {
         const { layerX, offsetX } = event;
 
         // Reason we need this is cause  Firefox set OffsetX to zero
-        const posX = isFireFox ? layerX - 30 : offsetX - 25;
+        const posX = isFireFox ? layerX - 38 : offsetX - 33;
 
         driverLine
           .attr('display', 'block')
@@ -161,7 +161,7 @@ function LineChart(props: Props) {
 
     const xScale = scaleTime()
       .domain(xDomain)
-      .rangeRound([0, width - 58]);
+      .rangeRound([0, width - 64]);
 
     const yScale = scaleLinear()
       .domain(yDomain)
@@ -191,8 +191,8 @@ function LineChart(props: Props) {
     board
 
       .selectAll(`.d3__conceivable_axis`)
-      .attr('x1', p => xScale(p as number))
       .data(basis)
+      .attr('x1', p => xScale(p as number))
       .attr('x2', p => xScale(p))
       .attr('y1', 0)
       .attr('y2', height)
@@ -219,7 +219,7 @@ function LineChart(props: Props) {
         toolTip.style('display', 'block');
         const posX = isFireFox ? layerX : offsetX;
         const posY = isFireFox ? layerY : offsetY;
-        const _offsetX = posX + 150 > _dims.width ? posX - 150 : posX - 50;
+        const _offsetX = posX + 150 > _dims.width ? posX - 150 : posX + 20;
         const _offsetY = posY + 120 > _dims.height ? posY - 75 : posY + 75;
         toolTip.style('left', `${_offsetX}px`).style('top', `${_offsetY}px`);
       })
@@ -255,7 +255,7 @@ function LineChart(props: Props) {
         ))}
       </div>
       <svg ref={renderNode}>
-        <g className="d3__board" transform={`translate(27, 10)`}>
+        <g className="d3__board" transform={`translate(35, 10)`}>
           <g className={'xAxis'} />
           <g className={'yAxis'} />
           {data.map(line => (

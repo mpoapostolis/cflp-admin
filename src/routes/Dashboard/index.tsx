@@ -1,33 +1,85 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { filterClass } from './css';
-import I18n from '../../I18n';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import { Button, Popover, Grid } from '@material-ui/core';
 import Calendar from 'react-calendar';
 import { subDays, format } from 'date-fns';
-import useApi from '../../Hooks';
-import { uniq } from 'ramda';
 import Overview from './Overview';
 import Analytics from './Analytics';
+import { useHistory } from 'react-router-dom';
+import queryString from 'query-string';
+import useApi from '../../Hooks';
 
 export const formatDate = (date?: number) =>
   date ? format(+date, 'd MMM yyy') : '';
 
-const defautDates = [new Date(), subDays(Date.now(), 1)];
+const defautDates = [subDays(Date.now(), 1), new Date()];
+type DashBoardParams = { from: string; to: string };
+
+export type AggregateData = {
+  name: string;
+  purchased: number;
+}[];
+
+export type TimeSeriesData = {
+  dateCreated: Date;
+  total: number;
+}[];
 
 function Dashboard() {
-  const t = useContext(I18n);
   const [anchorDateEl, setAnchorDateEl] = useState<HTMLButtonElement | null>(
     null
   );
 
+  const history = useHistory();
+  const urlParams = queryString.parse(history.location.search);
+  const { from, to } = urlParams as DashBoardParams;
+
+  const [aggregatedProducts, setAggregatedProducts] = useState<AggregateData>(
+    []
+  );
+  const [aggregatedOffers, setAggregatedOffers] = useState<AggregateData>([]);
+
+  const [timeSeriesProducts, settimeSeriesProducts] = useState<TimeSeriesData>(
+    []
+  );
+  const [timeSeriesOffers, settimeSeriesOffers] = useState<TimeSeriesData>([]);
+
   const api = useApi();
 
-  const [dates, setDates] = useState(defautDates);
-  const [from, to] = dates;
+  useEffect(() => {
+    const urlParams = queryString.parse(history.location.search);
 
-  const [products, setProducts] = useState();
-  const [offers, setOffers] = useState();
+    api
+      .get(`/api/bo/analytics/timeseries/product`)
+      .then(e => e.json())
+      .then(infos => settimeSeriesProducts(infos.data));
+
+    api
+      .get(`/api/bo/analytics/timeseries/offer`)
+      .then(e => e.json())
+      .then(infos => settimeSeriesOffers(infos.data));
+
+    api
+      .get(`/api/bo/analytics/aggregation/product`)
+      .then(e => e.json())
+      .then(infos => setAggregatedProducts(infos.data));
+
+    api
+      .get(`/api/bo/analytics/aggregation/offer`)
+      .then(e => e.json())
+      .then(infos => setAggregatedOffers(infos.data));
+  }, [history.location.search]);
+
+  useEffect(() => {
+    const urlParams = queryString.parse(history.location.search);
+    const defaultParams = {
+      from: defautDates[0].getTime(),
+      to: defautDates[1].getTime(),
+      ...urlParams
+    };
+    history.replace(`?${queryString.stringify(defaultParams)}`);
+  }, []);
 
   const handleOpenDates = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorDateEl(event.currentTarget);
@@ -38,21 +90,17 @@ function Dashboard() {
   };
 
   function handleChangeDates(evt: any) {
-    setDates(evt);
+    const [from, to] = evt;
+    const urlParams = queryString.parse(history.location.search);
+    history.push(
+      `?${queryString.stringify({
+        ...urlParams,
+        from: from.getTime(),
+        to: to.getTime()
+      })}`
+    );
     handleDateClose();
   }
-
-  useEffect(() => {
-    api
-      .get(`/api/bo/analytics/offers`)
-      .then(e => e.json())
-      .then(infos => setOffers(uniq(infos.data)));
-
-    api
-      .get(`/api/bo/analytics/products`)
-      .then(e => e.json())
-      .then(infos => setProducts(uniq(infos.data)));
-  }, [dates]);
 
   return (
     <>
@@ -61,14 +109,19 @@ function Dashboard() {
           startIcon={<DateRangeIcon />}
           variant="contained"
           onClick={handleOpenDates}>
-          {`${formatDate(from.getTime())} - ${formatDate(to.getTime())}`}
+          {`${formatDate(+from)} - ${formatDate(+to)}`}
         </Button>
       </div>
       <br />
 
       <Grid spacing={3} container>
         <Overview offersPurchased={0} totalProfit={2} productsPurchased={3} />
-        <Analytics products={products} offers={offers} transactions={[]} />
+        <Analytics
+          aggregatedProducts={aggregatedProducts}
+          aggregatedOffers={aggregatedOffers}
+          timeSeriesProducts={timeSeriesProducts}
+          timeSeriesOffers={timeSeriesOffers}
+        />
       </Grid>
 
       <Popover
@@ -83,7 +136,11 @@ function Dashboard() {
           vertical: 'top',
           horizontal: 'center'
         }}>
-        <Calendar onChange={handleChangeDates} value={dates} selectRange />
+        <Calendar
+          onChange={handleChangeDates}
+          value={[new Date(+from), new Date(+to)]}
+          selectRange
+        />
       </Popover>
     </>
   );

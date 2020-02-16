@@ -1,31 +1,35 @@
-import React from "react"
+import React from 'react';
+import { Typography } from '@material-ui/core';
+import { css, cx } from 'emotion';
 
+const cn = css`
+  display: flex;
+`;
 type Props = {
-  color: string
-  label: string
-  size?: number
-  onClick?: (e?: string) => void
-  className?: string
-}
+  color: string;
+  label: string;
+  size?: number;
+  onClick?: (e?: string) => void;
+  className?: string;
+};
 function Label(props: Props) {
-  const { color, size = 10, label } = props
+  const { color, size = 10, label } = props;
   return (
     <div
-      className={props.className}
-      onClick={() => props.onClick && props.onClick(label)}
-    >
+      className={cx(cn, props.className)}
+      onClick={() => props.onClick && props.onClick(label)}>
       <div
         style={{
-          borderRadius: "50%",
+          borderRadius: '50%',
           background: color,
           width: `${size}px`,
           height: `${size}px`,
-          marginRight: "10px",
+          marginRight: '10px'
         }}
       />
-      <p>{label}</p>
+      <Typography variant={'caption'}>{label}</Typography>
     </div>
-  )
+  );
 }
 
-export default Label
+export default Label;

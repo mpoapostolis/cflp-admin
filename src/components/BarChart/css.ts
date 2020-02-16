@@ -7,7 +7,7 @@ export const container = css`
   width: 100%;
   height: 100%;
   text {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .xAxis {

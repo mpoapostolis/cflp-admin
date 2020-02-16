@@ -72,9 +72,6 @@ function LineChart(props: Props) {
     svgEle.setAttribute('height', `${svgHeight}`);
   }
 
-  /**
-   * draw Axis lines and circles
-   */
   const renderChart = useCallback(() => {
     if (!renderNode.current || !toolTipNode.current) return void 0;
 
@@ -87,9 +84,15 @@ function LineChart(props: Props) {
 
     const board = svg.select('.d3__board');
 
+    board
+      .select('.xAxis')
+      .selectAll('.tick')
+      .select('text')
+      .attr('transform', `translate(0 , 10)`);
+
     const xScale = scaleBand()
       .domain(xDomain)
-      .rangeRound([0, width - 58])
+      .rangeRound([0, width - 66])
       .paddingInner(0.2);
 
     const yScale = scaleLinear()
@@ -139,12 +142,11 @@ function LineChart(props: Props) {
       </div>
 
       <svg ref={renderNode}>
-        <g className="d3__board" transform={`translate(27, 10)`}>
+        <g className="d3__board" transform={`translate(35, 10)`}>
           <g className={'xAxis'} />
           <g className={'yAxis'} />
           {props.data.map((d, idx) => (
             <rect
-              ry={4}
               key={d.label}
               opacity={0.7}
               fill={d.color || schemeCategory10[idx % 10]}

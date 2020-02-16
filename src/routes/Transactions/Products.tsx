@@ -123,14 +123,16 @@ function Products() {
 
       {
         title: t('int.actions'),
-        render: obj => (
-          <IconButton
-            size={'small'}
-            onClick={() => history.push(`/products/${obj._id}`)}
-            title={t('int.view')}>
-            <VisibilityIcon />
-          </IconButton>
-        )
+        render: obj => {
+          return (
+            <IconButton
+              size={'small'}
+              onClick={() => history.push(`/products/${obj.productId}`)}
+              title={t('int.view')}>
+              <VisibilityIcon />
+            </IconButton>
+          );
+        }
       }
     ],
     [t]

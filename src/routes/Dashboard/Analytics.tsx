@@ -1,11 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo, useEffect, useState } from 'react';
 import I18n from '../../I18n';
 import { Grid, Card, CardContent } from '@material-ui/core';
 import LineChart from '../../components/LineChart';
 import { addDays } from 'date-fns';
 import { makeStyles } from '@material-ui/styles';
 import BarChart from '../../components/BarChart';
-// import BarChart from '../../components/BarChart';
+import PieChart from '../../components/PieChart';
+import useApi from '../../Hooks';
+import { useHistory } from 'react-router-dom';
+import queryString from 'query-string';
+import { AggregateData, TimeSeriesData } from '.';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -22,23 +26,14 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const r = Array(10)
-  .fill('')
-  .map((e, i) => ({
-    x: addDays(Date.now(), i).getTime(),
-    y: i
-  }));
-
-console.log(r);
-
 type Props = {
-  products: any[];
-  offers: any[];
-  transactions: any[];
+  aggregatedProducts: AggregateData;
+  aggregatedOffers: AggregateData;
+  timeSeriesProducts: TimeSeriesData;
+  timeSeriesOffers: TimeSeriesData;
 };
 
 function Analytics(props: Props) {
-  const { products = [], offers = [], transactions = [] } = props;
   const classes = useStyles();
 
   const t = useContext(I18n);
@@ -50,66 +45,62 @@ function Analytics(props: Props) {
             <LineChart
               data={[
                 {
-                  label: 'line1',
-                  points: r
+                  label: 'products',
+                  points: props.timeSeriesProducts.map(obj => ({
+                    x: new Date(obj.dateCreated).getTime(),
+                    y: obj.total
+                  }))
                 }
               ]}
             />
           </CardContent>
         </Card>
       </Grid>
-      {/* <Grid xs={12} md={12} lg={6} item>
-        <Card component="div" className={classes.card}>
-          <CardContent className={classes.cardContent}>
-            <LineChart
-              data={[
-                {
-                  label: 'line1',
-                  points: r
-                }
-              ]}
-            />
-          </CardContent>
-        </Card>
-      </Grid> */}
 
       <Grid xs={12} md={12} lg={6} item>
         <Card component="div" className={classes.card}>
           <CardContent className={classes.cardContent}>
             <BarChart
-              title={t('int.top-5-selling-products')}
+              title={t('int.per-product')}
+              data={props.aggregatedProducts.map(obj => ({
+                label: obj.name,
+                value: obj.purchased
+              }))}
+            />
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid xs={12} md={12} lg={6} item>
+        <Card component="div" className={classes.card}>
+          <CardContent className={classes.cardContent}>
+            <LineChart
               data={[
-                { label: 'enas megalos titlos', value: 1 },
-                { label: 'enas megalos titlos1', value: 2 },
-                { label: 'enas megalos titlos2', value: 3 },
-                { label: 'enas megalos titlos3', value: 4 },
-                { label: 'enas megalos titlos4', value: 5 }
+                {
+                  label: 'offers',
+                  points: props.timeSeriesOffers.map(obj => ({
+                    x: new Date(obj.dateCreated).getTime(),
+                    y: obj.total
+                  }))
+                }
               ]}
             />
           </CardContent>
         </Card>
       </Grid>
+
       <Grid xs={12} md={12} lg={6} item>
-        {/* <LineChart
-          title={t('int.revenue')}
-          data={{
-            labels: products.map((obj: any) => obj.name),
-            datasets: [
-              {
-                label: 'Offers',
-                data: [12, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderWidth: 1
-              },
-              {
-                label: 'products',
-                data: [12, 19, 1, 2, 3, 4, 5, 6, 7],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderWidth: 1
-              }
-            ]
-          }}
-        /> */}
+        <Card component="div" className={classes.card}>
+          <CardContent className={classes.cardContent}>
+            <PieChart
+              title={t('int.per-offers')}
+              data={props.aggregatedOffers.map(obj => ({
+                label: obj.name,
+                value: obj.purchased
+              }))}
+            />
+          </CardContent>
+        </Card>
       </Grid>
     </>
   );
