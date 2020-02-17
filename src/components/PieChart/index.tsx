@@ -1,10 +1,10 @@
-import React, { createRef, useEffect } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 import { select, selectAll } from 'd3-selection';
 import { PieArcDatum, pie, arc } from 'd3-shape';
-import { css } from 'emotion';
+import { css, cx } from 'emotion';
 import { useWindowSize } from '../../Hooks/useWindowSize';
-import { container, headerClass } from './css';
+import { container, headerClass, label } from './css';
 import { Typography } from '@material-ui/core';
 import Label from '../LineChart/Label';
 
@@ -47,7 +47,8 @@ const emptyData = [
 ];
 const PieChart = React.memo((props: IProps) => {
   const renderNode = createRef<SVGSVGElement>();
-  const { data, size, position = Position.default } = props;
+  const [hoveredItem, setHoveredItem] = useState(-1);
+  const { data, size } = props;
   const windowSize = useWindowSize();
   useEffect(() => {
     const svgEle = renderNode.current;
@@ -106,6 +107,7 @@ const PieChart = React.memo((props: IProps) => {
             .select('path')
             .attr('opacity', 1)
             .attr('fill', colors[idx]);
+          setHoveredItem(idx);
         })
         .on('mouseleave', (_, idx, elements) => {
           body
@@ -116,6 +118,7 @@ const PieChart = React.memo((props: IProps) => {
           select(elements[idx])
             .select('path')
             .attr('fill', `${colors[idx]}Bf`);
+          setHoveredItem(-1);
         });
 
       body
@@ -152,6 +155,10 @@ const PieChart = React.memo((props: IProps) => {
         <br />
         {props.data.map((obj, idx) => (
           <Label
+            className={cx(label, {
+              hovered: Boolean(~hoveredItem),
+              active: idx === hoveredItem
+            })}
             key={idx}
             label={obj.label || ''}
             color={schemeCategory10[idx]}

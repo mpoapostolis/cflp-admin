@@ -12,3 +12,12 @@ export const headerClass = css`
   height: 50px;
   padding-left: 10px;
 `;
+
+export const label = css`
+  &.hovered {
+    opacity: 0.05;
+    &.active {
+      opacity: 1;
+    }
+  }
+`;
