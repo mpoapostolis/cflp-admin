@@ -33,10 +33,12 @@ function classifyByAge(person: { age: number }) {
     ? '0-14'
     : score < 25
     ? '15-24'
-    : score < 41
-    ? '25-40'
+    : score < 35
+    ? '25-34'
+    : score < 45
+    ? '25-44'
     : score < 61
-    ? '41-60'
+    ? '45-60'
     : '60+';
 }
 
@@ -123,7 +125,7 @@ function Near() {
                 .fill('')
                 .forEach((_, idx) => {
                   const randomGender = Math.random() < 0.3 ? 'f' : 'm';
-                  const randomAge = Math.floor(Math.random() * 80);
+                  const randomAge = Math.floor(Math.random() * 65);
                   api.get(
                     `/api/client/stores?id=${idx}&age=${randomAge}&gender=${randomGender}`
                   );

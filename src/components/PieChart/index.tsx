@@ -55,7 +55,7 @@ const PieChart = React.memo((props: IProps) => {
     if (svgEle && svgEle.parentElement) {
       const { parentElement } = svgEle;
       const svgWidth = size ? size : parentElement.clientWidth;
-      const svgHeight = size ? size : parentElement.clientHeight - 50;
+      const svgHeight = size ? size : parentElement.clientHeight - 85;
       svgEle.setAttribute('width', String(svgWidth));
       svgEle.setAttribute('height', String(svgHeight));
 
@@ -68,12 +68,7 @@ const PieChart = React.memo((props: IProps) => {
         : data.map((e, i) => e.color || defaultColor[i]);
       const perc = (value: number) =>
         isTotalZero ? `0%` : `${((value / total) * 100).toFixed(2)}%`;
-      const xOffset =
-        position === Position.left
-          ? radius + 100
-          : position === Position.right
-          ? svgWidth - radius - 100
-          : svgWidth / 2;
+      const xOffset = svgWidth / 2;
       const body = svg
         .select('g')
         .attr('transform', `translate(${xOffset} ,${svgHeight / 2})`);
@@ -111,10 +106,6 @@ const PieChart = React.memo((props: IProps) => {
             .select('path')
             .attr('opacity', 1)
             .attr('fill', colors[idx]);
-
-          select(elements[idx])
-            .selectAll('polyline, text')
-            .attr('opacity', 1);
         })
         .on('mouseleave', (_, idx, elements) => {
           body
@@ -125,10 +116,6 @@ const PieChart = React.memo((props: IProps) => {
           select(elements[idx])
             .select('path')
             .attr('fill', `${colors[idx]}Bf`);
-
-          select(elements[idx])
-            .selectAll('polyline, text')
-            .attr('opacity', 0);
         });
 
       body
@@ -146,16 +133,16 @@ const PieChart = React.memo((props: IProps) => {
         .data(_pie(isTotalZero ? emptyData : data))
         .attr('transform', d => {
           const pos = outerArc.centroid(d);
-          pos[0] = radius * (midAngle(d) < Math.PI ? 1.2 : -1.5);
+          pos[0] = radius * (midAngle(d) < Math.PI ? 1.2 : -1.4);
           return `translate(${pos})`;
         });
 
       const valueText = textGroup.select('.d3TextValue');
-      // .attr("text-anchor", d => (midAngle(d) < Math.PI ? "start" : "end"))
 
-      valueText.select('.percentage').text(d => perc(d.value));
-      valueText.select('.actualValue').text(d => (isTotalZero ? 0 : d.value));
-      // .text(d => `${d.data.label}: ${perc(d.value)}`)
+      valueText.select('.actualValue').text(d => perc(d.value));
+      valueText
+        .select('.percentage')
+        .text(d => (isTotalZero ? 0 : `total: ${d.value}`));
     }
   }, [data, windowSize]); // eslint-disable-line
   return (
@@ -175,31 +162,21 @@ const PieChart = React.memo((props: IProps) => {
         <g>
           {data.map((_, key) => (
             <g className="d3DonutSlice" key={key}>
-              <polyline stroke="#0005" opacity="0" fill="none" />
+              <polyline stroke="#0002" fill="none" />
               <path className={path} key={key} />
               <g className="textGroup">
-                <text
-                  fill="#717171"
-                  className="d3TextLabel"
-                  fontSize="13px"
-                  opacity="0"
-                />
-                <text
-                  opacity={0}
-                  className="d3TextValue"
-                  dy="5"
-                  dx="20"
-                  textLength="120%">
+                <text className="d3TextValue" textLength="120%">
                   <tspan
                     fontWeight="bold"
-                    fontSize="14px"
-                    fill="#000"
+                    fontSize="13px"
+                    x="0"
+                    fill={schemeCategory10[0]}
                     className="percentage"
                   />
                   <tspan
-                    fontSize="14px"
-                    dx="-35px"
-                    dy="20px"
+                    fontSize="12px"
+                    x="0"
+                    dy="1.2em"
                     fill="#717171"
                     className="actualValue"
                   />
