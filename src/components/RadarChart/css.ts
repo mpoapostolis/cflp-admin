@@ -8,18 +8,7 @@ export const container = css`
 `;
 
 export const headerClass = css`
-  padding-top: 10px;
   height: 50px;
-  padding-left: 10px;
+  display: flex;
+  align-items: center;
 `;
-
-export const label = css`
-  &.hovered {
-    opacity: 0.05;
-    &.active {
-      opacity: 1;
-    }
-  }
-`;
-
-export const LabelCont = css``;

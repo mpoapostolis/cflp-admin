@@ -4,7 +4,7 @@ import { select, selectAll } from 'd3-selection';
 import { PieArcDatum, pie, arc } from 'd3-shape';
 import { css, cx } from 'emotion';
 import { useWindowSize } from '../../Hooks/useWindowSize';
-import { container, headerClass, label } from './css';
+import { container, headerClass, label, LabelCont } from './css';
 import { Typography } from '@material-ui/core';
 import Label from '../LineChart/Label';
 
@@ -144,17 +144,19 @@ const PieChart = React.memo((props: IProps) => {
       <div className={headerClass}>
         <Typography variant="h6">{props.title}</Typography>
         <br />
-        {props.data.map((obj, idx) => (
-          <Label
-            className={cx(label, {
-              hovered: Boolean(~hoveredItem),
-              active: idx === hoveredItem
-            })}
-            key={idx}
-            label={obj.label || ''}
-            color={schemeCategory10[idx]}
-          />
-        ))}
+        <div className={LabelCont}>
+          {props.data.map((obj, idx) => (
+            <Label
+              className={cx(label, {
+                hovered: Boolean(~hoveredItem),
+                active: idx === hoveredItem
+              })}
+              key={idx}
+              label={obj.label || ''}
+              color={schemeCategory10[idx]}
+            />
+          ))}
+        </div>
       </div>
       <svg ref={renderNode}>
         <g>

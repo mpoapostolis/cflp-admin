@@ -7,6 +7,7 @@ import BarChart from '../../components/BarChart';
 import useApi from '../../Hooks';
 import { SECOND } from '../../utils';
 import * as R from 'ramda';
+import RadarChart from '../../components/RadarChart';
 
 const useStyles = makeStyles(() => ({
   filters: {
@@ -164,6 +165,14 @@ function Near() {
             <Card component="div" className={classes.card}>
               <CardContent className={classes.cardContent}>
                 <BarChart title={t('int.male-female')} data={maleVsFemale} />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid xs={12} md={12} lg={4} item>
+            <Card component="div" className={classes.card}>
+              <CardContent className={classes.cardContent}>
+                <RadarChart />
               </CardContent>
             </Card>
           </Grid>
