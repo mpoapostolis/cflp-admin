@@ -97,27 +97,18 @@ const PieChart = React.memo((props: IProps) => {
 
       body
         .selectAll('.d3DonutSlice')
-        .on('mouseover', (_, idx, elements) => {
-          body
-            .selectAll('.d3DonutSlice')
-            .select('path')
-            .attr('opacity', 0.4);
+        .on('mouseover', (ele, idx, elements) => {
+          body.selectAll('.d3DonutSlice').attr('opacity', 0.2);
 
           select(elements[idx])
-            .select('path')
             .attr('opacity', 1)
             .attr('fill', colors[idx]);
           setHoveredItem(idx);
         })
         .on('mouseleave', (_, idx, elements) => {
-          body
-            .selectAll('.d3DonutSlice')
-            .select('path')
-            .attr('opacity', 1);
+          body.selectAll('.d3DonutSlice').attr('opacity', 1);
 
-          select(elements[idx])
-            .select('path')
-            .attr('fill', `${colors[idx]}Bf`);
+          select(elements[idx]).attr('fill', `${colors[idx]}Bf`);
           setHoveredItem(-1);
         });
 
