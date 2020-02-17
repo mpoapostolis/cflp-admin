@@ -15,11 +15,11 @@ import {
   extent,
   axisLeft,
   scaleTime,
-  line,
   schemeCategory10,
   event,
   timeFormat,
-  curveMonotoneX
+  area,
+  curveCatmullRom
 } from 'd3';
 
 import { useParentDims } from '../../Hooks/useParentDims';
@@ -164,14 +164,15 @@ function LineChart(props: Props) {
       .rangeRound([0, width - 66]);
 
     const yScale = scaleLinear()
-      .domain(yDomain)
+      .domain([0, yDomain[1] + yDomain[0]])
       .range([height, 0]);
 
     //generate d attribute for path
-    const linePath = line<LineChartPoint>()
+    const linePath = area<LineChartPoint>()
       .x(point => xScale(point.x))
-      .y(point => yScale(point.y))
-      .curve(curveMonotoneX);
+      .y1(point => yScale(point.y))
+      .y0(height)
+      .curve(curveCatmullRom);
 
     const xAxis = axisBottom(xScale).tickSize(-height);
 
@@ -186,7 +187,8 @@ function LineChart(props: Props) {
       .attr('fill', 'none')
       .attr('stroke-width', '1')
       .attr('d', line => linePath(line.points))
-      .attr('stroke', line => line.color);
+      .attr('stroke', line => `${line.color}5f`)
+      .attr('fill', line => `${line.color}5f`);
 
     board
 

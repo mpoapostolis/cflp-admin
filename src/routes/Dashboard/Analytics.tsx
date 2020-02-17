@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/styles';
 import BarChart from '../../components/BarChart';
 import PieChart from '../../components/PieChart';
 import { AggregateData, TimeSeriesData } from '.';
+import { schemeCategory10 } from 'd3';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -74,6 +75,7 @@ function Analytics(props: Props) {
             <LineChart
               data={[
                 {
+                  color: schemeCategory10[2],
                   label: 'offers',
                   points: props.timeSeriesOffers.map(obj => ({
                     x: new Date(obj.dateCreated).getTime(),
