@@ -54,7 +54,7 @@ function Near() {
         .get(`/api/bo/analytics/near`)
         .then(e => e.json())
         .then(infos => setNear(infos.data));
-    }, SECOND);
+    }, 60 * SECOND);
     api
       .get(`/api/bo/analytics/near`)
       .then(e => e.json())
