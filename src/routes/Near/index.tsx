@@ -1,6 +1,13 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react';
 import I18n from '../../I18n';
-import { Button, Grid, Card, CardContent, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  makeStyles,
+  CardHeader
+} from '@material-ui/core';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 import PieChart from '../../components/PieChart';
 import BarChart from '../../components/BarChart';
@@ -20,6 +27,18 @@ const useStyles = makeStyles(() => ({
     margin: 0
   },
 
+  radar: {
+    height: '450px',
+    padding: 0,
+    margin: 0
+  },
+
+  cardContentRadar: {
+    width: '97%',
+    height: '90%',
+    padding: 0,
+    margin: 0
+  },
   cardContent: {
     width: '97%',
     height: '100%',
@@ -170,8 +189,18 @@ function Near() {
           </Grid>
 
           <Grid xs={12} md={12} lg={4} item>
-            <Card component="div" className={classes.card}>
-              <CardContent className={classes.cardContent}>
+            <Card component="div" className={classes.radar}>
+              <CardHeader title="women-per-age" />
+              <CardContent className={classes.cardContentRadar}>
+                <RadarChart />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid xs={12} md={12} lg={4} item>
+            <Card component="div" className={classes.radar}>
+              <CardHeader title="male-per-age" />
+              <CardContent className={classes.cardContentRadar}>
                 <RadarChart />
               </CardContent>
             </Card>

@@ -1,34 +1,26 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { container, headerClass } from './css';
-import { select, scaleLinear, max } from 'd3';
+import { select, scaleLinear, max, line, curveLinear } from 'd3';
 import { useParentDims } from '../../Hooks/useParentDims';
 
 const angleToRads = (angle: number) => (angle * Math.PI) / 180;
 
 const distinctΑrr = (arr: any[], howMany: number) => {
-  return arr.length < howMany
-    ? arr
-    : arr.filter((_, idx) => {
-        return (
-          idx === 0 || // first element
-          idx === arr.length - 1 || // last element
-          idx % Math.floor(arr.length / howMany) === 0
-        );
-      });
+  const step = Math.floor(Math.max(...arr) / 4);
+  return Array(5)
+    .fill(step)
+    .map((step, idx) => step * idx);
 };
 
-let labels = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-const points = labels.map(_ => 1 + Math.random() * 8);
-let ticks1 = Array(20)
-  .fill('')
-  .map((_, idx) => idx * 2);
+let labels = ['A', 'B', 'C', 'D', 'E', 'F', 'aa', 'bb', 'cc', 'dd', 'ee', 'ff'];
 
 let ticks = Array(20)
   .fill('')
-  .map((_, idx) => idx * 2);
+  .map((_, idx) => Math.random() * 60);
 
-const MARGINS = { top: 10, right: 10, bottom: 10, left: 10 };
+let ticks1 = Array(20)
+  .fill('')
+  .map((_, idx) => Math.random() * 60);
 
 function RadarChart() {
   const renderNode = useRef<SVGSVGElement>(null);
@@ -36,7 +28,7 @@ function RadarChart() {
   const parrentDims = useParentDims(renderNode);
   const _dims = parrentDims;
 
-  const values = distinctΑrr(ticks, 5);
+  const values = distinctΑrr(ticks, 4);
 
   useEffect(() => {
     initChart();
@@ -64,47 +56,71 @@ function RadarChart() {
     const maxValue = max(values) || 0;
     const maxRangeValue = Math.min(width, height) / 2 - 40;
 
-    const angle = 360 / values.length;
+    const angle = 360 / labels.length;
+
+    function angleToCoordinate(idx: number, value: number, factor: number = 1) {
+      let x =
+        width / 2 -
+        Math.cos(angleToRads(idx * angle)) * radialScale(value) * factor;
+      let y =
+        height / 2 -
+        Math.sin(angleToRads(idx * angle)) * radialScale(value) * factor;
+      return { x, y };
+    }
 
     let radialScale = scaleLinear()
       .domain([0, maxValue])
-      .range([0, maxRangeValue]);
+      .range([0, maxRangeValue - 10]);
 
     board
       .selectAll('circle')
       .data(values)
       .attr('cx', width / 2)
       .attr('cy', height / 2)
-      .attr('stroke', '#0005')
+      .attr('stroke', '#0002')
       .attr('r', d => radialScale(d));
 
     board
       .selectAll('text')
-      .data(values)
-      .attr('x', width / 2 - 2)
-      .attr('y', d => maxRangeValue + 35 - radialScale(d))
+      .data(labels)
+      .attr('x', (_d, i) => angleToCoordinate(i, maxValue, 1.2).x)
+      .attr('y', (_d, i) => angleToCoordinate(i, maxValue, 1.2).y)
       .attr('text-anchro', 'left')
-      .text(d => d.toString());
+      .text((_d, idx) => labels[idx]);
 
     board
       .selectAll('line')
-      .data(values)
+      .data(labels)
       .attr('x1', width / 2)
       .attr('y1', height / 2)
-      .attr(
-        'x2',
-        (_d, i) =>
-          // ANGLE TO RADS -> APPLY TRIGONOMETRY
-          width / 2 -
-          Math.cos(angleToRads(i * angle)) * radialScale(maxValue) * 1.2
-      )
-      .attr(
-        'y2',
-        (_d, i) =>
-          height / 2 -
-          Math.sin(angleToRads(i * angle)) * radialScale(maxValue) * 1.2
-      )
-      .attr('stroke', '#0005');
+      .attr('x2', (_d, i) => angleToCoordinate(i, maxValue, 1.1).x)
+      .attr('y2', (_d, i) => angleToCoordinate(i, maxValue, 1.1).y)
+      .attr('stroke', '#0002');
+
+    let xLine = line<{ x: number; y: number }>()
+      .x(d => d.x)
+      .y(d => d.y)
+      .curve(curveLinear);
+    let colors = ['darkorange', 'gray', 'navy'];
+
+    const coords1 = ticks.map((t, idx) => angleToCoordinate(idx, t));
+    const coords2 = ticks1.map((t, idx) => angleToCoordinate(idx, t));
+
+    board
+      .select('.path')
+      .datum(coords1)
+      .attr('d', xLine)
+      .attr('fill', colors[0])
+      .attr('stroke', colors[0])
+      .attr('stroke-opacity', 0.4);
+
+    board
+      .select('.path1')
+      .datum(coords2)
+      .attr('d', xLine)
+      .attr('fill', colors[1])
+      .attr('stroke', colors[1])
+      .attr('stroke-opacity', 0.4);
   }, [_dims]);
 
   return (
@@ -114,15 +130,12 @@ function RadarChart() {
           {values.map((_, idx) => (
             <circle fill="none" key={idx} />
           ))}
-
-          {values.map((_, idx) => (
-            <text fontSize="9" fill="grey" key={idx} />
-          ))}
-
+          <path className={'path'} fillOpacity={0.2} />
+          <path className={'path1'} fillOpacity={0.2} />
           {labels.map((label, idx) => (
             <g key={idx}>
               <line />
-              <text>{label}</text>
+              <text textAnchor="midle">{label}</text>
             </g>
           ))}
         </g>
