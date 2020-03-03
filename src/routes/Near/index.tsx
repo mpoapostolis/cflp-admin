@@ -16,6 +16,42 @@ import { SECOND } from '../../utils';
 import * as R from 'ramda';
 import RadarChart from '../../components/RadarChart';
 
+const data = [
+  {
+    groupName: '0-25',
+    scores: [
+      { label: 'AA', score: 15 },
+      { label: 'pp', score: 15 },
+      { label: 'BB', score: 13 },
+      { label: 'CC', score: 12 },
+      { label: 'DD', score: 11 },
+      { label: 'EE', score: 10 }
+    ]
+  },
+
+  {
+    groupName: '26-36',
+    scores: [
+      { label: 'AA', score: 5 },
+      { label: 'BB', score: 2 },
+      { label: 'CC', score: 5 },
+      { label: 'DD', score: 2 },
+      { label: 'EE', score: 5 }
+    ]
+  },
+
+  {
+    groupName: '36+',
+    scores: [
+      { label: 'AA', score: 1 },
+      { label: 'BB', score: 2 },
+      { label: 'CC', score: 3 },
+      { label: 'DD', score: 4 },
+      { label: 'EE', score: 5 }
+    ]
+  }
+];
+
 const useStyles = makeStyles(() => ({
   filters: {
     display: 'flex',
@@ -192,7 +228,7 @@ function Near() {
             <Card component="div" className={classes.radar}>
               <CardHeader title="women-per-age" />
               <CardContent className={classes.cardContentRadar}>
-                <RadarChart />
+                <RadarChart data={data} />
               </CardContent>
             </Card>
           </Grid>
@@ -201,7 +237,7 @@ function Near() {
             <Card component="div" className={classes.radar}>
               <CardHeader title="male-per-age" />
               <CardContent className={classes.cardContentRadar}>
-                <RadarChart />
+                <RadarChart data={data} />
               </CardContent>
             </Card>
           </Grid>

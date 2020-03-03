@@ -1,18 +1,21 @@
-import React, { useEffect, useRef, useCallback } from 'react';
-import { container, headerClass } from './css';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import { container } from './css';
 import { select, scaleLinear, max, line, curveLinear } from 'd3';
 import { useParentDims } from '../../Hooks/useParentDims';
+import { RadarData } from './types';
 
+let colors = ['darkorange', 'gray', 'navy'];
 const angleToRads = (angle: number) => (angle * Math.PI) / 180;
 
-const distinctΑrr = (arr: any[], howMany: number) => {
+/**
+ * This function will return a distinct Array
+ */
+const distinctΑrr = (arr: any[]) => {
   const step = Math.floor(Math.max(...arr) / 4);
   return Array(5)
     .fill(step)
     .map((step, idx) => step * idx);
 };
-
-let labels = ['A', 'B', 'C', 'D', 'E', 'F', 'aa', 'bb', 'cc', 'dd', 'ee', 'ff'];
 
 let ticks = Array(20)
   .fill('')
@@ -22,13 +25,26 @@ let ticks1 = Array(20)
   .fill('')
   .map((_, idx) => Math.random() * 60);
 
-function RadarChart() {
+type Props = {
+  data: RadarData[];
+};
+function RadarChart(props: Props) {
   const renderNode = useRef<SVGSVGElement>(null);
-
   const parrentDims = useParentDims(renderNode);
   const _dims = parrentDims;
 
-  const values = distinctΑrr(ticks, 4);
+  const uniqueLabels = useMemo(
+    () => new Set(props.data.map(o => o.scores.map(o => o.label)).flat(1)),
+    []
+  );
+
+  const allValues = useMemo(
+    () => new Set(props.data.map(o => o.scores.map(o => o.score)).flat(1)),
+    []
+  );
+
+  const labels = Array.from(uniqueLabels);
+  const values = distinctΑrr(Array.from(allValues));
 
   useEffect(() => {
     initChart();
@@ -101,25 +117,18 @@ function RadarChart() {
       .x(d => d.x)
       .y(d => d.y)
       .curve(curveLinear);
-    let colors = ['darkorange', 'gray', 'navy'];
-
-    const coords1 = ticks.map((t, idx) => angleToCoordinate(idx, t));
-    const coords2 = ticks1.map((t, idx) => angleToCoordinate(idx, t));
 
     board
-      .select('.path')
-      .datum(coords1)
-      .attr('d', xLine)
-      .attr('fill', colors[0])
-      .attr('stroke', colors[0])
-      .attr('stroke-opacity', 0.4);
+      .selectAll('path')
+      .data(props.data)
+      .attr('d', (_d, i) => {
+        const coords = _d.scores.map((t, idx) =>
+          angleToCoordinate(idx, t.score, 0.8)
+        );
+        return xLine(coords);
+      })
 
-    board
-      .select('.path1')
-      .datum(coords2)
-      .attr('d', xLine)
-      .attr('fill', colors[1])
-      .attr('stroke', colors[1])
+      .attr('fill', (_, idx) => colors[idx])
       .attr('stroke-opacity', 0.4);
   }, [_dims]);
 
@@ -130,8 +139,14 @@ function RadarChart() {
           {values.map((_, idx) => (
             <circle fill="none" key={idx} />
           ))}
-          <path className={'path'} fillOpacity={0.2} />
-          <path className={'path1'} fillOpacity={0.2} />
+          {props.data.map((_, idx) => (
+            <path
+              key={idx}
+              strokeOpacity={0.4}
+              stroke={colors[idx]}
+              fillOpacity={0.2}
+            />
+          ))}
           {labels.map((label, idx) => (
             <g key={idx}>
               <line />
