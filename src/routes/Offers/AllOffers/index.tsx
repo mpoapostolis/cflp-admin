@@ -27,6 +27,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import IconRepresentation from '../../../components/IconRepresentation';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 const useStyles = makeStyles(() => ({
   btn: {
@@ -156,18 +157,6 @@ function AllOffers() {
       title: t('int.name'),
       field: 'name'
     },
-    {
-      title: t('int.description'),
-      render: (obj, idx) => (
-        <Typography
-          style={{
-            maxWidth: '250px'
-          }}
-          variant="body1">
-          {obj.description}
-        </Typography>
-      )
-    },
 
     {
       title: t('int.type'),
@@ -189,10 +178,6 @@ function AllOffers() {
     {
       title: t('int.lp-reward'),
       field: 'lpReward'
-    },
-    {
-      title: t('int.purchased'),
-      render: obj => R.propOr('-', 'purchased', obj)
     },
     {
       title: t('int.discounts'),
@@ -239,6 +224,20 @@ function AllOffers() {
       title: t('int.actions'),
       render: (obj: any, idx: number) => (
         <div>
+          <IconButton
+            size={'small'}
+            onClick={() => {
+              api.post('/api/bo/transactions/offer', {
+                json: {
+                  offerId: obj._id,
+                  userId: '5e130ddc2bb8dda103401eef'
+                }
+              });
+            }}
+            title={t('int.view')}>
+            <ReceiptIcon />
+          </IconButton>
+
           {obj.status === 'DRAFT' && (
             <IconButton
               size={'small'}

@@ -28,7 +28,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 function QRcodeScanner(props: {}) {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
-    setOpen(true);
+    // setOpen(true);
+    api.post('/api/bo/transactions/product', {
+      json: {
+        productId: '5e41d3ec5e23302f43028664',
+        userId: '5e130ddc2bb8dda103401eef'
+      }
+    });
   };
 
   const handleClose = (value: string) => {

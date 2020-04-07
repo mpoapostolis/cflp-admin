@@ -52,16 +52,6 @@ function Dashboard() {
   const api = useApi();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      api
-        .get(`/api/bo/analytics/near/total`)
-        .then(e => e.json())
-        .then(infos => setLive(infos.total));
-    }, 60 * SECOND);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     api
       .get(`/api/bo/analytics/near/total`)
       .then(e => e.json())

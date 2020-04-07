@@ -9,12 +9,14 @@ import {
   Grid,
   Button,
   TextField,
-  InputAdornment
+  InputAdornment,
+  Chip
 } from '@material-ui/core';
 import I18n from '../../../I18n';
 import { useSelector } from 'react-redux';
 import { IReduxStore } from '../../../redux/reducers';
 import * as R from 'ramda';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles(() => ({
   cardContent: {
@@ -108,6 +110,34 @@ function AccountDetails(props: Props) {
               }
               required
               variant="outlined"
+            />
+          </Grid>
+
+          <Grid item md={12} xs={12}>
+            <Autocomplete
+              multiple
+              id="fixed-tags-demo"
+              options={[1, 2, 3, 4]}
+              getOptionLabel={option => option.title}
+              renderTags={(value, getTagProps) =>
+                value.map((option: any, index: number) => (
+                  <Chip
+                    label={option}
+                    {...getTagProps({ index })}
+                    disabled={index === 0}
+                  />
+                ))
+              }
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  margin="dense"
+                  label="Fixed tag"
+                  variant="outlined"
+                  placeholder="Favorites"
+                />
+              )}
             />
           </Grid>
         </Grid>

@@ -22,6 +22,7 @@ import IconRepresentation from '../../../components/IconRepresentation';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import { css } from 'emotion';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 const marginRight = css`
   margin-right: 15px !important;
@@ -105,10 +106,6 @@ function AllProducts() {
       title: t('int.price'),
       render: obj => `${R.propOr('-', 'price', obj)} €`
     },
-    {
-      title: t('int.purchased'),
-      render: obj => R.propOr('-', 'purchased', obj)
-    },
 
     {
       title: t('int.lpReward'),
@@ -130,6 +127,21 @@ function AllProducts() {
       title: t('int.actions'),
       render: (obj: any, idx: number) => (
         <>
+          <IconButton
+            classes={{ root: marginRight }}
+            size={'small'}
+            onClick={() => {
+              api.post('/api/bo/transactions/product', {
+                json: {
+                  productId: obj._id,
+                  userId: '5e130ddc2bb8dda103401eef'
+                }
+              });
+            }}
+            title={t('int.view')}>
+            <ReceiptIcon />
+          </IconButton>
+
           <IconButton
             classes={{ root: marginRight }}
             size={'small'}
