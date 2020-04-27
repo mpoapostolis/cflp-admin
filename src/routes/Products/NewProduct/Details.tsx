@@ -1,19 +1,16 @@
-import React, { useContext, useCallback, useState, useEffect } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
   CardHeader,
   CardContent,
-  CardActions,
   Divider,
   Grid,
-  Button,
   TextField,
   InputAdornment
 } from '@material-ui/core';
 import I18n from '../../../I18n';
 import { useSelector } from 'react-redux';
-import { IReduxStore } from '../../../redux/reducers';
 import * as R from 'ramda';
 
 const useStyles = makeStyles(() => ({
@@ -46,10 +43,9 @@ type Props = {
 function AccountDetails(props: Props) {
   const classes = useStyles();
   const { infos, setInfos } = props;
-  const errors = useSelector((store: IReduxStore) => store.errors);
 
-  const _setInfos = useCallback(obj => {
-    setInfos(s => ({ ...s, ...obj }));
+  const _setInfos = useCallback((obj) => {
+    setInfos((s) => ({ ...s, ...obj }));
   }, []);
 
   const t = useContext(I18n);
@@ -66,9 +62,7 @@ function AccountDetails(props: Props) {
             <TextField
               fullWidth
               value={R.propOr('', 'name', infos)}
-              error={Boolean(R.prop('name', errors))}
-              onChange={evt => _setInfos({ name: evt.currentTarget.value })}
-              helperText={R.propOr('', 'name', errors)}
+              onChange={(evt) => _setInfos({ name: evt.currentTarget.value })}
               label={t('int.name')}
               margin="dense"
               required
@@ -79,9 +73,7 @@ function AccountDetails(props: Props) {
             <TextField
               value={R.propOr('', 'price', infos)}
               fullWidth
-              error={Boolean(R.prop('price', errors))}
-              helperText={R.propOr('', 'price', errors)}
-              onChange={evt => _setInfos({ price: +evt.currentTarget.value })}
+              onChange={(evt) => _setInfos({ price: +evt.currentTarget.value })}
               type={'number'}
               InputProps={{
                 startAdornment: (
@@ -99,11 +91,9 @@ function AccountDetails(props: Props) {
             <TextField
               value={R.propOr('', 'lpReward', infos)}
               fullWidth
-              error={Boolean(R.prop('lpReward', errors))}
-              helperText={R.propOr('', 'lpReward', errors)}
               label={t('int.lpReward')}
               margin="dense"
-              onChange={evt =>
+              onChange={(evt) =>
                 _setInfos({ lpReward: +evt.currentTarget.value })
               }
               required

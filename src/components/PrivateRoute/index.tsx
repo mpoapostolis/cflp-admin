@@ -1,10 +1,9 @@
 import React from 'react';
 import { RouteProps, Route, Redirect } from 'react-router-dom';
-import { IReduxStore } from '../../redux/reducers';
-import { useSelector } from 'react-redux';
+import { useAccount } from '../../provider';
 
 function PrivateRoute(props: RouteProps) {
-  const account = useSelector((store: IReduxStore) => store.account);
+  const account = useAccount();
   return account.token ? <Route {...props} /> : <Redirect to="/login" />;
 }
 export default PrivateRoute;

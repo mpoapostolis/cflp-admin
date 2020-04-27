@@ -135,20 +135,18 @@ function Menu(props: Props) {
         <Profile />
         <Divider className={classes.divider} />
         <List>
-          {pages.map(page => (
-            <AuthWrapper key={page.title} reqPerm={page.perm}>
-              <ListItem className={classes.item} disableGutters>
-                <Button
-                  exact={page.exact}
-                  activeClassName={classes.active}
-                  className={classes.button}
-                  component={CustomRouterLink}
-                  to={page.href}>
-                  <div className={classes.icon}>{page.icon}</div>
-                  {page.title}
-                </Button>
-              </ListItem>
-            </AuthWrapper>
+          {pages.map((page) => (
+            <ListItem key={page.title} className={classes.item} disableGutters>
+              <Button
+                exact={page.exact}
+                activeClassName={classes.active}
+                className={classes.button}
+                component={CustomRouterLink}
+                to={page.href}>
+                <div className={classes.icon}>{page.icon}</div>
+                {page.title}
+              </Button>
+            </ListItem>
           ))}
         </List>
       </div>

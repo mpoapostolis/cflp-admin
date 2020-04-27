@@ -21,46 +21,47 @@ import CardHeader from '@material-ui/core/CardHeader';
 import { format } from 'date-fns/esm';
 import LockIcon from './LockIcon';
 import * as R from 'ramda';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../redux/actions/account';
 import { useHistory } from 'react-router-dom';
-import { IReduxStore } from '../../redux/reducers';
-
+import { useAccount } from '../../provider';
+import ky from 'ky';
+import { LOGIN } from '../../provider/names';
 const dateNow = format(new Date(), 'EEEE dd MMMM yyyy');
+
+const URL = '/api/employees/login';
+
+type Creds = {
+  username: string;
+  password: string;
+};
+
+async function login(creds: Creds) {
+  return await ky.post(URL, { json: creds });
+}
 
 const Login = () => {
   const t = useContext(I18n);
-  const token = useSelector((store: IReduxStore) => store.account.token);
+  const account = useAccount();
+  const token = account.token;
   const [infos, setInfos] = useState({
     username: '',
     password: ''
   });
   const [err, setErr] = useState({});
 
-  const handleChange = useCallback(obj => {
-    setInfos(s => ({ ...s, ...obj }));
+  const handleChange = useCallback((obj) => {
+    setInfos((s) => ({ ...s, ...obj }));
   }, []);
 
-  const dispatch = useDispatch();
-  const _login = React.useCallback(data => dispatch(login(data)), [dispatch]);
-
-  const handleSubmit = useCallback(
-    (infos: { username: string; password: string }) => {
-      setErr({});
-      return fetch('/auth/login', {
-        method: 'POST',
-        headers: new Headers({ 'content-type': 'application/json' }),
-        body: JSON.stringify({ ...infos, origin: 'admin' })
+  const handleSubmit = useCallback((infos: Creds) => {
+    setErr({});
+    return login(infos)
+      .then((res) => res.json())
+      .then((data) => {
+        if ('error' in data) setErr(data.error);
+        account.dispatch({ type: LOGIN, payload: data });
       })
-        .then(res => res.json())
-        .then(data => {
-          if ('error' in data) setErr(data.error);
-          _login(data);
-        })
-        .catch(err => setErr({ ...err }));
-    },
-    []
-  );
+      .catch((err) => setErr({ ...err }));
+  }, []);
 
   const history = useHistory();
   useEffect(() => {
@@ -70,7 +71,7 @@ const Login = () => {
   return (
     <div className={loginContainer}>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           handleSubmit(infos);
         }}
@@ -86,7 +87,7 @@ const Login = () => {
             <br />
             <br />
             <TextField
-              onChange={evt =>
+              onChange={(evt) =>
                 handleChange({
                   username: evt.currentTarget.value
                 })
@@ -101,7 +102,7 @@ const Login = () => {
 
             <br />
             <TextField
-              onChange={evt =>
+              onChange={(evt) =>
                 handleChange({
                   password: evt.currentTarget.value
                 })

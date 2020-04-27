@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,8 +7,6 @@ import {
   Hidden,
   Typography,
   Theme,
-  Menu,
-  MenuItem,
   ListItemIcon,
   Popover,
   ListItem,
@@ -18,14 +16,12 @@ import {
   Avatar
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/styles';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import I18n from '../../I18n';
-import { useSelector, useDispatch } from 'react-redux';
-import { IReduxStore } from '../../redux/reducers';
 import { useHistory } from 'react-router-dom';
-import { logout } from '../../redux/actions/account';
 import QRCodeScanner from '../QRcodeScanner';
+import { useAccount } from '../../provider';
+import { LOGOUT } from '../../provider/names';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,8 +47,7 @@ type Props = {
 function Header(props: Props) {
   const classes = useStyles();
 
-  const history = useHistory();
-  const token = useSelector((store: IReduxStore) => store.account.token);
+  const account = useAccount();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -64,9 +59,6 @@ function Header(props: Props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const dispatch = useDispatch();
-  const _logout = React.useCallback(() => dispatch(logout()), [dispatch]);
 
   const t = useContext(I18n);
   return (
@@ -83,7 +75,7 @@ function Header(props: Props) {
         </Hidden>
         <Typography variant="h6" className={classes.title}></Typography>
         <QRCodeScanner />
-        {token && (
+        {account.token && (
           <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"
@@ -106,7 +98,7 @@ function Header(props: Props) {
           onClose={handleClose}
           open={open}>
           <List component="nav" aria-label="main mailbox folders">
-            <ListItem onClick={_logout} button>
+            <ListItem onClick={() => account.dispatch({ type: LOGOUT })} button>
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>

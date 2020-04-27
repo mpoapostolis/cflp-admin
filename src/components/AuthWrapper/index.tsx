@@ -1,8 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import intersection from 'ramda/src/intersection';
-import { IReduxStore } from '../../redux/reducers';
+import { useAccount } from '../../provider';
 
 /**
  * @prop {string[]} reqPerm
@@ -18,11 +17,13 @@ interface IProps {
 
 function AuthWrapper(props: IProps) {
   const { reqPerm, redirect } = props;
-  const permissions = useSelector(
-    (store: IReduxStore) => store.account?.permissions ?? []
-  );
+  const account = useAccount();
+  if (!account.permissions) return null;
+
   const hasPerm =
-    reqPerm.length === 0 || intersection(reqPerm, permissions).length > 0;
+    reqPerm.length === 0 ||
+    intersection(reqPerm, account.permissions).length > 0;
+
   if (hasPerm) return props.children;
   else if (redirect) {
     return <Redirect to={{ pathname: '/not-found' }} />;

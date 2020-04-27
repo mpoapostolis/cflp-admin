@@ -17,7 +17,6 @@ import {
 } from '@material-ui/core';
 import I18n from '../../../I18n';
 import { useSelector } from 'react-redux';
-import { IReduxStore } from '../../../redux/reducers';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
 import AsyncAutoComplete from './AsyncAutoComplete';
@@ -71,11 +70,10 @@ type Props = {
 function AccountDetails(props: Props) {
   const classes = useStyles();
   const { infos, setInfos } = props;
-  const errors = useSelector((store: IReduxStore) => store.errors);
 
   const discounts = infos.discounts;
   const setDiscounts = (discounts: Discount[]) =>
-    setInfos(s => ({ ...s, discounts }));
+    setInfos((s) => ({ ...s, discounts }));
 
   function addDiscount() {
     const lastElement = discounts[discounts.length - 1];
@@ -107,11 +105,11 @@ function AccountDetails(props: Props) {
   );
 
   const deleteDiscount = (obj: any) => {
-    setDiscounts(discounts.filter(o => o !== obj));
+    setDiscounts(discounts.filter((o) => o !== obj));
   };
 
-  const _setInfos = useCallback(obj => {
-    setInfos(s => ({ ...s, ...obj }));
+  const _setInfos = useCallback((obj) => {
+    setInfos((s) => ({ ...s, ...obj }));
   }, []);
 
   const t = useContext(I18n);
@@ -128,9 +126,7 @@ function AccountDetails(props: Props) {
             <TextField
               fullWidth
               value={R.propOr('', 'name', infos)}
-              error={Boolean(R.prop('name', errors))}
-              onChange={evt => _setInfos({ name: evt.currentTarget.value })}
-              helperText={R.propOr('', 'name', errors)}
+              onChange={(evt) => _setInfos({ name: evt.currentTarget.value })}
               label={t('int.name')}
               margin="dense"
               required
@@ -142,11 +138,9 @@ function AccountDetails(props: Props) {
             <TextField
               fullWidth
               value={R.propOr('', 'description', infos)}
-              error={Boolean(R.prop('description', errors))}
-              onChange={evt =>
+              onChange={(evt) =>
                 _setInfos({ description: evt.currentTarget.value })
               }
-              helperText={R.propOr('', 'description', errors)}
               label={t('int.description')}
               margin="dense"
               required
@@ -159,9 +153,7 @@ function AccountDetails(props: Props) {
               select
               value={R.propOr('', 'status', infos)}
               fullWidth
-              error={Boolean(R.prop('status', errors))}
-              helperText={R.propOr('', 'status', errors)}
-              onChange={evt => _setInfos({ status: evt.target.value })}
+              onChange={(evt) => _setInfos({ status: evt.target.value })}
               label={t('int.status')}
               margin="dense"
               required
@@ -182,9 +174,7 @@ function AccountDetails(props: Props) {
               select
               value={R.propOr('', 'type', infos)}
               fullWidth
-              error={Boolean(R.prop('type', errors))}
-              helperText={R.propOr('', 'type', errors)}
-              onChange={evt =>
+              onChange={(evt) =>
                 _setInfos({
                   type: evt.target.value,
                   [evt.target.value === 'DEBIT'
@@ -212,11 +202,9 @@ function AccountDetails(props: Props) {
               <TextField
                 fullWidth
                 value={R.propOr('', 'lpPrice', infos)}
-                error={Boolean(R.prop('lpPrice', errors))}
-                onChange={evt =>
+                onChange={(evt) =>
                   _setInfos({ lpPrice: evt.currentTarget.value })
                 }
-                helperText={R.propOr('', 'lpPrice', errors)}
                 label={t('int.lpPrice')}
                 margin="dense"
                 required
@@ -229,11 +217,9 @@ function AccountDetails(props: Props) {
               <TextField
                 fullWidth
                 value={R.propOr('', 'lpReward', infos)}
-                error={Boolean(R.prop('lpReward', errors))}
-                onChange={evt =>
+                onChange={(evt) =>
                   _setInfos({ lpReward: evt.currentTarget.value })
                 }
-                helperText={R.propOr('', 'lpReward', errors)}
                 label={t('int.lpReward')}
                 margin="dense"
                 required
@@ -261,14 +247,14 @@ function AccountDetails(props: Props) {
                 <AsyncAutoComplete
                   value={obj}
                   url={'/api/bo/products'}
-                  onChange={obj => chooseProduct(obj, idx)}
+                  onChange={(obj) => chooseProduct(obj, idx)}
                 />
               </Grid>
               <Hidden smDown>x</Hidden>
               <Grid item md={4} xs={6}>
                 <TextField
                   fullWidth
-                  onChange={evt =>
+                  onChange={(evt) =>
                     setProductDiscount(+evt.currentTarget.value, idx)
                   }
                   disabled={Boolean(!discounts[idx].name)}
