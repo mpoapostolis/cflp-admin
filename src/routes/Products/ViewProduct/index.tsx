@@ -15,7 +15,6 @@ import {
 } from '@material-ui/core';
 import I18n from '../../../I18n';
 import { useParams, useHistory } from 'react-router';
-import useApi from '../../../Hooks';
 import * as R from 'ramda';
 import InfoItem from '../../../components/InfoItem';
 import { css } from 'emotion';
@@ -25,6 +24,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { toast } from 'react-toastify';
 import ActionHeader from '../../../components/ActionHeader';
 import QRCodeModal from '../../../components/QRcodeModal';
+import api from '../../../ky';
 
 const imgModal = css`
   max-width: 250px;
@@ -51,7 +51,6 @@ const imgCont = css`
 
 function ViewProduct() {
   const t = useContext(I18n);
-  const api = useApi();
   const [infos, setInfos] = useState({});
   const [images, setImages] = useState<{ url: string }[]>([]);
   const params = useParams<{ id?: string }>();
@@ -61,8 +60,8 @@ function ViewProduct() {
     if (!params.id) return;
     api
       .get(`/api/bo/products/${params.id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const { name = '', price = 0, lpReward = 0, purchased = 0 } = data;
         const images = data.images.map((url: string) => ({
           url
@@ -81,7 +80,7 @@ function ViewProduct() {
 
   const keys = useMemo(
     () =>
-      Object.keys(infos).map(k => ({
+      Object.keys(infos).map((k) => ({
         label: t(`int.${k.toLocaleLowerCase()}`),
         value: R.propOr('', k, infos) as string
       })),

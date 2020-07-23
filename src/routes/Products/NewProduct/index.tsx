@@ -3,10 +3,10 @@ import { Grid, Button } from '@material-ui/core';
 import Details from './Details';
 import ActionHeader from '../../../components/ActionHeader';
 import I18n from '../../../I18n';
-import useApi from '../../../Hooks';
 import { useParams, useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import EditImages from '../../../components/EditImages';
+import api from '../../../ky';
 
 function NewProduct() {
   const t = useContext(I18n);
@@ -25,7 +25,6 @@ function NewProduct() {
     lpReward: 0
   });
 
-  const api = useApi();
   const params = useParams<{ id?: string }>();
 
   const deleteImages = (paths: string[]) => {
@@ -35,15 +34,15 @@ function NewProduct() {
           paths
         }
       })
-      .then(d => d.json());
+      .then((d) => d.json());
   };
 
   useEffect(() => {
     if (!params.id) return;
     api
       .get(`/api/bo/products/${params.id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const { name = '', price = 0, lpReward = 0 } = data;
         const images = data.images.map((url: string) => ({
           file: null,
@@ -60,7 +59,9 @@ function NewProduct() {
   const handleSubmit = () => {
     const formData = new FormData();
 
-    images.filter(f => f.file).forEach(f => formData.append('image', f.file));
+    images
+      .filter((f) => f.file)
+      .forEach((f) => formData.append('image', f.file));
     formData.append('infos', JSON.stringify(infos));
     const action = isEdit ? api.put : api.post;
     const url = isEdit ? `/api/bo/products/${params.id}` : `/api/bo/products`;

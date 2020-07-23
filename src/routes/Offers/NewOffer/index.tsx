@@ -3,11 +3,11 @@ import { Grid, Button } from '@material-ui/core';
 import Details, { Discount } from './Details';
 import ActionHeader from '../../../components/ActionHeader';
 import I18n from '../../../I18n';
-import useApi from '../../../Hooks';
 import { useParams, useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import EditImages from '../../../components/EditImages';
 import * as R from 'ramda';
+import api from '../../../ky';
 
 function NewOffer() {
   const t = useContext(I18n);
@@ -34,7 +34,6 @@ function NewOffer() {
     discounts: []
   });
 
-  const api = useApi();
   const params = useParams<{ id?: string }>();
 
   const deleteImages = (paths: string[]) => {
@@ -51,8 +50,8 @@ function NewOffer() {
     if (!params.id) return;
     api
       .get(`/api/bo/offers/${params.id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const {
           name = '',
           description = '',
@@ -87,10 +86,10 @@ function NewOffer() {
     const _infos = {
       ...infos,
       discounts: infos.discounts
-        .map(o => R.pick(['name', 'price', 'discount'], o))
-        .filter(o => !R.isEmpty(o))
+        .map((o) => R.pick(['name', 'price', 'discount'], o))
+        .filter((o) => !R.isEmpty(o))
     };
-    images.forEach(f => formData.append('image', f.file));
+    images.forEach((f) => formData.append('image', f.file));
     formData.append('infos', JSON.stringify(_infos));
     const action = isEdit ? api.put : api.post;
     const url = isEdit ? `/api/bo/offers/${params.id}` : `/api/bo/offers`;

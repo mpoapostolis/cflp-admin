@@ -12,7 +12,6 @@ import MaterialTable from '../../../components/Table';
 import { Button, Typography, IconButton } from '@material-ui/core';
 import { Columns } from '../../../components/Table/types';
 import { Link, useHistory } from 'react-router-dom';
-import useApi from '../../../Hooks';
 import queryString from 'query-string';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -27,6 +26,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import IconRepresentation from '../../../components/IconRepresentation';
+import api from '../../../ky';
 
 const useStyles = makeStyles(() => ({
   btn: {
@@ -55,7 +55,6 @@ function AllOffers() {
   });
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const api = useApi();
   const classes = useStyles();
 
   useEffect(() => {
@@ -71,8 +70,8 @@ function AllOffers() {
       const url = queryString.stringify({ ...params, ...obj });
       api
         .get(`/api/bo/offers?${url}`)
-        .then(e => e.json())
-        .then(infos => {
+        .then((e) => e.json())
+        .then((infos) => {
           setInfos(infos);
           setLoading(false);
         });
@@ -171,7 +170,7 @@ function AllOffers() {
 
     {
       title: t('int.type'),
-      render: obj => (
+      render: (obj) => (
         <Typography
           variant={'button'}
           style={{
@@ -192,7 +191,7 @@ function AllOffers() {
     },
     {
       title: t('int.purchased'),
-      render: obj => R.propOr('-', 'purchased', obj)
+      render: (obj) => R.propOr('-', 'purchased', obj)
     },
     {
       title: t('int.discounts'),

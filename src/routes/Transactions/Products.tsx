@@ -12,13 +12,13 @@ import MaterialTable from '../../components/Table';
 import { Typography, IconButton } from '@material-ui/core';
 import { Columns } from '../../components/Table/types';
 import { useHistory, useParams } from 'react-router-dom';
-import useApi from '../../Hooks';
 import queryString from 'query-string';
 import { EUROSIGN, formatDate } from '../../utils';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import IconRepresentation from '../../components/IconRepresentation';
 import ImageIcon from '@material-ui/icons/Image';
 import * as R from 'ramda';
+import api from '../../ky';
 
 function Products() {
   const t = useContext(I18n);
@@ -31,7 +31,6 @@ function Products() {
   const history = useHistory();
   const param = useParams<{ tab: 'product' | 'offer' }>();
   const [loading, setLoading] = useState(false);
-  const api = useApi();
 
   useEffect(() => {
     const search = history.location.search;
@@ -50,8 +49,8 @@ function Products() {
 
       api
         .get(`/api/bo/transactions/products?${url}`)
-        .then(e => e.json())
-        .then(infos => {
+        .then((e) => e.json())
+        .then((infos) => {
           setInfos(infos);
           setLoading(false);
         });
@@ -106,14 +105,14 @@ function Products() {
       },
       {
         title: t('int.dateCreated'),
-        render: obj => {
+        render: (obj) => {
           const d = new Date(obj.dateCreated as Date);
           return formatDate(d.getTime());
         }
       },
       {
         title: t('int.price'),
-        render: obj => `${R.propOr('-', 'price', obj)} ${EUROSIGN}`
+        render: (obj) => `${R.propOr('-', 'price', obj)} ${EUROSIGN}`
       },
 
       {
@@ -123,7 +122,7 @@ function Products() {
 
       {
         title: t('int.actions'),
-        render: obj => {
+        render: (obj) => {
           return (
             <IconButton
               size={'small'}

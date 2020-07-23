@@ -105,12 +105,6 @@ function Menu(props: Props) {
       perm: []
     },
     {
-      title: t('int.employees'),
-      href: '/employees',
-      icon: <SupervisorAccountIcon />,
-      perm: []
-    },
-    {
       title: t('int.near'),
       href: '/near',
       icon: <PersonPinCircleIcon />,

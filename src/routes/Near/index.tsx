@@ -11,10 +11,10 @@ import {
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 import PieChart from '../../components/PieChart';
 import BarChart from '../../components/BarChart';
-import useApi from '../../Hooks';
 import { SECOND } from '../../utils';
 import * as R from 'ramda';
 import RadarChart from '../../components/RadarChart';
+import api from '../../ky';
 
 const data = [
   {
@@ -101,26 +101,25 @@ function classifyByAge(person: { age: number }) {
 function Near() {
   const classes = useStyles();
   const t = useContext(I18n);
-  const api = useApi();
   const [near, setNear] = useState<string[]>([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       api
         .get(`/api/bo/analytics/near`)
-        .then(e => e.json())
-        .then(infos => setNear(infos.data));
+        .then((e) => e.json())
+        .then((infos) => setNear(infos.data));
     }, 60 * SECOND);
     api
       .get(`/api/bo/analytics/near`)
-      .then(e => e.json())
-      .then(infos => setNear(infos.data));
+      .then((e) => e.json())
+      .then((infos) => setNear(infos.data));
     return () => clearInterval(interval);
   }, []);
 
   const transformation = useMemo(
     () =>
-      near.map(str => {
+      near.map((str) => {
         const [gender, age] = str.split('_');
         return {
           gender,
@@ -151,9 +150,9 @@ function Near() {
 
   const groupFemaleByAge = useMemo(() => {
     const tmp = R.groupBy<{ age: number }>(classifyByAge)(
-      transformation.filter(e => e.gender === 'f')
+      transformation.filter((e) => e.gender === 'f')
     );
-    return Object.keys(tmp).map(k => ({
+    return Object.keys(tmp).map((k) => ({
       label: k,
       value: tmp[k].length
     }));
@@ -161,9 +160,9 @@ function Near() {
 
   const groupMaleByAge = useMemo(() => {
     const tmp = R.groupBy<{ age: number }>(classifyByAge)(
-      transformation.filter(e => e.gender === 'm')
+      transformation.filter((e) => e.gender === 'm')
     );
-    return Object.keys(tmp).map(k => ({
+    return Object.keys(tmp).map((k) => ({
       label: k,
       value: tmp[k].length
     }));

@@ -4,10 +4,10 @@ import { Dialog, IconButton, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import queryString from 'query-string';
 import QrReader from 'react-qr-reader';
-import useApi from '../../Hooks';
 import LinkedCameraIcon from '@material-ui/icons/LinkedCamera';
 import { red } from '@material-ui/core/colors';
 import { toast } from 'react-toastify';
+import api from '../../ky';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -35,7 +35,6 @@ function QRcodeScanner(props: {}) {
     setOpen(false);
   };
 
-  const api = useApi();
   function handleScan(params: any) {
     if (params) {
       const data = queryString.parse(params);

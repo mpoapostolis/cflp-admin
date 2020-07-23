@@ -16,7 +16,6 @@ import {
 } from '@material-ui/core';
 import I18n from '../../../I18n';
 import { useParams, useHistory } from 'react-router';
-import useApi from '../../../Hooks';
 import * as R from 'ramda';
 import InfoItem from '../../../components/InfoItem';
 import { css } from 'emotion';
@@ -28,6 +27,7 @@ import { Discount } from '../NewOffer/Details';
 import { applyDiscount } from '../../../utils';
 import ActionHeader from '../../../components/ActionHeader';
 import QRCodeModal from '../../../components/QRcodeModal';
+import api from '../../../ky';
 
 function DiscountSum(obj: Discount) {
   const t = useContext(I18n);
@@ -70,7 +70,6 @@ const imgCont = css`
 
 function ViewOffer() {
   const t = useContext(I18n);
-  const api = useApi();
   const [infos, setInfos] = useState<{
     name: string;
     description: string;
@@ -86,8 +85,8 @@ function ViewOffer() {
     if (!params.id) return;
     api
       .get(`/api/bo/offers/${params.id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const {
           name = '',
           description = '',
@@ -111,7 +110,7 @@ function ViewOffer() {
   }, [params]);
 
   const keys = useMemo(() => {
-    return ['name', 'description', 'purchased', 'status'].map(k => ({
+    return ['name', 'description', 'purchased', 'status'].map((k) => ({
       label: t(`int.${k.toLocaleLowerCase()}`),
       value: R.propOr('', k, infos) as string
     }));

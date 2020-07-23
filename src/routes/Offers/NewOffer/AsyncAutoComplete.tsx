@@ -2,11 +2,11 @@ import React, { useEffect, useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import useApi from '../../../Hooks';
 import { debounce } from '../../../utils';
 import { ListItemText } from '@material-ui/core';
 import I18n from '../../../I18n';
 import { Discount } from './Details';
+import api from '../../../ky';
 
 type Props = {
   url: string;
@@ -17,14 +17,13 @@ function AsyncAutoComplete(props: Props) {
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<any[]>([]);
   const loading = open && options.length === 0;
-  const api = useApi();
 
   const handleSearchTerm = (searchTerm: string) => {
     setOpen(true);
     api
       .get(`${props.url}?searchTerm=${searchTerm}&limit=10`)
-      .then(res => res.json())
-      .then(d => {
+      .then((res) => res.json())
+      .then((d) => {
         if (d.data.length === 0) {
           setOptions([]);
           setOpen(false);
@@ -61,12 +60,12 @@ function AsyncAutoComplete(props: Props) {
       renderOption={(option: any) => (
         <ListItemText primary={option.name} secondary={`${option.price} €`} />
       )}
-      renderInput={params => (
+      renderInput={(params) => (
         <TextField
           {...params}
           label={t('int.product')}
           fullWidth
-          onChange={e => debounceOnChange(e.currentTarget.value)}
+          onChange={(e) => debounceOnChange(e.currentTarget.value)}
           margin={'dense'}
           variant="outlined"
           InputProps={{

@@ -1,9 +1,9 @@
 import { LOGIN, LOGOUT } from './names';
 
-const setKey = (payload: Record<string, any>) =>
+export const setKey = (payload: Record<string, any>) =>
   localStorage.setItem('__account', JSON.stringify(payload));
 
-const loadKey = () => {
+export const loadKey = () => {
   const k = localStorage.getItem('__account');
   return k ? JSON.parse(k) : undefined;
 };

@@ -5,7 +5,6 @@ import NotFound from './NotFound';
 import Products from './Products';
 import Offers from './Offers';
 import Transactions from './Transactions';
-import Employees from './Employees';
 import Dashboard from './Dashboard';
 import Near from './Near';
 
@@ -23,7 +22,6 @@ const Routes = () => {
       <Route path="/offers" component={Offers} />
       <Route path="/settings" component={Render} />
       <Route path="/transactions" component={Transactions} />
-      <Route path="/employees" component={Employees} />
       <Route path="/near" component={Near} />
       <Redirect to="/not-found" />
     </Switch>

@@ -8,7 +8,7 @@ import Overview from './Overview';
 import Analytics from './Analytics';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import useApi from '../../Hooks';
+import api from '../../ky';
 
 const SECOND = 1000;
 
@@ -48,50 +48,6 @@ function Dashboard() {
     []
   );
   const [timeSeriesOffers, settimeSeriesOffers] = useState<TimeSeriesData>([]);
-
-  const api = useApi();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      api
-        .get(`/api/bo/analytics/near/total`)
-        .then(e => e.json())
-        .then(infos => setLive(infos.total));
-    }, 60 * SECOND);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    api
-      .get(`/api/bo/analytics/near/total`)
-      .then(e => e.json())
-      .then(infos => setLive(infos.total));
-
-    api
-      .get(`/api/bo/analytics/revenue`)
-      .then(e => e.json())
-      .then(infos => setRevenue(infos.revenue));
-
-    api
-      .get(`/api/bo/analytics/timeseries/product`)
-      .then(e => e.json())
-      .then(infos => settimeSeriesProducts(infos.data));
-
-    api
-      .get(`/api/bo/analytics/timeseries/offer`)
-      .then(e => e.json())
-      .then(infos => settimeSeriesOffers(infos.data));
-
-    api
-      .get(`/api/bo/analytics/aggregation/product`)
-      .then(e => e.json())
-      .then(infos => setAggregatedProducts(infos.data));
-
-    api
-      .get(`/api/bo/analytics/aggregation/offer`)
-      .then(e => e.json())
-      .then(infos => setAggregatedOffers(infos.data));
-  }, [history.location.search]);
 
   useEffect(() => {
     const urlParams = queryString.parse(history.location.search);

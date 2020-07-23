@@ -27,10 +27,10 @@ import ky from 'ky';
 import { LOGIN } from '../../provider/names';
 const dateNow = format(new Date(), 'EEEE dd MMMM yyyy');
 
-const URL = '/api/employees/login';
+const URL = '/api/users/login';
 
 type Creds = {
-  username: string;
+  user_name: string;
   password: string;
 };
 
@@ -43,7 +43,7 @@ const Login = () => {
   const account = useAccount();
   const token = account.token;
   const [infos, setInfos] = useState({
-    username: '',
+    user_name: '',
     password: ''
   });
   const [err, setErr] = useState({});
@@ -89,12 +89,12 @@ const Login = () => {
             <TextField
               onChange={(evt) =>
                 handleChange({
-                  username: evt.currentTarget.value
+                  user_name: evt.currentTarget.value
                 })
               }
-              error={Boolean(R.propOr('', 'username', err))}
-              helperText={R.propOr('', 'username', err)}
-              label={t('int.username')}
+              error={Boolean(R.propOr('', 'user_name', err))}
+              helperText={R.propOr('', 'user_name', err)}
+              label={t('int.user_name')}
               required
               variant="outlined"
               fullWidth

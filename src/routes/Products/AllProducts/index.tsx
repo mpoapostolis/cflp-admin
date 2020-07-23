@@ -12,7 +12,6 @@ import MaterialTable from '../../../components/Table';
 import { Button, Typography, IconButton } from '@material-ui/core';
 import { Columns } from '../../../components/Table/types';
 import { Link, useHistory } from 'react-router-dom';
-import useApi from '../../../Hooks';
 import queryString from 'query-string';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -22,6 +21,7 @@ import IconRepresentation from '../../../components/IconRepresentation';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import { css } from 'emotion';
+import api from '../../../ky';
 
 const marginRight = css`
   margin-right: 15px !important;
@@ -37,7 +37,6 @@ function AllProducts() {
   });
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const api = useApi();
 
   useEffect(() => {
     const search = history.location.search;
@@ -51,9 +50,9 @@ function AllProducts() {
       setLoading(true);
       const url = queryString.stringify({ ...params, ...obj });
       api
-        .get(`/api/bo/products?${url}`)
-        .then(e => e.json())
-        .then(infos => {
+        .get(`/api/products?${url}`)
+        .then((e) => e.json())
+        .then((infos) => {
           setInfos(infos);
           setLoading(false);
         });
@@ -103,11 +102,11 @@ function AllProducts() {
     },
     {
       title: t('int.price'),
-      render: obj => `${R.propOr('-', 'price', obj)} €`
+      render: (obj) => `${R.propOr('-', 'price', obj)} €`
     },
     {
       title: t('int.purchased'),
-      render: obj => R.propOr('-', 'purchased', obj)
+      render: (obj) => R.propOr('-', 'purchased', obj)
     },
 
     {

@@ -12,7 +12,6 @@ import MaterialTable from '../../components/Table';
 import { Typography, IconButton } from '@material-ui/core';
 import { Columns } from '../../components/Table/types';
 import { useHistory } from 'react-router-dom';
-import useApi from '../../Hooks';
 import queryString from 'query-string';
 import { formatDate } from '../../utils';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -20,6 +19,7 @@ import { red, green } from '@material-ui/core/colors';
 import IconRepresentation from '../../components/IconRepresentation';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import * as R from 'ramda';
+import api from '../../ky';
 
 function Offers() {
   const t = useContext(I18n);
@@ -31,7 +31,6 @@ function Offers() {
   });
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const api = useApi();
 
   useEffect(() => {
     const search = history.location.search;
@@ -50,8 +49,8 @@ function Offers() {
 
       api
         .get(`/api/bo/transactions/offers?${url}`)
-        .then(e => e.json())
-        .then(infos => {
+        .then((e) => e.json())
+        .then((infos) => {
           setInfos(infos);
           setLoading(false);
         });
@@ -100,7 +99,7 @@ function Offers() {
       },
       {
         title: t('int.dateCreated'),
-        render: obj => {
+        render: (obj) => {
           const d = new Date(obj.dateCreated as Date);
           return formatDate(d.getTime());
         }
@@ -117,7 +116,7 @@ function Offers() {
 
       {
         title: t('int.actions'),
-        render: obj => (
+        render: (obj) => (
           <IconButton
             size={'small'}
             onClick={() => history.push(`/offers/${obj.offerId}`)}
