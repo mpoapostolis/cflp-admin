@@ -48,7 +48,7 @@ function Offers() {
       });
 
       api
-        .get(`/api/bo/transactions/offers?${url}`)
+        .get(`/api/transactions/offers?${url}`)
         .then((e) => e.json())
         .then((infos) => {
           setInfos(infos);

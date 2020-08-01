@@ -93,12 +93,6 @@ function Menu(props: Props) {
       perm: []
     },
     {
-      title: t('int.offers'),
-      href: '/offers',
-      icon: <LocalOfferIcon />,
-      perm: []
-    },
-    {
       title: t('int.transactions'),
       href: '/transactions',
       icon: <AttachMoneyIcon />,

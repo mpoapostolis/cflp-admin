@@ -48,7 +48,7 @@ function Products() {
       });
 
       api
-        .get(`/api/bo/transactions/products?${url}`)
+        .get(`/api/transactions/products?${url}`)
         .then((e) => e.json())
         .then((infos) => {
           setInfos(infos);

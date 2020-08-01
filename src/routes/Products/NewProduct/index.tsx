@@ -16,20 +16,20 @@ function NewProduct() {
   };
   const [images, setImages] = useState<Image[]>([]);
   const [infos, setInfos] = useState<{
-    name: string;
+    product_name: string;
     price: number;
-    lpReward: number;
+    tags: string[];
   }>({
-    name: '',
+    product_name: '',
     price: 0,
-    lpReward: 0
+    tags: []
   });
 
   const params = useParams<{ id?: string }>();
 
   const deleteImages = (paths: string[]) => {
     api
-      .delete(`/api/bo/products/${params.id}/images`, {
+      .delete(`/api/products/${params.id}/images`, {
         json: {
           paths
         }
@@ -40,16 +40,12 @@ function NewProduct() {
   useEffect(() => {
     if (!params.id) return;
     api
-      .get(`/api/bo/products/${params.id}`)
+      .get(`/api/products/${params.id}`)
       .then((res) => res.json())
       .then((data) => {
-        const { name = '', price = 0, lpReward = 0 } = data;
-        const images = data.images.map((url: string) => ({
-          file: null,
-          url
-        }));
-        setImages(images);
-        setInfos({ name, price, lpReward });
+        const { product_name = '', tags, price = 0 } = data;
+        setImages([]);
+        setInfos({ product_name, price, tags });
       })
       .catch(console.error);
   }, []);
@@ -59,17 +55,17 @@ function NewProduct() {
   const handleSubmit = () => {
     const formData = new FormData();
 
-    images
-      .filter((f) => f.file)
-      .forEach((f) => formData.append('image', f.file));
-    formData.append('infos', JSON.stringify(infos));
-    const action = isEdit ? api.put : api.post;
-    const url = isEdit ? `/api/bo/products/${params.id}` : `/api/bo/products`;
+    // images
+    //   .filter((f) => f.file)
+    //   .forEach((f) => formData.append('image', f.file));
+    // formData.append('infos', JSON.stringify(infos));
+    const action = isEdit ? api.patch : api.post;
+    const url = isEdit ? `/api/products/${params.id}` : `/api/products`;
     const successMsg = isEdit
       ? 'int.product-updated-successfully'
       : 'int.product-created-successfully';
     action(url, {
-      body: formData
+      json: infos
     }).then(() => {
       toast.success(successMsg);
       history.push('/products');

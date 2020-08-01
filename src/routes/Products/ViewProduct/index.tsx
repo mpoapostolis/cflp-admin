@@ -59,21 +59,21 @@ function ViewProduct() {
   useEffect(() => {
     if (!params.id) return;
     api
-      .get(`/api/bo/products/${params.id}`)
+      .get(`/api/products/${params.id}`)
       .then((res) => res.json())
       .then((data) => {
-        const { name = '', price = 0, lpReward = 0, purchased = 0 } = data;
-        const images = data.images.map((url: string) => ({
+        const { product_name = '', price = 0 } = data;
+        const images = data.images?.map((url: string) => ({
           url
         }));
-        setInfos({ name, price, purchased, lpReward });
+        setInfos({ product_name, price });
         setImages(images);
       })
       .catch(console.error);
   }, []);
 
   const deleteProduct = useCallback(() => {
-    api.delete(`/api/bo/products/${params.id}`);
+    api.delete(`/api/products/${params.id}`);
     toast.success(t('int.product-delete-successfully'));
     history.push('/products');
   }, [params]);
@@ -121,7 +121,7 @@ function ViewProduct() {
           </CardContent>
         </Card>
       </Grid>
-      {images.length > 0 && (
+      {images?.length > 0 && (
         <Grid item xs={12} md={6}>
           <Card>
             <CardHeader title={t('int.images')} />

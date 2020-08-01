@@ -106,12 +106,12 @@ function Near() {
   useEffect(() => {
     const interval = setInterval(() => {
       api
-        .get(`/api/bo/analytics/near`)
+        .get(`/api/analytics/near`)
         .then((e) => e.json())
         .then((infos) => setNear(infos.data));
     }, 60 * SECOND);
     api
-      .get(`/api/bo/analytics/near`)
+      .get(`/api/analytics/near`)
       .then((e) => e.json())
       .then((infos) => setNear(infos.data));
     return () => clearInterval(interval);

@@ -22,6 +22,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import { css } from 'emotion';
 import api from '../../../ky';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 
 const marginRight = css`
   margin-right: 15px !important;
@@ -63,7 +64,7 @@ function AllProducts() {
   const deleteProduct = useCallback(
     (id: string) => {
       const params = queryString.parse(history.location.search);
-      api.delete(`/api/bo/products/${id}`);
+      api.delete(`/api/products/${id}`);
       toast.success(t('int.product-delete-successfully'));
       getProducts(params);
     },
@@ -82,13 +83,7 @@ function AllProducts() {
             { label: t('int.date-desc'), value: 'date:DESC' },
 
             { label: t('int.price-asc'), value: 'price:ASC' },
-            { label: t('int.price-desc'), value: 'price:DESC' },
-
-            { label: t('int.purchased-asc'), value: 'purchased:ASC' },
-            { label: t('int.purchased-desc'), value: 'purchased:DESC' },
-
-            { label: t('int.lpReward-asc'), value: 'lpReward:ASC' },
-            { label: t('int.lpReward-desc'), value: 'lpReward:DESC' }
+            { label: t('int.price-desc'), value: 'price:DESC' }
           ]
         }
       ] as FilterType[],
@@ -98,21 +93,26 @@ function AllProducts() {
   const columns: Columns = [
     {
       title: t('int.name'),
-      field: 'name'
+      field: 'product_name'
     },
     {
       title: t('int.price'),
       render: (obj) => `${R.propOr('-', 'price', obj)} €`
     },
-    {
-      title: t('int.purchased'),
-      render: (obj) => R.propOr('-', 'purchased', obj)
-    },
 
     {
-      title: t('int.lpReward'),
-      field: 'lpReward'
+      title: t('int.tags'),
+      render: (obj: any, idx: number) => {
+        const tmp: unknown[] = R.propOr([], 'tags', obj);
+        const howMany = tmp.length;
+        return (
+          <IconRepresentation howMany={howMany}>
+            <LocalOfferIcon htmlColor={'#546e7a'} />
+          </IconRepresentation>
+        );
+      }
     },
+
     {
       title: t('int.images'),
       render: (obj: any, idx: number) => {
@@ -132,7 +132,7 @@ function AllProducts() {
           <IconButton
             classes={{ root: marginRight }}
             size={'small'}
-            onClick={() => history.push(`/products/${obj._id}`)}
+            onClick={() => history.push(`/products/${obj.id}`)}
             title={t('int.view')}>
             <VisibilityIcon />
           </IconButton>
@@ -140,14 +140,14 @@ function AllProducts() {
           <IconButton
             classes={{ root: marginRight }}
             size={'small'}
-            onClick={() => history.push(`/products/${obj._id}/edit`)}
+            onClick={() => history.push(`/products/${obj.id}/edit`)}
             title={t('int.edit')}>
             <EditIcon />
           </IconButton>
           <IconButton
             classes={{ root: marginRight }}
             size={'small'}
-            onClick={() => deleteProduct(obj._id)}
+            onClick={() => deleteProduct(obj.id)}
             title={t('int.delete')}>
             <DeleteIcon />
           </IconButton>

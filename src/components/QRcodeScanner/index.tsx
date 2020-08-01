@@ -40,13 +40,13 @@ function QRcodeScanner(props: {}) {
       const data = queryString.parse(params);
 
       if ('productId' in data) {
-        api.post('/api/bo/transactions/product', {
+        api.post('/api/transactions/product', {
           json: data
         });
       }
 
       if ('offerId' in data) {
-        api.post('/api/bo/transactions/offer', {
+        api.post('/api/transactions/offer', {
           json: data
         });
       }

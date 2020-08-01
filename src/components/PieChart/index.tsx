@@ -77,7 +77,7 @@ const PieChart = React.memo((props: IProps) => {
 
       const _pie = pie<DonutData>()
         .sort(null)
-        .value(d => d.value);
+        .value((d) => d.value);
 
       const _arc = arc<DonutData>()
         .innerRadius(radius * 0.6)
@@ -100,9 +100,7 @@ const PieChart = React.memo((props: IProps) => {
         .on('mouseover', (ele, idx, elements) => {
           body.selectAll('.d3DonutSlice').attr('opacity', 0.2);
 
-          select(elements[idx])
-            .attr('opacity', 1)
-            .attr('fill', colors[idx]);
+          select(elements[idx]).attr('opacity', 1).attr('fill', colors[idx]);
           setHoveredItem(idx);
         })
         .on('mouseleave', (_, idx, elements) => {
@@ -115,7 +113,7 @@ const PieChart = React.memo((props: IProps) => {
       body
         .selectAll('polyline')
         .data(_pie(isTotalZero ? emptyData : data))
-        .attr('points', d => {
+        .attr('points', (d) => {
           // see label transform function for explanations of these three lines.
           const pos = outerArc.centroid(d);
           pos[0] = radius * 0.9 * (midAngle(d) < Math.PI ? 1.2 : -1);
@@ -125,7 +123,7 @@ const PieChart = React.memo((props: IProps) => {
       const textGroup = body
         .selectAll('.textGroup')
         .data(_pie(isTotalZero ? emptyData : data))
-        .attr('transform', d => {
+        .attr('transform', (d) => {
           const pos = outerArc.centroid(d);
           pos[0] = radius * (midAngle(d) < Math.PI ? 1.2 : -1.4);
           return `translate(${pos})`;
@@ -133,10 +131,10 @@ const PieChart = React.memo((props: IProps) => {
 
       const valueText = textGroup.select('.d3TextValue');
 
-      valueText.select('.actualValue').text(d => perc(d.value));
+      valueText.select('.actualValue').text((d) => perc(d.value));
       valueText
         .select('.percentage')
-        .text(d => (isTotalZero ? 0 : `total: ${d.value}`));
+        .text((d) => (isTotalZero ? 0 : `total: ${d.value}`));
     }
   }, [data, windowSize]); // eslint-disable-line
   return (
@@ -182,7 +180,7 @@ const PieChart = React.memo((props: IProps) => {
                   />
                 </text>
               </g>
-              ))}
+              ))
             </g>
           ))}
           <image />
