@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,15 +13,19 @@ import {
   List,
   Divider,
   ListItemText,
-  Avatar
+  Avatar,
+  Badge
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/styles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Notifications from '@material-ui/icons/Notifications';
 import I18n from '../../I18n';
-import { useHistory } from 'react-router-dom';
+
 import QRCodeScanner from '../QRcodeScanner';
 import { useAccount } from '../../provider';
 import { LOGOUT } from '../../provider/names';
+import { css } from 'emotion';
+import api from '../../ky';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,8 +50,26 @@ type Props = {
 };
 function Header(props: Props) {
   const classes = useStyles();
+  const [notf, setNotf] = useState(0);
 
   const account = useAccount();
+
+  const getNotf = async () => {
+    const res = await api.get('/api/orders/pending');
+    const data = await res.json();
+    setNotf(data.total);
+  };
+  useEffect(() => {
+    if (account.store_id) {
+      const source = new EventSource(
+        `http://localhost:4000/api/listen-orders/4746e2a6-c49b-41f5-be38-11792ba591c0?token=${account.token}`
+      );
+      source.onmessage = () => {
+        getNotf();
+      };
+    }
+    getNotf();
+  }, []);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -74,7 +96,20 @@ function Header(props: Props) {
           </IconButton>
         </Hidden>
         <Typography variant="h6" className={classes.title}></Typography>
-        <QRCodeScanner />
+
+        <IconButton aria-label="cart">
+          <Badge
+            badgeContent={notf}
+            classes={{
+              badge: css`
+                background: #dc0f77;
+                color: white;
+              `
+            }}>
+            <Notifications htmlColor="#fff" />
+          </Badge>
+        </IconButton>
+
         {account.token && (
           <IconButton
             aria-label="account of current user"

@@ -15,7 +15,7 @@ const clearKey = (k: string) => {
 export type Store = {
   _id?: string;
   username?: string;
-  storeId?: string;
+  store_id?: string;
   email?: string;
   firstName?: string;
   lastName?: string;
