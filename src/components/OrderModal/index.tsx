@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAccount } from '../../provider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -6,37 +6,21 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button, Typography } from '@material-ui/core';
 
-function OrderModal() {
-  const account = useAccount();
-  const [order, setOrder] = useState<any[]>();
-
-  // useEffect(() => {
-  //   if (account.store_id) {
-  //     const source = new EventSource(
-  //       `http://localhost:4000/api/listen-orders/4746e2a6-c49b-41f5-be38-11792ba591c0?token=${account.token}`
-  //     );
-  //     source.onmessage = (evt) => handleClickOpen(JSON.parse(evt.data));
-  //   }
-  // }, []);
-
-  const handleClickOpen = (data: any[]) => {
-    setOrder(data);
-  };
-
-  const handleClose = () => {
-    setOrder(undefined);
-  };
-
+function OrderModal(props: {
+  handleClickOpen: (data: any[]) => void;
+  handleClose: () => void;
+  order?: any[];
+}) {
   return (
     <Dialog
       fullWidth
-      open={Boolean(order)}
-      onClose={handleClose}
+      open={Boolean(props.order)}
+      onClose={props.handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description">
       <DialogTitle id="alert-dialog-title">{'Παραγγελία'}</DialogTitle>
       <DialogContent>
-        {order?.map((obj) => (
+        {props.order?.map((obj) => (
           <Typography key={obj.id}>
             {obj.product_name}{' '}
             <Typography
@@ -47,10 +31,10 @@ function OrderModal() {
         ))}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={props.handleClose} color="primary">
           Disagree
         </Button>
-        <Button onClick={handleClose} color="primary" autoFocus>
+        <Button onClick={props.handleClose} color="primary" autoFocus>
           Agree
         </Button>
       </DialogActions>

@@ -20,12 +20,13 @@ import { makeStyles, createStyles } from '@material-ui/styles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Notifications from '@material-ui/icons/Notifications';
 import I18n from '../../I18n';
+import { getPendingNotification } from '../../api/notification';
 
-import QRCodeScanner from '../QRcodeScanner';
 import { useAccount } from '../../provider';
 import { LOGOUT } from '../../provider/names';
+
+import { useQuery } from 'react-query';
 import { css } from 'emotion';
-import api from '../../ky';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,26 +51,8 @@ type Props = {
 };
 function Header(props: Props) {
   const classes = useStyles();
-  const [notf, setNotf] = useState(0);
 
   const account = useAccount();
-
-  const getNotf = async () => {
-    const res = await api.get('/api/orders/pending');
-    const data = await res.json();
-    setNotf(data.total);
-  };
-  useEffect(() => {
-    if (account.store_id) {
-      const source = new EventSource(
-        `http://localhost:4000/api/listen-orders/4746e2a6-c49b-41f5-be38-11792ba591c0?token=${account.token}`
-      );
-      source.onmessage = () => {
-        getNotf();
-      };
-    }
-    getNotf();
-  }, []);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -81,6 +64,11 @@ function Header(props: Props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const { data: notf = { totalUnread: 0 } } = useQuery(
+    'pending-notifications',
+    getPendingNotification
+  );
 
   const t = useContext(I18n);
   return (
@@ -99,7 +87,7 @@ function Header(props: Props) {
 
         <IconButton aria-label="cart">
           <Badge
-            badgeContent={notf}
+            badgeContent={notf.totalUnread}
             classes={{
               badge: css`
                 background: #dc0f77;
