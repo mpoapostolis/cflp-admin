@@ -9,8 +9,11 @@ import { Button, Typography } from '@material-ui/core';
 function OrderModal(props: {
   handleClickOpen: (data: any[]) => void;
   handleClose: () => void;
+  orderId?: string;
+  orderName?: string;
   order?: any[];
 }) {
+  console.log(props.order);
   return (
     <Dialog
       fullWidth
@@ -18,7 +21,7 @@ function OrderModal(props: {
       onClose={props.handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description">
-      <DialogTitle id="alert-dialog-title">{'Παραγγελία'}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{`Παραγγελία: ${props.orderName}`}</DialogTitle>
       <DialogContent>
         {props.order?.map((obj) => (
           <Typography key={obj.id}>

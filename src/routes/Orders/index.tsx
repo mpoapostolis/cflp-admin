@@ -11,24 +11,23 @@ import { FilterType } from '../../components/Filters/types';
 import MaterialTable from '../../components/Table';
 import { IconButton, Button } from '@material-ui/core';
 import { Columns } from '../../components/Table/types';
-import { useHistory, useParams } from 'react-router-dom';
-import queryString from 'query-string';
-import { EUROSIGN, formatDate } from '../../utils';
+
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
-import * as R from 'ramda';
 import api from '../../ky';
-import { useQuery, usePaginatedQuery } from 'react-query';
+import { usePaginatedQuery } from 'react-query';
 import { getNotification } from '../../api/notification';
 import StatusRect from '../../components/StatusRect';
 import OrderModal from '../../components/OrderModal';
+import { format, parseISO } from 'date-fns';
+import { el } from 'date-fns/esm/locale';
 
 function Products() {
   const t = useContext(I18n);
 
-  const history = useHistory();
-  const param = useParams<{ tab: 'product' | 'offer' }>();
   const [order, setOrder] = useState<any[]>();
+  const [orderName, setOrderName] = useState<string>();
+  const [orderId, setOrderId] = useState<string>();
 
   const handleClickOpen = (data: any[]) => {
     setOrder(data);
@@ -98,9 +97,10 @@ function Products() {
       {
         title: t('int.dateCreated'),
         render: (obj) => {
-          const d = new Date(obj.date_created as Date);
-          console.log(obj.date_created);
-          return formatDate(d.getTime());
+          const d = parseISO(obj.date_created);
+
+          console.log(d);
+          return format(d, 'd MMM yyy, HH:mm');
         }
       },
 
@@ -115,7 +115,11 @@ function Products() {
           return (
             <IconButton
               size={'small'}
-              onClick={() => getOrder(obj.order_id)}
+              onClick={() => {
+                setOrderId(obj.order_id);
+                setOrderName(obj.user_name);
+                getOrder(obj.order_id);
+              }}
               title={t('int.view')}>
               <VisibilityIcon />
             </IconButton>
@@ -144,6 +148,8 @@ function Products() {
       />
       <OrderModal
         order={order}
+        orderId={orderId}
+        orderName={orderName}
         handleClickOpen={handleClickOpen}
         handleClose={handleClose}
       />
