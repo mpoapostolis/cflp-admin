@@ -27,7 +27,7 @@ const Routes = () => {
   useEffect(() => {
     if (account.store_id) {
       const source = new EventSource(
-        `http://localhost:4000/api/listen-orders/4746e2a6-c49b-41f5-be38-11792ba591c0?token=${account.token}`
+        `http://localhost:4000/api/listen-orders/${account.store_id}?token=${account.token}`
       );
       source.onmessage = () => {
         queryCache.invalidateQueries('pending-notifications');

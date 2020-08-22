@@ -14,3 +14,7 @@ export async function getNotification(
   const params = qs.stringify(_params);
   return await api.get(`${URL}?${params}`).json();
 }
+
+export async function approveOrder(id?: string): Promise<any> {
+  return await api.post(`${URL}/${id}/approve`);
+}

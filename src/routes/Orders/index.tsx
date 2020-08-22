@@ -28,6 +28,7 @@ function Products() {
   const [order, setOrder] = useState<any[]>();
   const [orderName, setOrderName] = useState<string>();
   const [orderId, setOrderId] = useState<string>();
+  const [status, setStatus] = useState<string>();
 
   const handleClickOpen = (data: any[]) => {
     setOrder(data);
@@ -98,8 +99,6 @@ function Products() {
         title: t('int.dateCreated'),
         render: (obj) => {
           const d = parseISO(obj.date_created);
-
-          console.log(d);
           return format(d, 'd MMM yyy, HH:mm');
         }
       },
@@ -117,6 +116,7 @@ function Products() {
               size={'small'}
               onClick={() => {
                 setOrderId(obj.order_id);
+                setStatus(obj.status);
                 setOrderName(obj.user_name);
                 getOrder(obj.order_id);
               }}
@@ -147,6 +147,7 @@ function Products() {
         {...tableInfos}
       />
       <OrderModal
+        status={status}
         order={order}
         orderId={orderId}
         orderName={orderName}
