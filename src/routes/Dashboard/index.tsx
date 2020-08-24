@@ -9,6 +9,8 @@ import Analytics from './Analytics';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import api from '../../ky';
+import { useQuery } from 'react-query';
+import { getGeoLog } from '../../api/geolog';
 
 const SECOND = 1000;
 
@@ -36,7 +38,6 @@ function Dashboard() {
   const history = useHistory();
   const urlParams = queryString.parse(history.location.search);
   const { from, to } = urlParams as DashBoardParams;
-  const [live, setLive] = useState(0);
   const [revenue, setRevenue] = useState(0);
 
   const [aggregatedProducts, setAggregatedProducts] = useState<AggregateData>(
@@ -48,6 +49,10 @@ function Dashboard() {
     []
   );
   const [timeSeriesOffers, settimeSeriesOffers] = useState<TimeSeriesData>([]);
+
+  const { data } = useQuery(['geolog', {}], getGeoLog, {
+    refetchInterval: 5000
+  });
 
   useEffect(() => {
     const urlParams = queryString.parse(history.location.search);
@@ -94,7 +99,7 @@ function Dashboard() {
 
       <Grid spacing={3} container>
         <Overview
-          live={live}
+          live={data?.data?.length}
           offersPurchased={timeSeriesOffers.reduce(
             (acc, curr) => acc + curr.total,
             0

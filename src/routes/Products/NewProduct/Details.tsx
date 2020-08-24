@@ -55,7 +55,7 @@ function AccountDetails(props: Props) {
     api
       .get('/api/tags')
       .then((d) => d.json())
-      .then((tags) => setTags(tags.map((t: any) => t.tag_name)));
+      .then((tags) => setTags(tags?.map((t: any) => t?.tag_name)));
   }, []);
 
   const t = useContext(I18n);
@@ -102,7 +102,7 @@ function AccountDetails(props: Props) {
             <Autocomplete
               multiple
               options={tags}
-              value={infos.tags}
+              value={infos.tags || []}
               freeSolo
               onChange={(_, newTags) => {
                 _setInfos({ tags: newTags });

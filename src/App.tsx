@@ -24,6 +24,7 @@ function LoginWrapper(props: RouteProps) {
 
 function App() {
   const t = (key: string) => key;
+
   return (
     <ThemeProvider theme={theme}>
       <I18n.Provider value={t}>

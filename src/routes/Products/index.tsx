@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router';
 import AllProducts from './AllProducts';
 import NewProduct from './NewProduct';
 import ViewProduct from './ViewProduct';
+import api from '../../ky';
 
 function Reports() {
   return (

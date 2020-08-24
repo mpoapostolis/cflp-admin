@@ -106,7 +106,7 @@ function OrderModal(props: {
           </ListItem>
         </List>
       </DialogContent>
-      {props.status !== 'complete' && (
+      {/* {props.status !== 'complete' && (
         <DialogActions>
           <Button onClick={props.handleClose} color="primary">
             Ακυρωση
@@ -118,7 +118,18 @@ function OrderModal(props: {
             Εγκριση
           </Button>
         </DialogActions>
-      )}
+      )} */}
+      <DialogActions>
+        <Button onClick={props.handleClose} color="primary">
+          Ακυρωση
+        </Button>
+        <Button
+          onClick={() => _approveOrder(props.orderId ?? '')}
+          color="primary"
+          autoFocus>
+          Εγκριση
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 }

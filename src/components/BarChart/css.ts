@@ -24,7 +24,7 @@ export const container = css`
     stroke: #0001;
   }
   .tick line {
-    stroke: #0001;
+    stroke: #0000;
   }
 `;
 
