@@ -6,7 +6,8 @@ import {
   Card,
   CardContent,
   makeStyles,
-  CardHeader
+  CardHeader,
+  Paper
 } from '@material-ui/core';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 import PieChart from '../../components/PieChart';
@@ -29,57 +30,29 @@ import {
   Line,
   Area,
   Axis,
-  Coordinate
+  Coordinate,
+  Interaction
 } from 'bizcharts';
 
 import DataSet from '@antv/data-set';
-
-const data = [
-  { name: 'London', 月份: 'Jan.', 月均降雨量: 18.9 },
-  { name: 'London', 月份: 'Feb.', 月均降雨量: 28.8 },
-  { name: 'London', 月份: 'Mar.', 月均降雨量: 39.3 },
-  { name: 'London', 月份: 'Apr.', 月均降雨量: 81.4 },
-  { name: 'London', 月份: 'May', 月均降雨量: 47 },
-  { name: 'London', 月份: 'Jun.', 月均降雨量: 20.3 },
-  { name: 'London', 月份: 'Jul.', 月均降雨量: 24 },
-  { name: 'London', 月份: 'Aug.', 月均降雨量: 35.6 },
-  { name: 'Berlin', 月份: 'Jan.', 月均降雨量: 12.4 },
-  { name: 'Berlin', 月份: 'Feb.', 月均降雨量: 23.2 },
-  { name: 'Berlin', 月份: 'Mar.', 月均降雨量: 34.5 },
-  { name: 'Berlin', 月份: 'Apr.', 月均降雨量: 99.7 },
-  { name: 'Berlin', 月份: 'May', 月均降雨量: 52.6 },
-  { name: 'Berlin', 月份: 'Jun.', 月均降雨量: 35.5 },
-  { name: 'Berlin', 月份: 'Jul.', 月均降雨量: 37.4 },
-  { name: 'Berlin', 月份: 'Aug.', 月均降雨量: 42.4 }
-];
+import { getTagsAnalytics } from '../../api/tags';
 
 const data1 = [
-  { item: 'Design', a: 70, b: 30 },
-  { item: 'Development', a: 60, b: 70 },
-  { item: 'Marketing', a: 50, b: 60 },
-  { item: 'Users', a: 40, b: 50 },
-  { item: 'Test', a: 60, b: 70 },
-  { item: 'Language', a: 70, b: 50 },
-  { item: 'Technology', a: 50, b: 40 },
-  { item: 'Support', a: 30, b: 40 },
-  { item: 'Sales', a: 60, b: 40 },
-  { item: 'UX', a: 50, b: 60 }
+  { item: 'Design', c: 1, d: 3, aa: 3, a: 70, b: 30 },
+  { item: 'Development', c: 1, d: 3, aa: 3, a: 60, b: 70 },
+  { item: 'Marketing', c: 1, d: 3, aa: 3, a: 50, b: 60 },
+  { item: 'Users', c: 1, d: 3, aa: 3, a: 40, b: 50 },
+  { item: 'Test', c: 1, d: 3, aa: 3, a: 60, b: 70 },
+  { item: 'Language', c: 1, d: 3, aa: 3, a: 70, b: 50 },
+  { item: 'Technology', c: 1, d: 3, aa: 3, a: 50, b: 40 },
+  { item: 'Support', c: 1, d: 3, aa: 3, a: 30, b: 40 },
+  { item: 'Sales', c: 1, d: 3, aa: 3, a: 60, b: 40 },
+  { item: 'UX', c: 1, d: 3, aa: 3, a: 50, b: 60 }
 ];
 
-const tooltipConfig = {
-  shared: true, // 合并数据项
-  follow: true, // tooltip 跟随鼠标
-  showCrosshairs: true, // 展示 crosshairs
-  crosshairs: {
-    // 配置 crosshairs 样式
-    type: 'xy', // crosshairs 类型
-    line: {
-      // crosshairs 线样式
-      style: {
-        stroke: '#565656',
-        lineDash: [4]
-      }
-    }
+const cols = {
+  percent: {
+    formatter: (val: any) => `${val * 100}%`
   }
 };
 
@@ -90,7 +63,7 @@ const useStyles = makeStyles(() => ({
   },
   card: {
     height: '350px',
-    padding: 0,
+    padding: 25,
     margin: 0
   },
 
@@ -116,6 +89,8 @@ const useStyles = makeStyles(() => ({
 
 function Near() {
   const classes = useStyles();
+  const [ageGroupState, setAgeGroupState] = useState([]);
+  const [percentageData, setPercentageData] = useState<any>([]);
   const [coords, setCoords] = useState<
     | {
         latitude: number;
@@ -124,6 +99,10 @@ function Near() {
     | undefined
   >(undefined);
   const t = useContext(I18n);
+
+  const { data: tags } = useQuery('tags', getTagsAnalytics);
+  console.log(tags);
+
   const { data: ageGroup = { data: [] } } = useQuery(
     ['geolog', { ...coords }],
     getGeoLogInfos,
@@ -132,6 +111,37 @@ function Near() {
       enabled: Boolean(coords)
     }
   );
+  useEffect(() => {
+    if (ageGroup.data.length < 1) return;
+    const tmp = ageGroup.data.map((obj: any) => ({
+      total: +obj.total ?? 0,
+      gender: obj.age_group.match('female') ? 'female' : 'male',
+      age_group: obj.age_group.replace(/female_|male_/g, '')
+    }));
+
+    const male = tmp.reduce(
+      (acc: number, curr: any) =>
+        acc + (curr.gender === 'male' ? curr.total : 0),
+      0
+    );
+    const female = tmp.reduce(
+      (acc: number, curr: any) =>
+        acc + (curr.gender === 'female' ? curr.total : 0),
+      0
+    );
+
+    const malePercentage = +(male / (female + male)).toFixed(2);
+    const femalePercentage = +(1 - malePercentage).toFixed(2);
+    setAgeGroupState(tmp);
+    setPercentageData([
+      {
+        gender: 'male',
+        total: male,
+        percent: malePercentage || 0.5
+      },
+      { gender: 'female', total: female, percent: femalePercentage || 0.5 }
+    ]);
+  }, [ageGroup]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -149,7 +159,7 @@ function Near() {
   const dv = new DataView().source(data1);
   dv.transform({
     type: 'fold',
-    fields: ['a', 'b'], // 展开字段集
+    fields: ['a', 'b', 'c', 'aa'], // 展开字段集
     key: 'user', // key字段
     value: 'score' // value字段
   });
@@ -164,170 +174,97 @@ function Near() {
     }
   };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     api
-  //       .get(`/api/analytics/near`)
-  //       .then((e) => e.json())
-  //       .then((infos) => setNear(infos.data));
-  //   }, 60 * SECOND);
-  //   api
-  //     .get(`/api/analytics/near`)
-  //     .then((e) => e.json())
-  //     .then((infos) => setNear(infos.data));
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  // const transformation = useMemo(
-  //   () =>
-  //     near.map((str) => {
-  //       const [gender, age] = str.split('_');
-  //       return {
-  //         gender,
-  //         age: +age
-  //       };
-  //     }),
-  //   [near]
-  // );
-
-  // const maleVsFemale = useMemo(() => {
-  //   const femaleCount = transformation.reduce((acc, curr) => {
-  //     const add1 = curr.gender === 'f' ? 1 : 0;
-  //     return acc + add1;
-  //   }, 0);
-  //   return [
-  //     {
-  //       color: '#1f77b4',
-  //       label: 'male',
-  //       value: transformation.length - femaleCount
-  //     },
-  //     {
-  //       color: '#9467bd',
-  //       label: 'female',
-  //       value: femaleCount
-  //     }
-  //   ];
-  // }, [transformation]);
-
-  // const groupFemaleByAge = useMemo(() => {
-  //   const tmp = R.groupBy<{ age: number }>(classifyByAge)(
-  //     transformation.filter((e) => e.gender === 'f')
-  //   );
-  //   return Object.keys(tmp).map((k) => ({
-  //     label: k,
-  //     value: tmp[k].length
-  //   }));
-  // }, [transformation]);
-
-  // const groupMaleByAge = useMemo(() => {
-  //   const tmp = R.groupBy<{ age: number }>(classifyByAge)(
-  //     transformation.filter((e) => e.gender === 'm')
-  //   );
-  //   return Object.keys(tmp).map((k) => ({
-  //     label: k,
-  //     value: tmp[k].length
-  //   }));
-  // }, [transformation]);
-
   return (
     <>
-      <>
-        <div className={classes.filters}>
-          <Button
-            startIcon={<PersonPinCircleIcon />}
-            variant="contained"
-            onClick={() => {
-              api.get(
-                `/api/geolog/traffic?latitude=${coords?.latitude}&longitude=${coords?.longitude}`
-              );
-            }}>
-            {t('generate-traffic')}
-          </Button>
-
-          <Button
-            startIcon={<PersonPinCircleIcon />}
-            variant="contained"
-            onClick={console.log}>
-            {t('int.radius')}
-          </Button>
-        </div>
-        <br />
-
-        <Grid spacing={3} container>
-          <Grid xs={12} md={12} lg={12} item>
-            <Card component="div" className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <Chart padding="auto" data={data} autoFit>
-                  <Interval
-                    adjust={[
-                      {
-                        type: 'dodge',
-                        marginRatio: 0
-                      }
-                    ]}
-                    color="name"
-                    position="月份*月均降雨量"
-                  />
-                  <Tooltip shared />
-                  <Legend layout="vertical" position="top-left" />
-                </Chart>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid xs={12} md={12} lg={4} item>
-            <Card component="div" className={classes.radar}>
-              <CardHeader title="women-per-age" />
-              <CardContent className={classes.cardContentRadar}>
-                <Chart
-                  height={400}
-                  data={newData}
-                  autoFit
-                  scale={{
-                    score: {
-                      min: 0,
-                      max: 90
-                    }
-                  }}
-                  interactions={['legend-highlight']}>
-                  <Coordinate type="polar" radius={0.8} />
-                  {/* <Tooltip {...tooltipConfig} /> */}
-                  <Point position="item*score" color="user" shape="circle" />
-                  <Line position="item*score" color="user" size="2" />
-                  <Area position="item*score" color="user" />
-                  <Axis name="item" {...axisConfig} />
-                </Chart>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid xs={12} md={12} lg={4} item>
-            <Card component="div" className={classes.radar}>
-              <CardHeader title="male-per-age" />
-              <CardContent className={classes.cardContentRadar}>
-                <Chart
-                  height={400}
-                  data={newData}
-                  autoFit
-                  scale={{
-                    score: {
-                      min: 0,
-                      max: 90
-                    }
-                  }}
-                  interactions={['legend-highlight']}>
-                  <Coordinate type="polar" radius={0.8} />
-                  {/* <Tooltip {...tooltipConfig} /> */}
-                  <Point position="item*score" color="user" shape="circle" />
-                  <Line position="item*score" color="user" size="2" />
-                  <Area position="item*score" color="user" />
-                  <Axis name="item" {...axisConfig} />
-                </Chart>
-              </CardContent>
-            </Card>
-          </Grid>
+      <Grid spacing={3} container>
+        <Grid xs={12} md={12} lg={8} item>
+          <Paper component="div" className={classes.card}>
+            <Chart padding="auto" data={ageGroupState} autoFit>
+              <Interval
+                adjust={[
+                  {
+                    type: 'dodge',
+                    marginRatio: 0
+                  }
+                ]}
+                color="gender"
+                position="age_group*total"
+              />
+              <Tooltip shared />
+              <Legend layout="vertical" position="top-left" />
+            </Chart>
+          </Paper>
         </Grid>
-      </>
+
+        <Grid xs={12} md={12} lg={4} item>
+          <Paper component="div" className={classes.card}>
+            <Chart data={percentageData} scale={cols} autoFit>
+              <Coordinate type="theta" radius={1} />
+              <Tooltip showTitle={false} />
+              <Axis visible={false} />
+              <Interval
+                position="percent"
+                adjust="stack"
+                color="gender"
+                style={{
+                  lineWidth: 1,
+                  stroke: '#fff'
+                }}
+                label={[
+                  'total',
+                  {
+                    content: (data) => {
+                      return `${data.total}`;
+                    }
+                  }
+                ]}
+              />
+              <Interaction type="element-single-selected" />
+            </Chart>
+          </Paper>
+        </Grid>
+        <Grid xs={12} md={12} lg={4} item>
+          <Paper component="div" className={classes.card}>
+            <Chart
+              data={newData}
+              autoFit
+              scale={{
+                score: {
+                  min: 0,
+                  max: 90
+                }
+              }}
+              interactions={['legend-highlight']}>
+              <Coordinate type="polar" radius={0.8} />
+              <Point position="item*score" color="user" shape="circle" />
+              <Line position="item*score" color="user" size="2" />
+              <Area position="item*score" color="user" />
+              <Axis name="item" {...axisConfig} />
+            </Chart>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={12} lg={4} item>
+          <Paper component="div" className={classes.card}>
+            <Chart
+              data={newData}
+              autoFit
+              scale={{
+                score: {
+                  min: 0,
+                  max: 90
+                }
+              }}
+              interactions={['legend-highlight']}>
+              <Coordinate type="polar" radius={0.8} />
+              <Point position="item*score" color="user" shape="circle" />
+              <Line position="item*score" color="user" size="2" />
+              <Area position="item*score" color="user" />
+              <Axis name="item" {...axisConfig} />
+            </Chart>
+          </Paper>
+        </Grid>
+      </Grid>
     </>
   );
 }
