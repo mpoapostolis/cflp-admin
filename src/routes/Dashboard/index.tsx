@@ -50,7 +50,7 @@ function Dashboard() {
   );
   const [timeSeriesOffers, settimeSeriesOffers] = useState<TimeSeriesData>([]);
 
-  const { data } = useQuery(['geolog', {}], getGeoLog, {
+  const { data } = useQuery(['geolog-near-me', {}], getGeoLog, {
     refetchInterval: 5000
   });
 
@@ -99,7 +99,7 @@ function Dashboard() {
 
       <Grid spacing={3} container>
         <Overview
-          live={data?.data?.length}
+          live={data?.countNearMe}
           offersPurchased={timeSeriesOffers.reduce(
             (acc, curr) => acc + curr.total,
             0
