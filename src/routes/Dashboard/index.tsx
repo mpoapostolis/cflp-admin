@@ -110,12 +110,7 @@ function Dashboard() {
             0
           )}
         />
-        <Analytics
-          aggregatedProducts={aggregatedProducts}
-          aggregatedOffers={aggregatedOffers}
-          timeSeriesProducts={timeSeriesProducts}
-          timeSeriesOffers={timeSeriesOffers}
-        />
+        <Analytics />
       </Grid>
 
       <Popover

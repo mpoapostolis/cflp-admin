@@ -19,41 +19,16 @@ function Overview(props: Props) {
   const t = useContext(I18n);
   return (
     <>
-      <Grid item md={6} lg={3} xs={12}>
-        <InfoCard
-          actions={[
-            <Button
-              component={Link}
-              to="/transactions/products"
-              size="small"
-              color="secondary">
-              {t('int.see-more')}
-            </Button>
-          ]}
-          icon={<AllInboxIcon />}
-          value={props.productsPurchased.toFixed(0)}
-          iconColor="blue"
-          title={t('int.products-purchased')}
-        />
-      </Grid>
-      <Grid item md={6} lg={3} xs={12}>
+      <Grid item md={12} lg={4} xs={12}>
         <InfoCard
           iconColor="orange"
-          icon={<LocalOfferIcon />}
-          value={props.offersPurchased.toFixed(0)}
-          title={t('int.offers-purchased')}
-          actions={[
-            <Button
-              size="small"
-              component={Link}
-              to="/transactions/offers"
-              color="secondary">
-              {t('int.see-more')}
-            </Button>
-          ]}
+          icon={<AttachMoneyIcon />}
+          title={t('int.revenue')}
+          value={`${props.revenue.toFixed(2)}${EUROSIGN}`}
         />
       </Grid>
-      <Grid item md={6} lg={3} xs={12}>
+
+      <Grid item md={12} lg={4} xs={12}>
         <InfoCard
           iconColor="green"
           icon={<AttachMoneyIcon />}
@@ -61,13 +36,8 @@ function Overview(props: Props) {
           value={`${props.revenue.toFixed(2)}${EUROSIGN}`}
         />
       </Grid>
-      <Grid item md={6} lg={3} xs={12}>
+      <Grid item md={12} lg={4} xs={12}>
         <InfoCard
-          actions={[
-            <Button size="small" component={Link} to="/near" color="secondary">
-              {t('int.see-more')}
-            </Button>
-          ]}
           icon={
             <Typography
               style={{

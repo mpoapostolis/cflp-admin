@@ -5,7 +5,7 @@ import NotFound from './NotFound';
 import Products from './Products';
 import Orders from './Orders';
 import Dashboard from './Dashboard';
-import Near from './Near';
+
 import OrderModal from '../components/OrderModal';
 import { useAccount } from '../provider';
 import { queryCache } from 'react-query';
@@ -44,7 +44,6 @@ const Routes = () => {
         <Route path="/products" component={Products} />
         <Route path="/settings" component={Render} />
         <Route path="/orders" component={Orders} />
-        <Route path="/near" component={Near} />
         <Redirect to="/not-found" />
       </Switch>
     </>
