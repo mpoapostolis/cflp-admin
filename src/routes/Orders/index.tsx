@@ -100,6 +100,32 @@ function Products() {
       },
 
       {
+        title: t('int.paid-with'),
+        render: (obj) => (
+          <div>
+            {obj.paid_with === 'cash' ? (
+              <span
+                style={{ width: '16px', marginRight: '10px' }}
+                role="img"
+                aria-label="money">
+                💵 &nbsp; μετρητά
+              </span>
+            ) : (
+              <div style={{ display: 'flex' }}>
+                <img
+                  src="/images/loyalty.svg"
+                  alt="loyalty"
+                  style={{ width: '16px', marginRight: '10px' }}
+                />
+                &nbsp;
+                <span>slourps</span>
+              </div>
+            )}
+          </div>
+        )
+      },
+
+      {
         title: t('int.actions'),
         render: (obj) => {
           return (
@@ -120,8 +146,6 @@ function Products() {
     ],
     [t]
   );
-
-  console.log(notifications);
 
   const tableInfos = {
     offset: 0,
