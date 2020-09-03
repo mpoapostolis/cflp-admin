@@ -7,7 +7,7 @@ export const container = css`
   &.isSmallDevice {
     grid-template-columns: 0px 1fr;
   }
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 220px 1fr;
   grid-template-rows: 64px 1fr;
   grid-template-areas:
     'header header'

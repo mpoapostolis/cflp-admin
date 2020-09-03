@@ -8,20 +8,16 @@ import AuthWrapper from '../AuthWrapper';
 import { Button, Theme, colors } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
-import SettingsIcon from '@material-ui/icons/Settings';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import Profile from './Profiles';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     height: 'calc(100% - 64px)',
     marginTop: '64px',
-    width: '240px'
+    width: '220px'
   },
   root: {
     display: 'flex',
@@ -96,19 +92,6 @@ function Menu(props: Props) {
       title: t('int.orders'),
       href: '/orders',
       icon: <AttachMoneyIcon />,
-      perm: []
-    },
-    {
-      title: t('int.near'),
-      href: '/near',
-      icon: <PersonPinCircleIcon />,
-      perm: []
-    },
-
-    {
-      title: t('int.settings'),
-      href: '/settings',
-      icon: <SettingsIcon />,
       perm: []
     }
   ];

@@ -6,7 +6,6 @@ import Products from './Products';
 import Orders from './Orders';
 import Dashboard from './Dashboard';
 
-import OrderModal from '../components/OrderModal';
 import { useAccount } from '../provider';
 import { queryCache } from 'react-query';
 
@@ -17,12 +16,6 @@ export function Render() {
 
 const Routes = () => {
   const account = useAccount();
-
-  // const getNotf = async () => {
-  //   const res = await api.get('/api/orders?status=pending');
-  //   const data = await res.json();
-  //   setNotf(data.total);
-  // };
 
   useEffect(() => {
     if (account.store_id) {

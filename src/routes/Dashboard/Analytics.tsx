@@ -58,12 +58,6 @@ const useStyles = makeStyles(() => ({
     overflowY: 'auto'
   },
 
-  radar: {
-    height: '450px',
-    padding: 0,
-    margin: 0
-  },
-
   cardContentRadar: {
     width: '97%',
     height: '90%',
@@ -203,7 +197,7 @@ function Near() {
   return (
     <>
       <Grid xs={12} md={12} lg={4} item>
-        <Typography variant="h5" style={{ marginBottom: '10px' }}>
+        <Typography variant="h6" style={{ marginBottom: '10px' }}>
           Groups per age near me
         </Typography>
 
@@ -235,7 +229,7 @@ function Near() {
       </Grid>
 
       <Grid xs={12} md={12} lg={4} item>
-        <Typography variant="h5" style={{ marginBottom: '10px' }}>
+        <Typography variant="h6" style={{ marginBottom: '10px' }}>
           Tags {selectedGroup} preffer
         </Typography>
         <Paper component="div" className={classes.card}>
@@ -253,7 +247,7 @@ function Near() {
       </Grid>
 
       <Grid item md={12} lg={4} xs={12}>
-        <Typography variant="h5" style={{ marginBottom: '10px' }}>
+        <Typography variant="h6" style={{ marginBottom: '10px' }}>
           Famous groups arround
         </Typography>
 
@@ -299,7 +293,7 @@ function Near() {
       </Grid>
 
       <Grid xs={12} md={12} lg={4} item>
-        <Typography variant="h5" style={{ marginBottom: '10px' }}>
+        <Typography variant="h6" style={{ marginBottom: '10px' }}>
           Top 10 selling products
         </Typography>
 
@@ -313,16 +307,15 @@ function Near() {
       </Grid>
 
       <Grid xs={12} md={12} lg={4} item>
-        <Typography variant="h5" style={{ marginBottom: '10px' }}>
+        <Typography variant="h6" style={{ marginBottom: '10px' }}>
           Most likely products to sell for {selectedGroup}
         </Typography>
 
         <Paper component="div" className={classes.card}>
           {selectedGroup && (
             <Chart padding="auto" data={recommendations} autoFit>
-              <Interval position="product_name*total" />
+              <Interval color="#F3A9BA" position="product_name*total" />
               <Coordinate transpose reflect="y" />
-              <Axis name="total" visible={false} />
 
               <Tooltip shared />
             </Chart>

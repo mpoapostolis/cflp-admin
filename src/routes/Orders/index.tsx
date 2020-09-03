@@ -1,26 +1,17 @@
-import React, {
-  useContext,
-  useMemo,
-  useState,
-  useEffect,
-  useCallback
-} from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import I18n from '../../I18n';
 import Filters from '../../components/Filters';
 import { FilterType } from '../../components/Filters/types';
 import MaterialTable from '../../components/Table';
-import { IconButton, Button } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import { Columns } from '../../components/Table/types';
-
 import VisibilityIcon from '@material-ui/icons/Visibility';
-
 import api from '../../ky';
 import { usePaginatedQuery } from 'react-query';
 import { getNotification } from '../../api/notification';
 import StatusRect from '../../components/StatusRect';
 import OrderModal from '../../components/OrderModal';
 import { format, parseISO } from 'date-fns';
-import { el } from 'date-fns/esm/locale';
 
 function Products() {
   const t = useContext(I18n);
@@ -129,6 +120,8 @@ function Products() {
     ],
     [t]
   );
+
+  console.log(notifications);
 
   const tableInfos = {
     offset: 0,

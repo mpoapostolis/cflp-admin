@@ -65,12 +65,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&.isNegative': {
       color: 'red'
     }
-  },
-  actions: {
-    minHeight: '30px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row-reverse'
   }
 }));
 
@@ -101,7 +95,7 @@ function InfoCard(props: Props) {
               variant="body2">
               {props.title}
             </Typography>
-            <Typography color="inherit" variant="h3">
+            <Typography color="inherit" variant="h5">
               {props.value}
             </Typography>
           </Grid>
@@ -114,11 +108,6 @@ function InfoCard(props: Props) {
           </Grid>
         </Grid>
       </CardContent>
-      <CardActions className={classes.actions}>
-        {props.actions?.map((action, idx) => (
-          <Fragment key={idx}>{action}</Fragment>
-        ))}
-      </CardActions>
     </Card>
   );
 }

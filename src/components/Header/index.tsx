@@ -27,6 +27,7 @@ import { LOGOUT } from '../../provider/names';
 
 import { useQuery } from 'react-query';
 import { css } from 'emotion';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,7 +73,11 @@ function Header(props: Props) {
 
   const t = useContext(I18n);
   return (
-    <AppBar elevation={0}>
+    <AppBar
+      style={{
+        background: '#486493'
+      }}
+      elevation={0}>
       <Toolbar>
         <Hidden mdUp>
           <IconButton
@@ -94,7 +99,9 @@ function Header(props: Props) {
                 color: white;
               `
             }}>
-            <Notifications htmlColor="#fff" />
+            <Link to="/orders">
+              <Notifications htmlColor="#fff" />
+            </Link>
           </Badge>
         </IconButton>
 

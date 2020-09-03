@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { filterClass } from './css';
 import DateRangeIcon from '@material-ui/icons/DateRange';
-import { Button, Popover, Grid } from '@material-ui/core';
+import { Button, Popover, Grid, Typography } from '@material-ui/core';
 import Calendar from 'react-calendar';
 import { subDays, format } from 'date-fns';
 import Overview from './Overview';
@@ -92,7 +92,9 @@ function Dashboard() {
           startIcon={<DateRangeIcon />}
           variant="contained"
           onClick={handleOpenDates}>
-          {`${formatDate(+from)} - ${formatDate(+to)}`}
+          <Typography variant="h6">
+            {`${formatDate(+from)} - ${formatDate(+to)}`}
+          </Typography>
         </Button>
       </div>
       <br />
