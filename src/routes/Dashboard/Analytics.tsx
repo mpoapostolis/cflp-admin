@@ -192,8 +192,6 @@ function Near() {
     ).slice(0, 10);
   }, [top10TagNames, products]);
 
-  console.log(recommendations);
-
   return (
     <>
       <Grid xs={12} md={12} lg={4} item>
@@ -219,7 +217,7 @@ function Near() {
                   marginRatio: 0.1
                 }
               ]}
-              color={['gender', ['#F2A4B6', '#6395F9']]}
+              color={['gender', ['#6395F9', '#F2A4B6']]}
               position="age_group*total"
             />
             <Tooltip shared />
@@ -314,7 +312,7 @@ function Near() {
         <Paper component="div" className={classes.card}>
           {selectedGroup && (
             <Chart padding="auto" data={recommendations} autoFit>
-              <Interval color="#F3A9BA" position="product_name*total" />
+              <Interval color="#6395F9" position="product_name*total" />
               <Coordinate transpose reflect="y" />
 
               <Tooltip shared />

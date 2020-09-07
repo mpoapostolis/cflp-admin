@@ -11,7 +11,8 @@ import { Link } from 'react-router-dom';
 type Props = {
   productsPurchased: number;
   offersPurchased: number;
-  revenue: number;
+  debits: number;
+  credits: number;
   live: number;
 };
 
@@ -23,8 +24,8 @@ function Overview(props: Props) {
         <InfoCard
           iconColor="orange"
           icon={<AttachMoneyIcon />}
-          title={t('int.revenue')}
-          value={`${props.revenue.toFixed(2)}${EUROSIGN}`}
+          title={t('int.debits')}
+          value={`${props.debits.toFixed(2)}${EUROSIGN}`}
         />
       </Grid>
 
@@ -32,8 +33,8 @@ function Overview(props: Props) {
         <InfoCard
           iconColor="green"
           icon={<AttachMoneyIcon />}
-          title={t('int.revenue')}
-          value={`${props.revenue.toFixed(2)}${EUROSIGN}`}
+          title={t('int.credits')}
+          value={`${props.credits.toFixed(2)}${EUROSIGN}`}
         />
       </Grid>
       <Grid item md={12} lg={4} xs={12}>
