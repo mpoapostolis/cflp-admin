@@ -89,20 +89,20 @@ function EditImages(props: Props) {
   const { images, setImages } = props;
   const [openModal, setOpenModal] = useState(false);
   const [selected, setSelected] = useState<Image[]>([]);
-  const handleAddImage = useCallback(img => setImages(s => [...s, img]), []);
+  const handleAddImage = useCallback((img) => setImages([img]), []);
   const t = useContext(I18n);
 
   function handleClickDelete() {
-    if (selected.filter(f => !f.file).length > 0) {
+    if (selected.filter((f) => !f.file).length > 0) {
       setOpenModal(true);
     } else handleDeleteImage();
   }
 
   const handleDeleteImage = () => {
     const union = R.intersection(images, selected);
-    const _images = images.filter(img => !union.includes(img));
+    const _images = images.filter((img) => !union.includes(img));
     if (props.isEdit) {
-      const paths = selected.filter(f => !f.file).map(f => f.url);
+      const paths = selected.filter((f) => !f.file).map((f) => f.url);
       if (paths.length > 0) {
         setOpenModal(false);
         props.deleteImages(paths);
@@ -115,10 +115,10 @@ function EditImages(props: Props) {
 
   const handleSelectImg = (img: Image) => {
     if (selected.includes(img)) {
-      const _images = selected.filter(_img => _img.url !== img.url);
+      const _images = selected.filter((_img) => _img.url !== img.url);
       setSelected(_images);
     } else {
-      setSelected(s => [...s, img]);
+      setSelected((s) => [...s, img]);
     }
   };
 
@@ -138,7 +138,7 @@ function EditImages(props: Props) {
           {images.map((obj, idx) => (
             <div
               key={idx}
-              onClickCapture={evt => {
+              onClickCapture={(evt) => {
                 if (selected.length > 0) {
                   handleSelectImg(obj);
                   evt.stopPropagation();
