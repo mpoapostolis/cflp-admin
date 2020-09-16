@@ -10,12 +10,7 @@ type Props = {
 function Upload(props: Props) {
   async function fileChangedHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.currentTarget.files;
-    if (files && files.length > 0) {
-      Array.from(files).forEach((file) => {
-        const url = URL.createObjectURL(file);
-        props.onChange({ file, url });
-      });
-    }
+    if (files) props.onChange(files[0]);
     e.currentTarget.value = '';
   }
 

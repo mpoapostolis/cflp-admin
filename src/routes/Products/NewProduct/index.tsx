@@ -10,31 +10,23 @@ import api from '../../../ky';
 
 function NewProduct() {
   const t = useContext(I18n);
-  type Image = {
-    file: File;
-    url: string;
-  };
-  const [images, setImages] = useState<Image[]>([]);
+
   const [infos, setInfos] = useState<{
     product_name: string;
     price: number;
     tags: string[];
+    images?: string;
   }>({
     product_name: '',
     price: 0,
-    tags: []
+    tags: [],
+    images: undefined
   });
 
   const params = useParams<{ id?: string }>();
 
-  const deleteImages = (paths: string[]) => {
-    api
-      .delete(`/api/products/${params.id}/images`, {
-        json: {
-          paths
-        }
-      })
-      .then((d) => d.json());
+  const onChange = (images: string) => {
+    setInfos((s) => ({ ...s, images }));
   };
 
   useEffect(() => {
@@ -43,22 +35,16 @@ function NewProduct() {
       .get(`/api/products/${params.id}`)
       .then((res) => res.json())
       .then((data) => {
-        const { product_name = '', tags, price = 0 } = data;
-        setImages([]);
-        setInfos({ product_name, price, tags });
+        const { product_name = '', images, tags, price = 0 } = data;
+        setInfos({ product_name, price, tags, images });
       })
       .catch(console.error);
   }, []);
 
   const isEdit = Boolean(params.id);
   const history = useHistory();
-  const handleSubmit = () => {
-    const formData = new FormData();
 
-    // images
-    //   .filter((f) => f.file)
-    //   .forEach((f) => formData.append('image', f.file));
-    // formData.append('infos', JSON.stringify(infos));
+  const handleSubmit = () => {
     const action = isEdit ? api.patch : api.post;
     const url = isEdit ? `/api/products/${params.id}` : `/api/products`;
     const successMsg = isEdit
@@ -86,10 +72,9 @@ function NewProduct() {
         </Grid>
         <Grid item xl={6} lg={6} md={12} xs={12}>
           <EditImages
-            deleteImages={deleteImages}
+            image={infos.images}
+            onChange={onChange}
             isEdit={isEdit}
-            images={images}
-            setImages={setImages}
           />
         </Grid>
       </Grid>

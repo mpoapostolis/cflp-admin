@@ -22,6 +22,7 @@ import { cx } from 'emotion';
 import * as R from 'ramda';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import { toast } from 'react-toastify';
+import api from '../../ky';
 
 const useStyles = makeStyles(() => ({
   cardContent: {
@@ -78,49 +79,48 @@ type Image = {
 };
 
 type Props = {
-  images: Image[];
-  setImages: React.Dispatch<React.SetStateAction<Image[]>>;
+  image?: string;
   isEdit: boolean;
-  deleteImages: (paths: string[]) => void;
+  onChange: (paths: string) => void;
 };
 
 function EditImages(props: Props) {
   const classes = useStyles();
-  const { images, setImages } = props;
   const [openModal, setOpenModal] = useState(false);
   const [selected, setSelected] = useState<Image[]>([]);
-  const handleAddImage = useCallback((img) => setImages([img]), []);
+  const handleAddImage = useCallback(async (img) => {
+    const formData = new FormData();
+    formData.append('image', img);
+
+    const { path } = await api
+      .post('/api/upload/images', {
+        body: formData,
+        headers: {}
+      })
+      .json();
+    props.onChange(path);
+  }, []);
   const t = useContext(I18n);
 
-  function handleClickDelete() {
-    if (selected.filter((f) => !f.file).length > 0) {
-      setOpenModal(true);
-    } else handleDeleteImage();
-  }
+  // function handleClickDelete() {
+  //   if (selected.filter((f) => !f.file).length > 0) {
+  //     setOpenModal(true);
+  //   } else handleDeleteImage();
+  // }
 
-  const handleDeleteImage = () => {
-    const union = R.intersection(images, selected);
-    const _images = images.filter((img) => !union.includes(img));
-    if (props.isEdit) {
-      const paths = selected.filter((f) => !f.file).map((f) => f.url);
-      if (paths.length > 0) {
-        setOpenModal(false);
-        props.deleteImages(paths);
-        toast.success(t('int.images-deleted-successfully'));
-      }
-    }
-    setImages(_images);
-    setSelected([]);
-  };
+  // const handleDeleteImage = () => {
+  //   if (props.isEdit) {
+  //     const paths = selected.filter((f) => !f.file).map((f) => f.url);
+  //     if (paths.length > 0) {
+  //       setOpenModal(false);
+  //       props.deleteImages(paths);
+  //       toast.success(t('int.images-deleted-successfully'));
+  //     }
+  //   }
+  //   setSelected([]);
+  // };
 
-  const handleSelectImg = (img: Image) => {
-    if (selected.includes(img)) {
-      const _images = selected.filter((_img) => _img.url !== img.url);
-      setSelected(_images);
-    } else {
-      setSelected((s) => [...s, img]);
-    }
-  };
+  console.log(props.image);
 
   const selectedTitle =
     selected.length > 0 ? `(${selected.length} ${t('int.selected')})` : '';
@@ -135,45 +135,25 @@ function EditImages(props: Props) {
         <Divider />
 
         <CardContent className={classes.cardContent}>
-          {images.map((obj, idx) => (
-            <div
-              key={idx}
-              onClickCapture={(evt) => {
-                if (selected.length > 0) {
-                  handleSelectImg(obj);
-                  evt.stopPropagation();
-                }
-              }}
-              className={cx(classes.selectMeCont, {
-                selected: selected.includes(obj)
-              })}>
-              <IconButton
-                className={classes.selecteMe}
-                onClick={() => handleSelectImg(obj)}>
-                <CheckBoxRoundedIcon
-                  color={selected.includes(obj) ? 'secondary' : 'action'}
-                />
-              </IconButton>
-              <ImageModal key={idx} className={classes.imgModal} src={obj.url}>
+          {props.image && (
+            <div className={cx(classes.selectMeCont)}>
+              <ImageModal
+                className={classes.imgModal}
+                src={`/img/${props.image}`}>
                 <img
-                  className={cx(classes.imgClass, {
-                    selected: selected.includes(obj)
-                  })}
-                  src={obj.url}
+                  className={cx(classes.imgClass)}
+                  src={`/img/${props.image}`}
                 />
               </ImageModal>
             </div>
-          ))}
+          )}
         </CardContent>
         <Divider />
         <CardActions>
           <span className={classes.spacer}></span>
 
           {selected.length > 0 && (
-            <Button
-              onClick={handleClickDelete}
-              title={t('int.delete')}
-              variant={'outlined'}>
+            <Button title={t('int.delete')} variant={'outlined'}>
               <DeleteOutlineIcon />
             </Button>
           )}
@@ -198,10 +178,7 @@ function EditImages(props: Props) {
           <Button onClick={() => setOpenModal(false)}>
             {t('int.disagree')}
           </Button>
-          <Button
-            style={{ color: 'red' }}
-            onClick={handleDeleteImage}
-            autoFocus>
+          <Button style={{ color: 'red' }} autoFocus>
             {t('int.agree')}
           </Button>
         </DialogActions>

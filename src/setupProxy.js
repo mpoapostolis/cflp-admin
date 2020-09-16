@@ -8,6 +8,12 @@ module.exports = function (app) {
       target,
       secure: false,
       logLevel: 'debug'
+    }),
+    proxy('/img', {
+      target,
+      changeOrigin: true,
+      secure: false,
+      logLevel: 'debug'
     })
   );
 };

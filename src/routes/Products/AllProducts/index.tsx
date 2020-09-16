@@ -102,7 +102,7 @@ function AllProducts() {
 
     {
       title: t('int.tags'),
-      render: (obj: any, idx: number) => {
+      render: (obj: any) => {
         const tmp: unknown[] = R.propOr([], 'tags', obj);
         const howMany = tmp.length;
         return (
@@ -115,11 +115,9 @@ function AllProducts() {
 
     {
       title: t('int.images'),
-      render: (obj: any, idx: number) => {
-        const tmp: unknown[] = R.propOr([], 'images', obj);
-        const howMany = tmp.length;
+      render: (obj: any) => {
         return (
-          <IconRepresentation howMany={howMany}>
+          <IconRepresentation howMany={obj?.images ? 1 : 0}>
             <ImageIcon htmlColor={'#546e7a'} />
           </IconRepresentation>
         );
@@ -127,16 +125,8 @@ function AllProducts() {
     },
     {
       title: t('int.actions'),
-      render: (obj: any, idx: number) => (
+      render: (obj: any) => (
         <>
-          <IconButton
-            classes={{ root: marginRight }}
-            size={'small'}
-            onClick={() => history.push(`/products/${obj.id}`)}
-            title={t('int.view')}>
-            <VisibilityIcon />
-          </IconButton>
-
           <IconButton
             classes={{ root: marginRight }}
             size={'small'}
