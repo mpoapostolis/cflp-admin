@@ -6,6 +6,8 @@ import { cx } from 'emotion';
 import { useMediaQuery, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import Routes from '../routes';
+import { LOGOUT } from '../provider/names';
+import { useAccount } from '../provider';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -19,6 +21,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 function Layout() {
+  const account = useAccount();
+
+  useEffect(() => {
+    window.addEventListener('__logout', () => {
+      account.dispatch({ type: LOGOUT });
+    });
+    return () => {
+      window.removeEventListener('__logout', () => void 0);
+    };
+  }, []);
+
   const isSmallDevice = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down('sm')
   );

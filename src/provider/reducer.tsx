@@ -1,10 +1,13 @@
 import { LOGIN, LOGOUT } from './names';
+import JwtDecode from 'jwt-decode';
+
+export const LOCAL_STORAGE_AUTH_KEY = 'slourp_acount_key';
 
 export const setKey = (payload: Record<string, any>) =>
-  localStorage.setItem('__account', JSON.stringify(payload));
+  localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(payload));
 
 export const loadKey = () => {
-  const k = localStorage.getItem('__account');
+  const k = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
   return k ? JSON.parse(k) : undefined;
 };
 
@@ -23,6 +26,8 @@ export type Store = {
   token?: string;
   refreshToken?: string;
   permissions?: string[];
+  expToken?: number;
+  expRToken?: number;
 };
 
 type Action = {
@@ -35,8 +40,19 @@ export const initState: Store = loadKey() || {};
 function reducer(state: Store, action: Action) {
   switch (action.type) {
     case LOGIN:
-      setKey(action.payload);
-      return { ...state, ...action.payload };
+      const { exp: expToken } = JwtDecode(action?.payload?.token);
+      const { exp: expRToken } = JwtDecode(action?.payload.refresh_token);
+      setKey({
+        ...action.payload,
+        expToken: expToken * 1000,
+        expRToken: expRToken * 1000
+      });
+      return {
+        ...state,
+        ...action.payload,
+        expToken: expToken * 1000,
+        expRToken: expRToken * 1000
+      };
     case LOGOUT:
       clearKey('__account');
       return undefined;

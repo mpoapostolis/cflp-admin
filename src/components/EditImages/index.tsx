@@ -139,10 +139,10 @@ function EditImages(props: Props) {
             <div className={cx(classes.selectMeCont)}>
               <ImageModal
                 className={classes.imgModal}
-                src={`/img/${props.image}`}>
+                src={`/uploads/${props.image}`}>
                 <img
                   className={cx(classes.imgClass)}
-                  src={`/img/${props.image}`}
+                  src={`/uploads/${props.image}`}
                 />
               </ImageModal>
             </div>

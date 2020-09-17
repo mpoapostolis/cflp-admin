@@ -9,7 +9,7 @@ module.exports = function (app) {
       secure: false,
       logLevel: 'debug'
     }),
-    proxy('/img', {
+    proxy('/uploads', {
       target,
       changeOrigin: true,
       secure: false,
