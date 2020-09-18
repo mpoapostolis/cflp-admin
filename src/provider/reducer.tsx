@@ -56,6 +56,7 @@ function reducer(state: Store, action: Action) {
     case LOGOUT:
       clearKey('__account');
       return undefined;
+
     default:
       throw new Error();
   }

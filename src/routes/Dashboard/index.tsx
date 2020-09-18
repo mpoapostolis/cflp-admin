@@ -8,7 +8,7 @@ import queryString from 'query-string';
 
 import { useQuery } from 'react-query';
 import { getGeoLog } from '../../api/geolog';
-import { getDebitCredits } from '../../api/stores';
+import { getStoreInfos } from '../../api/stores';
 
 export type AggregateData = {
   name: string;
@@ -24,12 +24,9 @@ function Dashboard() {
   const history = useHistory();
   const urlParams = queryString.parse(history.location.search);
 
-  const { data: debitsCredis = { debits: 0, credits: 0 } } = useQuery(
-    'debits-credits',
-    getDebitCredits,
-    {
-      onSuccess: console.log
-    }
+  const { data: infos = { debits: 0, credits: 0 } } = useQuery(
+    'storeInfos',
+    getStoreInfos
   );
 
   const { data } = useQuery(['geolog-near-me', urlParams], getGeoLog, {
@@ -42,7 +39,7 @@ function Dashboard() {
         <Overview
           live={data?.countNearMe}
           offersPurchased={0}
-          {...debitsCredis}
+          {...infos}
           productsPurchased={0}
         />
         <Analytics />
