@@ -3,6 +3,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import { Avatar, Typography, Theme } from '@material-ui/core';
 import { useAccount } from '../../provider';
+import { useQuery } from 'react-query';
+import { getStoreInfos } from '../../api/stores';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     marginTop: theme.spacing(1),
@@ -17,6 +19,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 60
   },
   name: {
+    marginBottom: theme.spacing(1)
+  },
+  storeName: {
+    fontWeight: 'bolder',
     marginTop: theme.spacing(1)
   }
 }));
@@ -24,6 +30,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 function Profile() {
   const classes = useStyles();
   const account = useAccount();
+
+  const { data: infos = { debits: 0, credits: 0 } } = useQuery(
+    'storeInfos',
+    getStoreInfos
+  );
 
   return (
     <div className={classes.root}>
@@ -34,8 +45,10 @@ function Profile() {
         component={RouterLink}
         src={'/images/avatar.png'}
       />
-      <Typography className={classes.name} variant="h4">
-        {account.username}
+
+      <br />
+      <Typography className={classes.storeName} variant="h4">
+        {infos.name}
       </Typography>
       <Typography variant="body2">{account.email}</Typography>
     </div>
