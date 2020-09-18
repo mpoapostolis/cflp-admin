@@ -110,7 +110,7 @@ function MaterialTable(props: Props) {
             }}
             className={cx(classes.textField, 'without-padding')}
             defaultValue={R.propOr('', 'searchTerm', params)}
-            onChange={evt => {
+            onChange={(evt) => {
               const searchTerm =
                 evt.currentTarget.value === ''
                   ? undefined
@@ -157,7 +157,7 @@ function MaterialTable(props: Props) {
         onChangePage={(_, offset) => {
           handleChange({ offset: +offset * Number(params.limit) });
         }}
-        onChangeRowsPerPage={evt => {
+        onChangeRowsPerPage={(evt) => {
           handleChange({
             offset: 0,
             limit: +evt.target.value

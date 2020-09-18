@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useMemo,
-  useState,
-  useEffect,
-  useCallback
-} from 'react';
+import React, { useContext, useMemo } from 'react';
 import I18n from '../../../I18n';
 import Filters from '../../../components/Filters';
 import { FilterType } from '../../../components/Filters/types';
@@ -18,11 +12,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import * as R from 'ramda';
 import { toast } from 'react-toastify';
 import IconRepresentation from '../../../components/IconRepresentation';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import ImageIcon from '@material-ui/icons/Image';
 import { css } from 'emotion';
-import api from '../../../ky';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import { usePaginatedQuery, useMutation, queryCache } from 'react-query';
+import { getProducts, deleteProduct } from '../../../api/products';
 
 const marginRight = css`
   margin-right: 15px !important;
@@ -30,46 +24,24 @@ const marginRight = css`
 
 function AllProducts() {
   const t = useContext(I18n);
-  const [infos, setInfos] = useState({
-    data: [],
-    offset: 0,
-    total: 20,
-    limit: 100
-  });
+
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const search = history.location.search;
-    const obj = queryString.parse(search);
-    getProducts(obj);
-  }, []);
+  const params = queryString.parse(history.location.search);
+  const onChange = (obj: Record<string, string>) => {
+    history.push({ search: queryString.stringify({ ...params, ...obj }) });
+  };
 
-  const getProducts = useCallback(
-    (obj: Record<string, any>) => {
-      const params = queryString.parse(history.location.search);
-      setLoading(true);
-      const url = queryString.stringify({ ...params, ...obj });
-      api
-        .get(`/api/products?${url}`)
-        .then((e) => e.json())
-        .then((infos) => {
-          setInfos(infos);
-          setLoading(false);
-        });
-    },
-    [history.location.search]
+  const { resolvedData: products, isFetching } = usePaginatedQuery(
+    ['get-products', params],
+    getProducts
   );
-
-  const deleteProduct = useCallback(
-    (id: string) => {
-      const params = queryString.parse(history.location.search);
-      api.delete(`/api/products/${id}`);
+  const [_deleteProduct] = useMutation(deleteProduct, {
+    onSuccess: () => {
+      queryCache.invalidateQueries('get-products');
       toast.success(t('int.product-delete-successfully'));
-      getProducts(params);
-    },
-    [history.location.search]
-  );
+    }
+  });
 
   const filterConf = useMemo(
     () =>
@@ -137,7 +109,7 @@ function AllProducts() {
           <IconButton
             classes={{ root: marginRight }}
             size={'small'}
-            onClick={() => deleteProduct(obj.id)}
+            onClick={() => _deleteProduct(obj.id)}
             title={t('int.delete')}>
             <DeleteIcon />
           </IconButton>
@@ -145,7 +117,6 @@ function AllProducts() {
       )
     }
   ];
-
   return (
     <>
       <div
@@ -161,12 +132,15 @@ function AllProducts() {
         </Button>
       </div>
       <br />
-      <Filters onSubmit={getProducts} filterConf={filterConf} />
+      <Filters onSubmit={onChange} filterConf={filterConf} />
       <MaterialTable
-        loading={loading}
+        loading={isFetching}
         columns={columns}
-        {...infos}
-        onChange={getProducts}
+        total={products?.total ?? 5000}
+        data={products?.data ?? []}
+        offset={Number(params?.offset ?? 0)}
+        limit={Number(params?.limit ?? 10)}
+        onChange={() => void 0}
       />
     </>
   );

@@ -12,6 +12,8 @@ import { getNotification } from '../../api/notification';
 import StatusRect from '../../components/StatusRect';
 import OrderModal from '../../components/OrderModal';
 import { format, parseISO } from 'date-fns';
+import { useHistory } from 'react-router-dom';
+import queryString from 'query-string';
 
 function Products() {
   const t = useContext(I18n);
@@ -20,6 +22,8 @@ function Products() {
   const [orderName, setOrderName] = useState<string>();
   const [orderId, setOrderId] = useState<string>();
   const [status, setStatus] = useState<string>();
+  const history = useHistory();
+  const params = queryString.parse(history.location.search);
 
   const handleClickOpen = (data: any[]) => {
     setOrder(data);
@@ -34,7 +38,7 @@ function Products() {
       data: [],
       total: 0
     }
-  } = usePaginatedQuery(['notifications', {}], getNotification);
+  } = usePaginatedQuery(['notifications', params], getNotification);
 
   const getOrder = async (id: string) => {
     const { data } = await api.get(`/api/orders/${id}`).json();
@@ -160,7 +164,7 @@ function Products() {
       <MaterialTable
         hideSearch
         columns={columns}
-        onChange={console.log}
+        onChange={() => void 0}
         {...tableInfos}
       />
       <OrderModal
