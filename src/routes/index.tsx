@@ -20,7 +20,7 @@ const Routes = () => {
   useEffect(() => {
     if (account.store_id) {
       const source = new EventSource(
-        `https://139.59.131.160:4000/api/listen-orders/${account.store_id}?token=${account.token}`
+        `https://www.slourp.tk/api/listen-orders/${account.store_id}?token=${account.token}`
       );
       source.onmessage = () => {
         queryCache.invalidateQueries('pending-notifications');
