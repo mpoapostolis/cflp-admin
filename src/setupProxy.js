@@ -1,7 +1,7 @@
 const proxy = require('http-proxy-middleware');
 
 // const target = 'http://localhost:4000';
-const target = 'http://139.59.131.160:4000';
+const target = 'http://167.172.131.114:4000';
 
 module.exports = function (app) {
   app.use(
